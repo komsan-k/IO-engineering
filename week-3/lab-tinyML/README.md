@@ -10,7 +10,7 @@ This laboratory introduces students to:
 * TinyML inference on ESP32
 * RSSI/WiFi signal classification
 * Edge AI for connected systems
-* CPS-style low-latency communication
+* Low-latency communication
 
 Students will build a system where:
 
@@ -29,7 +29,7 @@ After completing this lab, students will be able to:
 * Build ANN-based classifiers
 * Perform RSSI classification
 * Implement edge AI communication
-* Visualize CPS data flow
+* Visualize data flow
 
 ---
 
