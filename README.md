@@ -149,7 +149,7 @@ Embedded → Connectivity → CPS Integration → FPGA Acceleration
 * ESP32 (Arduino / ESP-IDF)
 * Node-RED + MQTT (Mosquitto)
 * Vivado HLS / Vitis HLS
-* Python (optional AI integration)
+* Python (AI integration)
 
 ---
 
@@ -158,7 +158,7 @@ Embedded → Connectivity → CPS Integration → FPGA Acceleration
 Students will be able to:
 
 * Design embedded systems
-* Build IoT/CPS architectures
+* Build IoT architectures
 * Implement real-time communication
 * Accelerate systems using FPGA
 
