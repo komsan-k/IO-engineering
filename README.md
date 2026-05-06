@@ -48,7 +48,7 @@ Each week consists of **4 time slots**, each **3 hours**.
 ### 🔹 Slot 1: Connected Systems – Technology
 
 * IoT architecture
-* IoT communication stack
+* Cloud communication 
 
 ### 🔹 Slot 2: Connected Systems – HTTP
 
