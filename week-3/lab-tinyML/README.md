@@ -414,13 +414,13 @@ Students successfully implemented:
 * ESP-NOW communication
 * TinyML-based classification
 * Edge AI inference
-* Connected CPS workflow
+* Connected workflow
 * Wireless signal intelligence
 
 This lab forms the foundation for:
 
 * Smart IoT systems
-* CPS edge intelligence
+* Edge intelligence
 * AI-enabled wireless networks
 * ANN-assisted communication systems
 
