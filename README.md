@@ -167,6 +167,7 @@ Students will be able to:
 ## 👨‍🏫 Instructor
 
 Komsan Kanjanasit
+
 College of Computing, Prince of Songkla University, Thailand  
 
 ---
