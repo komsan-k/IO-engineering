@@ -122,14 +122,15 @@ Embedded → Connectivity → CPS Integration → FPGA Acceleration
 
 ---
 
-## 🧪 Suggested Labs
+## 🧪 Labs
 
 | Week   | Lab                              |
 | ------ | -------------------------------- |
 | Week 1 | ESP32 + Sensor Interface         |
 | Week 2 | HTTP + WiFi Dashboard (Node-RED) |
 | Week 3 | WiFi + TinyML Classifier             |
-| Week 4 | FPGA HLS Mini Project            |
+| Week 4 | FPGA HLS            |
+| Week 5 | Mini Project            |
 
 ---
 
