@@ -166,6 +166,6 @@ Students will be able to:
 
 ## 👨‍🏫 Instructor
 
-Assistant Professor (CPS / Embedded / FPGA Systems)
+Komsan Kanjanasit
 
 ---
