@@ -135,11 +135,11 @@ Embedded → Connectivity → CPS Integration → FPGA Acceleration
 
 ## 🎯 Mini Project
 
-**Smart CPS System**
+**Smart System**
 
 * ESP32 Sensor Node
 * MQTT Communication
-* Node-RED Dashboard
+* visualization and analyticals 
 * FPGA Acceleration
 
 ---
