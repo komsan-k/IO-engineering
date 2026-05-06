@@ -1,5 +1,5 @@
 # 📘 Module : Inteligent Object Engineering 977-331
-Embedded & Connected Systems + FPGA (HLS) Course Plan
+## Part-2: Embedded & Connected Systems + FPGA (HLS) Course Plan
 
 ## 🗂 Course Overview
 
