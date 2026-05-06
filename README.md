@@ -7,7 +7,7 @@ This 4-week intensive course covers:
 
 * Embedded Systems fundamentals
 * Connected Systems (IoT communication)
-* ML-based integration
+* TinyML-based integration
 * FPGA acceleration using High-Level Synthesis (HLS)
 
 Each week consists of **4 time slots**, each **3 hours**.
