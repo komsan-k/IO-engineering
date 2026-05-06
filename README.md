@@ -48,7 +48,7 @@ Each week consists of **4 time slots**, each **3 hours**.
 ### 🔹 Slot 1: Connected Systems – Technology
 
 * IoT architecture
-* CPS communication stack
+* IoT communication stack
 
 ### 🔹 Slot 2: Connected Systems – HTTP
 
@@ -74,7 +74,7 @@ Each week consists of **4 time slots**, each **3 hours**.
 * D2D communication basics
 * Non-IP communication introduction
 
-### 🔹 Slot 2: ESP-Mesh Network
+### 🔹 Slot 2: Mesh Network (ESP-Mesh)
 
 * WiFI Mesh architecture
 * Multi-Hop Network
