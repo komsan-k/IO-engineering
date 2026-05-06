@@ -25,8 +25,9 @@ Each week consists of **4 time slots**, each **3 hours**.
 ### 🔹 Slot 2: Embedded Systems – Programming
 
 * Embedded Software
-* Toolchains (Arduino, ESP-IDF)
-* Debugging techniques
+* Interupttion techniques
+* Toolchains (Arduino, ESP-IDF, micorPython)
+
 
 ### 🔹 Slot 3: Embedded Systems – HW Interfaces
 
