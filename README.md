@@ -128,7 +128,7 @@ Embedded → Connectivity → CPS Integration → FPGA Acceleration
 | ------ | -------------------------------- |
 | Week 1 | ESP32 + Sensor Interface         |
 | Week 2 | HTTP + WiFi Dashboard (Node-RED) |
-| Week 3 | MQTT + Digital Twin              |
+| Week 3 | WiFi + TinyML Classifier             |
 | Week 4 | FPGA HLS Mini Project            |
 
 ---
