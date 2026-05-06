@@ -19,13 +19,12 @@ Each week consists of **4 time slots**, each **3 hours**.
 ### 🔹 Slot 1: Embedded Systems – Architecture
 
 * MCU vs MPU
-* Memory hierarchy
-* Bus systems
-* CPS architecture mapping
+* Input/Output systems
+* System architecture mapping
 
 ### 🔹 Slot 2: Embedded Systems – Programming
 
-* Embedded C/C++
+* Embedded Software
 * Toolchains (Arduino, ESP-IDF)
 * Debugging techniques
 
@@ -69,25 +68,25 @@ Each week consists of **4 time slots**, each **3 hours**.
 
 ## 🔗 Week 3: Advanced Connectivity & Integration
 
-### 🔹 Slot 1: Peer-to-Peer 1
+### 🔹 Slot 1: Device-to-Device (ESP-NOW) 
 
-* P2P communication basics
-* MQTT introduction
+* D2D communication basics
+* Non-IP communication introduction
 
-### 🔹 Slot 2: Peer-to-Peer 2
+### 🔹 Slot 2: ESP-Mesh Network
 
-* MQTT architecture
-* Broker (Mosquitto)
+* WiFI Mesh architecture
+* Multi-Hop Network
 
-### 🔹 Slot 3: WiFi–Bluetooth Cooperation 1
+### 🔹 Slot 3: WiFi–Bluetooth Cooperation 
 
 * Hybrid communication models
 * System design
 
-### 🔹 Slot 4: WiFi–Bluetooth Cooperation 2
+### 🔹 Slot 4: ANN for Connected WiFi
 
-* CPS integration
-* Smart system case studies
+* ANN Structure
+* RSSI Signal Classifier
 
 ---
 
