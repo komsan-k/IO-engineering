@@ -1,5 +1,5 @@
 # 📘 Module 977-331 : Intelligence Object Engineering 
-## Part-2: Embedded & Connected Systems + FPGA (HLS) Course Plan
+## Part-2: Embedded & Connected Systems + AI-FPGA Course Plan
 
 ## 🗂 Course Overview
 
