@@ -1,4 +1,4 @@
-# 📘 Module 977-331 : Inteligent Object Engineering 
+# 📘 Module 977-331 : Intelligence Object Engineering 
 ## Part-2: Embedded & Connected Systems + FPGA (HLS) Course Plan
 
 ## 🗂 Course Overview
@@ -117,7 +117,7 @@ Each week consists of **4 time slots**, each **3 hours**.
 ## 🔁 Learning Flow
 
 ```
-Embedded → Connectivity → CPS Integration → FPGA Acceleration
+Embedded → Connectivity → ML Integration → FPGA Acceleration
 ```
 
 ---
