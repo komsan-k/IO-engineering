@@ -1,26 +1,25 @@
 # 📘 Module 977-331 : Intelligence Object Engineering 
-## Part-2: Embedded & Connected Systems + Advanced FPGA Course Plan
+## Part-2: Intelligent Connected & Embedded Systems - Course Plan
 
 # 🗂 Course Overview
 
 This 4-week intensive course covers:
 
-* Embedded Systems fundamentals
-* Connected Systems (IoT communication)
-* TinyML-based integration
-* FPGA acceleration using High-Level Synthesis (HLS)
+* Foundations & Hardware Interfacing
+* Real-Time Operating Systems (RTOS)
+* Connectivity & IoT Protocols
+* Edge AI & Embedded Security
 
 Each week consists of **4 time slots**, each **3 hours**.
 
 ---
 
-## 🗓️ Week 1: Embedded Systems Fundamentals
+## 🗓️ Week 1: Foundations & Hardware Interfacing
 
-### 🔹 Slot 1: Embedded Systems – Architecture
-
-* MCU vs MPU
-* Input/Output systems
-* System architecture mapping
+### 🔹 Slot 1: GPIO, Registers & Bare-Metal Control
+#### Focus: Bare-metal programming, peripherals, and communication protocols.
+* Theory: MCU architecture, memory mapping, register-level programming, and HAL basics.
+* Lab 1: Set up the development environment and create a bare-metal program to blink an LED and read a push button.
 
 ### 🔹 Slot 2: Embedded Systems – Programming
 
