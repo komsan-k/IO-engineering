@@ -134,27 +134,46 @@ Secure Intelligent Embedded Systems
 
 ---
 
-## 🧪 Labs
-
-| Week   | Lab                              |
-| ------ | -------------------------------- |
-| Week 1 | ESP32 + Sensor Interface         |
-| Week 2 | HTTP + WiFi Dashboard (Node-RED) |
-| Week 3 | WiFi + TinyML Classifier             |
-| Week 4 | FPGA HLS            |
-| Week 5 | Mini Project            |
-
----
-
 ## 🎯 Mini Project
 
 **Smart System**
 
-* ESP32 Sensor Node
-* MQTT Communication
-* visualization and analyticals 
-* FPGA Acceleration
+1. Smart Environment Monitor
+* Monitor environmental conditions and upload data via Wi-Fi/MQTT.
 
+2. Gesture-Controlled Light
+* Use TinyML and IMU data to control LEDs with hand gestures.
+
+3. Smart Door Lock
+* Implement BLE-based authentication and secure access control.
+  
+4. IoT Plant Monitor
+* Measure soil moisture and send watering alerts.
+
+5. Activity Recognition Wearable
+* Classify user activities using TinyML and motion sensors.
+
+6. Smart Energy Meter
+Monitor power consumption and transmit usage data.
+
+7. Secure OTA Update System
+* Enable encrypted and authenticated firmware updates.
+
+8. BLE Weather Station
+* Broadcast sensor data to smartphones via BLE.
+
+9. Smart Parking Sensor
+* Detect vehicle occupancy and report status remotely.
+
+10. TinyML Fall Detector
+* Detect falls and trigger alerts using edge AI.
+
+**Recommended Capstone Projects**
+* Gesture-Controlled Light
+* Activity Recognition Wearable
+* Smart Environment Monitor
+* Secure OTA Update System
+* TinyML Fall Detector
 ---
 
 ## 📌 Tools & Platforms
