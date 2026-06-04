@@ -45,22 +45,22 @@ Each week consists of **4 time slots**, each **3 hours**.
 
 ## 🌐 Week 2: Connected Systems (Communication Layer)
 
-### 🔹 Slot 1: Connected Systems – Technology
+### 🔹 Slot 5: Connected Systems – Technology
 
 * IoT architecture
 * Cloud communication 
 
-### 🔹 Slot 2: Connected Systems – HTTP
+### 🔹 Slot 6: Connected Systems – HTTP
 
 * REST API
 * Client-server model
 
-### 🔹 Slot 3: Connected Systems – WiFi
+### 🔹 Slot 7: Connected Systems – WiFi
 
 * TCP/IP basics
 * ESP32 WiFi integration
 
-### 🔹 Slot 4: Connected Systems – Bluetooth
+### 🔹 Slot 8: Connected Systems – Bluetooth
 
 * BLE fundamentals
 * Device communication
@@ -69,22 +69,22 @@ Each week consists of **4 time slots**, each **3 hours**.
 
 ## 🔗 Week 3: Advanced Connectivity & Integration
 
-### 🔹 Slot 1: Device-to-Device (ESP-NOW) 
+### 🔹 Slot 9: Device-to-Device (ESP-NOW) 
 
 * D2D communication basics
 * Non-IP communication introduction
 
-### 🔹 Slot 2: Mesh Network (ESP-Mesh)
+### 🔹 Slot 10: Mesh Network (ESP-Mesh)
 
 * WiFI Mesh architecture
 * Multi-Hop Network
 
-### 🔹 Slot 3: WiFi–Bluetooth Cooperation 
+### 🔹 Slot 11: WiFi–Bluetooth Cooperation 
 
 * Hybrid communication models
 * System design
 
-### 🔹 Slot 4: ANN for Connected WiFi
+### 🔹 Slot 12: ANN for Connected WiFi
 
 * ANN Structure
 * RSSI Signal Classifier
@@ -93,24 +93,25 @@ Each week consists of **4 time slots**, each **3 hours**.
 
 ## ⚡ Week 4: FPGA & High-Level Synthesis (HLS)
 
-### 🔹 Slot 1: FPGA – HLS 1
+### 🔹 Slot 13: FPGA – HLS 1
 
 * FPGA fundamentals
 * HLS workflow (C → HDL)
 
-### 🔹 Slot 2: FPGA – HLS 2
+### 🔹 Slot 14: FPGA – HLS 2
 
 * Loop optimization
 * Pipelining
 
-### 🔹 Slot 3: FPGA – HLS 3
+### 🔹 Slot 15: FPGA – HLS 3
 
 * Latency & throughput optimization
 * Resource utilization
 
-### 🔹 Slot 4: FPGA – HLS 4
+### 🔹 Slot 16: Embedded Cryptography & Secure Boot
+#### Theory: Hardware security threats, symmetric vs. asymmetric encryption on low-power chips, secure bootloader concepts, and Root of Trust.
 
-* Case study: AI / DSP accelerator
+#### Lab 16: Use the MCU’s hardware cryptographic engine to encrypt a local string payload using AES-256, verify SHA-256 firmware hashes, and implement a basic secure firmware Over-The-Air (OTA) update mechanism.
 
 ---
 
