@@ -18,28 +18,25 @@ Each week consists of **4 time slots**, each **3 hours**.
 
 ### 🔹 Slot 1: GPIO, Registers & Bare-Metal Control
 #### Focus: Bare-metal programming, peripherals, and communication protocols.
+
 * Theory: MCU architecture, memory mapping, register-level programming, and HAL basics.
 * Lab 1: Set up the development environment and create a bare-metal program to blink an LED and read a push button.
 
-### 🔹 Slot 2: Embedded Systems – Programming
+### 🔹 Slot 2: Hardware Interrupts & Timers
 
-* Embedded Software
-* Interupttion techniques
-* Toolchains (Arduino, ESP-IDF, micorPython)
+* Theory: Polling vs. interrupts, ISRs, debouncing, and hardware timers.
+* Lab 2: Implement a button interrupt, debounce the input, and use a timer to blink an LED at a fixed frequency.
 
 
-### 🔹 Slot 3: Embedded Systems – HW Interfaces
+### 🔹 Slot 3: Analog Interfacing & PWM
 
-* GPIO, ADC, PWM
-* UART, I2C, SPI
-* Sensor interfacing
+* Theory: ADC operation, resolution, sampling, and PWM duty-cycle control.
+* Lab 3: Read sensor values via ADC and use PWM to control LED brightness or a servo motor.
 
-### 🔹 Slot 4: Embedded Systems – Real-Time OS
+### 🔹 Slot 4: Serial Protocols (I²C & SPI)
 
-* RTOS concepts
-* Task scheduling
-* FreeRTOS basics
-
+* Theory: Synchronous communication, master-slave operation, addressing, and timing.
+* Lab 4: Interface an I²C sensor, read register data, and display formatted results via UART serial output.
 ---
 
 ## 🌐 Week 2: Connected Systems (Communication Layer)
