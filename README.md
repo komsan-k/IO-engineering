@@ -103,15 +103,16 @@ Each week consists of **4 time slots**, each **3 hours**.
 * Loop optimization
 * Pipelining
 
-### 🔹 Slot 15: FPGA – HLS 3
+### 🔹 Slot 15: Edge Inference & Local Actuation
 
-* Latency & throughput optimization
-* Resource utilization
+* Theory: Managing latency, execution profiles, and memory buffers during live math inference on a CPU/MCU core.
+
+* Lab 15: Run the deployed ML model locally on the MCU in real-time. Process live sensor inputs through the inference engine and light up different physical LEDs based on the predicted gesture class.
 
 ### 🔹 Slot 16: Embedded Cryptography & Secure Boot
-#### Theory: Hardware security threats, symmetric vs. asymmetric encryption on low-power chips, secure bootloader concepts, and Root of Trust.
+* Theory: Hardware security threats, symmetric vs. asymmetric encryption on low-power chips, secure bootloader concepts, and Root of Trust.
 
-#### Lab 16: Use the MCU’s hardware cryptographic engine to encrypt a local string payload using AES-256, verify SHA-256 firmware hashes, and implement a basic secure firmware Over-The-Air (OTA) update mechanism.
+* Lab 16: Use the MCU’s hardware cryptographic engine to encrypt a local string payload using AES-256, verify SHA-256 firmware hashes, and implement a basic secure firmware Over-The-Air (OTA) update mechanism.
 
 ---
 
