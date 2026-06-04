@@ -39,65 +39,67 @@ Each week consists of **4 time slots**, each **3 hours**.
 * Lab 4: Interface an I²C sensor, read register data, and display formatted results via UART serial output.
 ---
 
-## 🌐 Week 2: Connected Systems (Communication Layer)
+## 🌐 Week 2: Real-Time Operating Systems (RTOS)
+#### Focus: Concurrency, multitasking, and resource management.
 
-### 🔹 Slot 5: Connected Systems – Technology
+### 🔹 Slot 5: Concurrency & Multitasking Basics
 
-* IoT architecture
-* Cloud communication 
+* Theory: FreeRTOS fundamentals, scheduling, preemption, and task management.
+* Lab 5: Create multiple FreeRTOS tasks with different priorities and observe preemptive scheduling.
 
-### 🔹 Slot 6: Connected Systems – HTTP
+### 🔹 Slot 6: Task Synchronization: Semaphores & Mutexes
 
-* REST API
-* Client-server model
+* Theory: Race conditions, critical sections, semaphores, and mutexes.
+* Lab 6: Demonstrate a race condition on a shared resource and resolve it using a FreeRTOS mutex.
 
-### 🔹 Slot 7: Connected Systems – WiFi
+### 🔹 Slot 7: Inter-Task Communication via Queues
 
-* TCP/IP basics
-* ESP32 WiFi integration
+* Theory: Thread-safe data exchange using message queues.
+* Lab 7: Implement a producer-consumer system where one task acquires sensor data and another processes it via a FreeRTOS queue.
 
-### 🔹 Slot 8: Connected Systems – Bluetooth
+### 🔹 Slot 8: Software Timers & Memory Management
 
-* BLE fundamentals
-* Device communication
+* Theory: Software timers, RTOS memory management, and dynamic vs. static allocation.
+* Lab 8: Use FreeRTOS timers for periodic tasks and monitor heap usage under varying workloads.
+---
+
+## 🔗 Week 3: Connectivity & IoT Protocols
+#### Focus: Wireless networking, edge-to-cloud communication, and low-power operation.
+
+### 🔹 Slot 9: Wi-Fi Networking & HTTP Clients
+
+* Theory: Wi-Fi modes, embedded networking, and REST APIs.
+* Lab 9: Connect to Wi-Fi, synchronize time via NTP, and perform HTTP GET/POST requests.
+
+### 🔹 Slot 10: Event-Driven IoT Telemetry via MQTT
+
+* Theory: MQTT publish/subscribe, brokers, and QoS levels.
+* Lab 10: Publish sensor data in JSON to an MQTT broker and subscribe to remote control commands.
+
+### 🔹 Slot 11: Bluetooth Low Energy (BLE) Fundamentals
+
+* Theory: BLE topology, GAP, and GATT concepts.
+* Lab 11: Create a BLE GATT server, expose sensor data, and monitor notifications using a mobile app.
+
+### 🔹 Slot 12: Low-Power Optimization & LPWAN
+
+* Theory: Power management, sleep modes, and LPWAN technologies.
+* Lab 12: Publish sensor data, enter deep sleep, and wake via timer or GPIO interrupt for low-power operation.
 
 ---
 
-## 🔗 Week 3: Advanced Connectivity & Integration
+## ⚡ Week 4: Edge AI & Embedded Security
+#### Focus: Edge AI deployment and embedded system security.
 
-### 🔹 Slot 9: Device-to-Device (ESP-NOW) 
+### 🔹 Slot 13: Data Collection for Machine Learning
 
-* D2D communication basics
-* Non-IP communication introduction
+* Theory: TinyML fundamentals, feature extraction, and dataset quality.
+* Lab 13: Collect and export IMU gesture data to build a machine-learning training dataset.
 
-### 🔹 Slot 10: Mesh Network (ESP-Mesh)
+### 🔹 Slot 14: Model Quantization & TinyML Deployment
 
-* WiFI Mesh architecture
-* Multi-Hop Network
-
-### 🔹 Slot 11: WiFi–Bluetooth Cooperation 
-
-* Hybrid communication models
-* System design
-
-### 🔹 Slot 12: ANN for Connected WiFi
-
-* ANN Structure
-* RSSI Signal Classifier
-
----
-
-## ⚡ Week 4: FPGA & High-Level Synthesis (HLS)
-
-### 🔹 Slot 13: FPGA – HLS 1
-
-* FPGA fundamentals
-* HLS workflow (C → HDL)
-
-### 🔹 Slot 14: FPGA – HLS 2
-
-* Loop optimization
-* Pipelining
+* Theory: Model optimization (INT8 quantization, pruning) and TensorFlow Lite for Microcontrollers.
+* Lab 14: Train, optimize, and deploy a TinyML gesture-recognition model on the MCU.
 
 ### 🔹 Slot 15: Edge Inference & Local Actuation
 
@@ -113,7 +115,21 @@ Each week consists of **4 time slots**, each **3 hours**.
 ## 🔁 Learning Flow
 
 ```
-Embedded → Connectivity → ML Integration → FPGA Acceleration
+Embedded Hardware
+        ↓
+Peripheral Interfacing
+        ↓
+Real-Time Multitasking (RTOS)
+        ↓
+Wireless IoT Connectivity
+        ↓
+Low-Power Edge Devices
+        ↓
+TinyML Model Development
+        ↓
+Real-Time Edge AI Inference
+        ↓
+Secure Intelligent Embedded Systems
 ```
 
 ---
