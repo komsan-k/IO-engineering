@@ -138,35 +138,25 @@ Secure Intelligent Embedded Systems
 
 **Smart System**
 
-1. Smart Environment Monitor
-* Monitor environmental conditions and upload data via Wi-Fi/MQTT.
+1. Smart Environment Monitor - Monitor environmental conditions and upload data via Wi-Fi/MQTT.
 
-2. Gesture-Controlled Light
-* Use TinyML and IMU data to control LEDs with hand gestures.
+2. Gesture-Controlled Light - Use TinyML and IMU data to control LEDs with hand gestures.
 
-3. Smart Door Lock
-* Implement BLE-based authentication and secure access control.
+3. Smart Door Lock - Implement BLE-based authentication and secure access control.
   
-4. IoT Plant Monitor
-* Measure soil moisture and send watering alerts.
+4. IoT Plant Monitor - Measure soil moisture and send watering alerts.
 
-5. Activity Recognition Wearable
-* Classify user activities using TinyML and motion sensors.
+5. Activity Recognition Wearable - Classify user activities using TinyML and motion sensors.
 
-6. Smart Energy Meter
-Monitor power consumption and transmit usage data.
+6. Smart Energy Meter - Monitor power consumption and transmit usage data.
 
-7. Secure OTA Update System
-* Enable encrypted and authenticated firmware updates.
+7. Secure OTA Update System - Enable encrypted and authenticated firmware updates.
 
-8. BLE Weather Station
-* Broadcast sensor data to smartphones via BLE.
+8. BLE Weather Station - Broadcast sensor data to smartphones via BLE.
 
-9. Smart Parking Sensor
-* Detect vehicle occupancy and report status remotely.
+9. Smart Parking Sensor - Detect vehicle occupancy and report status remotely.
 
-10. TinyML Fall Detector
-* Detect falls and trigger alerts using edge AI.
+10. TinyML Fall Detector - Detect falls and trigger alerts using edge AI.
 
 **Recommended Capstone Projects**
 * Gesture-Controlled Light
@@ -178,9 +168,14 @@ Monitor power consumption and transmit usage data.
 
 ## 📌 Tools & Platforms
 
-* ESP32 (Arduino / ESP-IDF)
-* Node-RED + MQTT (Mosquitto)
-* Python (AI integration)
+* ESP32-S3 Development Board
+* MPU6050 Sensor
+* Breadboard + LEDs + Push Buttons
+* VS Code + PlatformIO
+* FreeRTOS (included with ESP-IDF)
+* HiveMQ MQTT Broker
+* nRF Connect Mobile App
+* Edge Impulse for TinyML
 
 ---
 
