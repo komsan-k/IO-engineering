@@ -161,19 +161,80 @@ Secure Intelligent Embedded Systems
 
 * ESP32 (Arduino / ESP-IDF)
 * Node-RED + MQTT (Mosquitto)
-* Vivado HLS / Vitis HLS
 * Python (AI integration)
 
 ---
 
 ## 📖 Outcome
 
-Students will be able to:
+### Stage 1: Embedded Hardware Foundations
 
-* Design embedded systems
-* Build IoT architectures
-* Implement real-time communication
-* Accelerate systems using FPGA
+**(Week 1: Foundations & Hardware Interfacing)**
+
+Students learn microcontroller fundamentals, including GPIO, interrupts, timers, analog interfaces, and serial communication, enabling them to control peripherals and acquire sensor data.
+
+**Skills Gained:**
+
+* Bare-metal programming
+* Register-level control
+* Sensor interfacing
+* ADC/PWM operation
+* UART, I²C, and SPI communication
+
+⬇️
+
+### Stage 2: Real-Time Embedded Systems
+
+**(Week 2: RTOS & Concurrency)**
+
+Students progress from single-loop programs to FreeRTOS-based multitasking systems, learning task scheduling, synchronization, communication, and memory management for real-time applications.
+
+**Skills Gained:**
+
+* Multitasking design
+* Task synchronization
+* Queue-based communication
+* Software timers
+* Resource management
+
+⬇️
+
+### Stage 3: Connected IoT Devices
+
+**(Week 3: Connectivity & IoT Protocols)**
+
+Students enable embedded devices to communicate with sensors, cloud services, and mobile apps using Wi-Fi, MQTT, BLE, and low-power networking.
+
+**Skills Gained:**
+
+* Wi-Fi networking
+* HTTP and REST APIs
+* MQTT telemetry
+* BLE applications
+* Low-power IoT design
+
+⬇️
+
+### Stage 4: Edge Intelligence & Security
+
+**(Week 4: Edge AI & Embedded Security)**
+
+Students collect data, deploy TinyML models on microcontrollers, and secure embedded systems using cryptography and secure boot.
+
+**Skills Gained:**
+
+* TinyML workflow
+* Dataset collection
+* Model deployment
+* Edge inference
+* Embedded cybersecurity
+
+⬇️
+
+### Final System Integration Outcome
+
+
+Students can design intelligent, connected, and secure embedded systems for IoT, Industry 4.0, robotics, and cyber-physical applications.
 
 ---
 
