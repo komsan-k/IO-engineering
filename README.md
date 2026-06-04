@@ -105,14 +105,12 @@ Each week consists of **4 time slots**, each **3 hours**.
 
 ### 🔹 Slot 15: Edge Inference & Local Actuation
 
-* Theory: Managing latency, execution profiles, and memory buffers during live math inference on a CPU/MCU core.
-
-* Lab 15: Run the deployed ML model locally on the MCU in real-time. Process live sensor inputs through the inference engine and light up different physical LEDs based on the predicted gesture class.
+* Theory: Real-time ML inference on MCUs, focusing on latency, execution efficiency, and memory management.
+* Lab 15: Run the ML model on the MCU, process live sensor data, and control LEDs based on gesture classification results.
 
 ### 🔹 Slot 16: Embedded Cryptography & Secure Boot
-* Theory: Hardware security threats, symmetric vs. asymmetric encryption on low-power chips, secure bootloader concepts, and Root of Trust.
-
-* Lab 16: Use the MCU’s hardware cryptographic engine to encrypt a local string payload using AES-256, verify SHA-256 firmware hashes, and implement a basic secure firmware Over-The-Air (OTA) update mechanism.
+* Theory: Hardware security, symmetric/asymmetric encryption, secure boot, and Root of Trust.
+* Lab 16: Encrypt data with AES-256, verify firmware using SHA-256 hashes, and implement a basic secure OTA firmware update.
 
 ---
 
