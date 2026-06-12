@@ -14,6 +14,14 @@ Each week consists of **4 time slots**, each **3 hours**.
 
 ---
 
+## 📚 Teaching Book
+A teaching textbook
+
+📖 *Interconnecting Smart Objects with IP*  
+🔗 https://www.sciencedirect.com/book/monograph/9780123751652/interconnecting-smart-objects-with-ip
+
+---
+
 ## 🗓️ Week 1: Foundations & Hardware Interfacing
 
 ### 🔹 Slot 1: GPIO, Registers & Bare-Metal Control
