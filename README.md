@@ -87,6 +87,15 @@ A teaching textbook
 
 * Theory: Software timers, RTOS memory management, and dynamic vs. static allocation.
 * Lab 8: Use FreeRTOS timers for periodic tasks and monitor heap usage under varying workloads.
+
+  | Assessment Item                  |  Marks |
+| -------------------------------- | -----: |
+| Quiz (FreeRTOS Concepts)         |      5 |
+| Laboratory Completion (Labs 5–8) |      8 |
+| RTOS Program Design & Debugging  |      3 |
+| Demonstration & Discussion       |      4 |
+| **Total**                        | **20** |
+
 ---
 
 ## 🔗 Week 3: Connectivity & IoT Protocols
@@ -112,6 +121,14 @@ A teaching textbook
 * Theory: Power management, sleep modes, and LPWAN technologies.
 * Lab 12: Publish sensor data, enter deep sleep, and wake via timer or GPIO interrupt for low-power operation.
 
+| Assessment Item                       |  Marks |
+| ------------------------------------- | -----: |
+| Quiz (Wi-Fi, MQTT, BLE, LPWAN)        |      5 |
+| Laboratory Completion (Labs 9–12)     |      8 |
+| IoT Connectivity & Data Communication |      3 |
+| Live Demonstration                    |      4 |
+| **Total**                             | **20** |
+
 ---
 
 ## ⚡ Week 4: Edge AI & Embedded Security
@@ -135,6 +152,14 @@ A teaching textbook
 ### 🔹 Slot 16: Embedded Cryptography & Secure Boot
 * Theory: Hardware security, symmetric/asymmetric encryption, secure boot, and Root of Trust.
 * Lab 16: Encrypt data with AES-256, verify firmware using SHA-256 hashes, and implement a basic secure OTA firmware update.
+
+| Assessment Item                         |  Marks |
+| --------------------------------------- | -----: |
+| Quiz (TinyML & Embedded Security)       |      5 |
+| Laboratory Completion (Labs 13–16)      |      8 |
+| AI Deployment & Security Implementation |      3 |
+| Final Demonstration                     |      4 |
+| **Total**                               | **20** |
 
 ---
 
@@ -190,6 +215,17 @@ Secure Intelligent Embedded Systems
 * Smart Environment Monitor
 * Secure OTA Update System
 * TinyML Fall Detector
+
+| Criteria                      |  Marks |
+| ----------------------------- | -----: |
+| System Design & Innovation    |      4 |
+| Hardware Integration          |      4 |
+| Software Implementation       |      4 |
+| IoT/AI/Security Features      |      3 |
+| Demonstration & Functionality |      3 |
+| Report & Presentation         |      2 |
+| **Total**                     | **20** |
+
 ---
 
 ## 📌 Tools & Platforms
