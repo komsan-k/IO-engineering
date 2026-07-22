@@ -88,7 +88,7 @@ A teaching textbook
 * Theory: Software timers, RTOS memory management, and dynamic vs. static allocation.
 * Lab 8: Use FreeRTOS timers for periodic tasks and monitor heap usage under varying workloads.
 
-  | Assessment Item                  |  Marks |
+| Assessment Item                  |  Marks |
 | -------------------------------- | -----: |
 | Quiz (FreeRTOS Concepts)         |      5 |
 | Laboratory Completion (Labs 5–8) |      8 |
