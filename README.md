@@ -13,6 +13,16 @@ This 4-week intensive course covers:
 Each week consists of **4 time slots**, each **3 hours**.
 
 ---
+| Component         |   Marks |
+| ----------------- | ------: |
+| Week 1 Assessment |      20 |
+| Week 2 Assessment |      20 |
+| Week 3 Assessment |      20 |
+| Week 4 Assessment |      20 |
+| Mini Project      |      20 |
+| **Total**         | **100** |
+
+---
 
 ## 📚 Teaching Book
 A teaching textbook
