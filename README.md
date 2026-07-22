@@ -55,6 +55,14 @@ A teaching textbook
 * Theory: Synchronous communication, master-slave operation, addressing, and timing.
 * Lab 4: Interface an I²C sensor, read register data, and display formatted results via UART serial output.
 ---
+| Assessment Item                                      |  Marks |
+| ---------------------------------------------------- | -----: |
+| Quiz (GPIO, Registers, Interrupts, ADC/PWM, I²C/SPI) |      5 |
+| Laboratory Completion (Labs 1–4)                     |      8 |
+| Code Quality & Documentation                         |      3 |
+| Demonstration & Oral Explanation                     |      4 |
+| **Total**                                            | **20** |
+
 
 ## 🌐 Week 2: Real-Time Operating Systems (RTOS)
 #### Focus: Concurrency, multitasking, and resource management.
