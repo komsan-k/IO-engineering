@@ -28,6 +28,7 @@ Each week consists of **4 time slots**, each **3 hours**.
 A teaching textbook
 
 📖 [Vasseur JP, Dunkels A. Interconnecting smart objects with IP. 2010.](https://www.sciencedirect.com/book/monograph/9780123751652/interconnecting-smart-objects-with-ip)
+
 📖 [Warden P, Situnayake D. TinyML: Machine Learning with TensorFlow Lite on Arduino and Ultra-Low-Power Microcontrollers. 2019.](https://www.amazon.com/TinyML-Learning-TensorFlow-Ultra-Low-Power-Microcontrollers/dp/1492052043)
 
 ---
