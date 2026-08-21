@@ -29,12 +29,9 @@ The fundamental relationship is
 
 $$
 \boxed{
-\text{Clock}
-+
-\text{Data}
-+
-\text{Protocol}
-=
+\text{Clock}+
+\text{Data}+
+\text{Protocol}=
 \text{Synchronous Communication}
 }
 $$
@@ -571,10 +568,8 @@ $$
 then
 
 $$
-T_{CLK}
-=
-\frac{1}{100000}
-=
+T_{CLK}=
+\frac{1}{100000}=
 10~\mu s.
 $$
 
@@ -612,8 +607,7 @@ $$
 the approximate time is
 
 $$
-T_{byte}
-=
+T_{byte}=
 \frac{9}{100000}
 $$
 
@@ -781,8 +775,7 @@ Therefore:
 
 $$
 \boxed{
-\text{Device Selection}
-=
+\text{Device Selection}=
 \text{Bus Address}
 }
 $$
@@ -791,8 +784,7 @@ $$
 
 $$
 \boxed{
-\text{Device Selection}
-=
+\text{Device Selection}=
 \text{Chip Select}
 }
 $$
@@ -817,8 +809,7 @@ $$
 \boxed{
 \text{Transmit}
 +
-\text{Receive}
-=
+\text{Receive}=
 \text{Simultaneous}
 }
 $$
@@ -928,8 +919,7 @@ $$
 then the clock period is
 
 $$
-T_{SPI}
-=
+T_{SPI}=
 \frac{1}{10\times10^6}
 $$
 
@@ -940,16 +930,14 @@ $$
 An 8-bit transfer requires approximately eight clock cycles:
 
 $$
-T_{8bit}
-=
+T_{8bit}=
 8T_{SPI}.
 $$
 
 Therefore,
 
 $$
-T_{8bit}
-=
+T_{8bit}=
 800~ns
 $$
 
@@ -1094,10 +1082,9 @@ $$
 The timing margin is
 
 $$
-T_{margin}
-=
-T_{available}
--
+T_{margin}=
+T_{available}-
+
 T_{setup}.
 $$
 
@@ -1158,8 +1145,7 @@ Therefore,
 
 $$
 \boxed{
-\text{Reliable Communication}
-=
+\text{Reliable Communication}=
 \text{Correct Protocol}
 +
 \text{Correct Timing}
@@ -1384,8 +1370,7 @@ Thus,
 
 $$
 \boxed{
-\text{Protocol Selection}
-=
+\text{Protocol Selection}=
 f(
 \text{Speed},
 \text{Pins},
@@ -1615,10 +1600,8 @@ $$
 Therefore,
 
 $$
-f
-=
-\frac{1}{0.5\times10^{-6}}
-=
+f=
+\frac{1}{0.5\times10^{-6}}=
 2~MHz.
 $$
 
@@ -1688,11 +1671,9 @@ $$
 For example, if 64 useful bits require 80 total transferred bits,
 
 $$
-\eta
-=
+\eta =
 \frac{64}{80}
-\times100
-=
+\times100 =
 80\%.
 $$
 
@@ -1990,8 +1971,7 @@ $$
 \boxed{
 \text{Clock}
 +
-\text{Data}
-=
+\text{Data} =
 \text{Synchronized Transfer}
 }
 $$
@@ -2052,8 +2032,7 @@ $$
 +
 \text{Correct Protocol}
 +
-\text{Correct Wiring}
-=
+\text{Correct Wiring} =
 \text{Reliable Data Transfer}
 }
 $$
