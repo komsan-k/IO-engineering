@@ -1,1691 +1,1566 @@
-# 📘 Theory: MCU Architecture, Memory Mapping, Register-Level Programming, and HAL Basics
+# 🔬 Lab 1: ESP32 Bare-Metal GPIO Programming
 
-## ESP32 MCU Case
-
-## 1. Introduction
-
-A **microcontroller unit (MCU)** is a compact computing system that integrates a processor core, memory, digital and analog peripherals, communication interfaces, timers, and control logic on a single chip. Unlike a general-purpose computer, an MCU is designed to interact directly with physical devices such as sensors, actuators, switches, displays, motors, and communication modules.
-
-The ESP32 family is a useful case study because it combines:
-
-* a programmable CPU,
-* internal SRAM and ROM,
-* external flash support,
-* GPIO,
-* timers,
-* ADC/DAC capabilities on selected devices,
-* PWM,
-* UART,
-* SPI,
-* I²C,
-* Wi-Fi,
-* Bluetooth,
-* interrupt controllers,
-* low-power subsystems.
-
-The basic embedded-system model is
-
-$$
-\boxed{
-\text{CPU}
-+
-\text{Memory}
-+
-\text{Peripherals}
-+
-\text{Software}
-===============
-
-\text{MCU System}
-}
-$$
+## Development Environment Setup, LED Blinking, and Push-Button Input
 
 ---
 
-# 2. MCU Architecture
+## 🧩 1. Objective
 
-## 2.1 Basic MCU Structure
+This laboratory introduces basic **bare-metal embedded programming** using the ESP32 microcontroller. Students will configure the development environment and implement simple GPIO operations for an LED and push button.
 
-A typical MCU can be represented as
+After completing this laboratory, students will be able to:
 
-```text
-                 ┌─────────────────┐
-                 │      CPU        │
-                 │  ALU + Control  │
-                 └────────┬────────┘
-                          │
-                    System Bus
-                          │
-        ┌─────────────────┼─────────────────┐
-        ▼                 ▼                 ▼
-      Memory          Peripherals       Interrupts
-        │                 │                 │
-   Flash / SRAM       GPIO / UART      IRQ Controller
-                      SPI / I2C
-                      ADC / Timer
+-  Set up an ESP32 development environment.
+-  Understand the basic workflow of MCU firmware development.
+-  Configure a GPIO pin as a digital output.
+-  Blink an LED using software-controlled timing.
+-  Configure a GPIO pin as a digital input.
+-  Read the state of a push button.
+-  Control an LED according to the push-button state.
+-  Understand the relationship between **GPIO registers, low-level drivers, and physical pins**.
+-  Compare polling-based input with basic event-driven embedded-system concepts.
+
+---
+
+## ⚙️ 2. Equipment and Tools
+
+| Tool / ResourceDescription  |                                           |
+| --------------------------- | ----------------------------------------- |
+| **ESP32 Development Board** | Target MCU platform                       |
+| **USB Cable**               | Programming and serial communication      |
+| **LED**                     | Digital output device                     |
+| **220–330 Ω Resistor**      | LED current-limiting resistor             |
+| **Push Button**             | Digital input device                      |
+| **10 kΩ Resistor**          | Optional external pull-up/pull-down       |
+| **Breadboard**              | Circuit construction                      |
+| **Jumper Wires**            | Electrical connections                    |
+| **VS Code / Terminal**      | Source-code development                   |
+| **ESP-IDF**                 | ESP32 development framework and toolchain |
+| **Serial Monitor**          | Debug and status output                   |
+
+---
+
+# 🧠 3. Background Theory
+
+## 3.1 Bare-Metal Embedded Programming
+
+Bare-metal programming refers to software that interacts closely with the microcontroller hardware without relying on a large operating-system environment.
+
+The basic relationship is
+
+Application→MCU Hardware​
+
+At a low level, the CPU controls peripherals through hardware registers:
+
+CPU→Peripheral Registers→GPIO Hardware​
+
+In this laboratory, ESP-IDF may provide startup, toolchain, and low-level support while the application remains a simple MCU GPIO program without application-level RTOS task design.
+
+> **Note:** ESP-IDF itself uses FreeRTOS internally on common ESP32 targets. Therefore, “bare-metal” in this introductory laboratory means direct, low-level MCU-oriented GPIO programming rather than a completely RTOS-free runtime.
+
+---
+
+## 3.2 General-Purpose Input/Output
+
+**GPIO** stands for General-Purpose Input/Output.
+
+A GPIO pin can typically operate as:
+
+-  digital input,
+-  digital output,
+-  peripheral signal,
+-  interrupt source.
+
+For this laboratory:
+
+```
+GPIO Output → LED
 ```
 
-The CPU executes instructions, memory stores code and data, and peripherals interface the MCU with the outside world.
+GPIO Input  ← Push Button
 
 ---
 
-## 2.2 CPU Core
+# 💡 4. Digital Output
 
-The processor executes the instruction cycle
+A digital output drives a pin to a logical state.
 
-$$
-\boxed{
-\text{Fetch}
-\rightarrow
-\text{Decode}
-\rightarrow
-\text{Execute}
-}
-$$
+GPIO={1,0,​HIGHLOW​
 
-During execution, the CPU performs operations such as:
+For a typical active-high LED connection:
 
-* arithmetic,
-* logical operations,
-* data movement,
-* branch operations,
-* memory accesses,
-* peripheral accesses.
-
-For example,
-
-```c
-c = a + b;
+```
+ESP32 GPIO
 ```
 
-may eventually produce processor instructions that:
-
-1. load `a`,
-2. load `b`,
-3. add them,
-4. store the result.
-
----
-
-# 3. ESP32 MCU Architecture
-
-The original ESP32 commonly uses dual Xtensa LX6 CPU cores, while newer ESP32 variants may use Xtensa or RISC-V cores depending on the device.
-
-Therefore, when designing for the ESP32 family, the exact architecture should always be checked for the selected chip.
-
-A simplified ESP32 architecture is
-
-```text
-                    ┌──────────────────┐
-                    │   CPU Core(s)    │
-                    └────────┬─────────┘
-                             │
-                       System Bus
-                             │
-          ┌──────────────────┼──────────────────┐
-          ▼                  ▼                  ▼
-       Memory              GPIO            Communication
-   ROM / SRAM / Flash       │              UART / SPI / I2C
-                            │
-          ┌─────────────────┼──────────────────┐
-          ▼                 ▼                  ▼
-        Timers             ADC               PWM
-                                               │
-                                               ▼
-                                           Actuators
-```
-
-Wireless subsystems add
-
-```text
-Wi-Fi
-Bluetooth
-```
-
-to the embedded platform.
-
----
-
-# 4. Harvard and Von Neumann Concepts
-
-MCU architectures are often explained using two classical memory organizations.
-
-## 4.1 Von Neumann Architecture
-
-Instructions and data share a common memory and bus.
-
-```text
-CPU
- │
- ▼
-Common Bus
- │
- ▼
-Instructions + Data
-```
-
----
-
-## 4.2 Harvard Architecture
-
-Instructions and data use separate paths.
-
-```text
-             CPU
-          /       \
-         ▼         ▼
-Instruction     Data
- Memory        Memory
-```
-
-Many modern MCUs use a modified Harvard architecture internally to improve performance while still presenting a unified software address space.
-
----
-
-# 5. MCU Memory Types
-
-An MCU commonly contains several forms of memory.
-
-| Memory Type                | Purpose                                             |
-| -------------------------- | --------------------------------------------------- |
-| **ROM**                    | Boot code, fixed functions                          |
-| **Flash**                  | Program storage and persistent data                 |
-| **SRAM**                   | Runtime variables and stack                         |
-| **Registers**              | Fast CPU and peripheral state                       |
-| **RTC Memory**             | Low-power data retention on supported ESP32 devices |
-| **External Flash / PSRAM** | Additional program or data storage                  |
-
----
-
-# 6. Program Memory
-
-Program instructions are commonly stored in nonvolatile flash.
-
-For example:
-
-```text
-Power OFF
-   │
-   ▼
-Program remains stored
-   │
-   ▼
-Power ON
-   │
-   ▼
-Bootloader starts
-   │
-   ▼
-Application runs
-```
-
-This makes flash suitable for firmware storage.
-
----
-
-# 7. SRAM
-
-SRAM stores temporary runtime information.
-
-Examples include:
-
-```c
-int counter;
-float temperature;
-char buffer[128];
-```
-
-These values normally exist while the MCU is powered.
-
-SRAM is used for:
-
-* local variables,
-* global variables,
-* stack,
-* heap,
-* communication buffers.
-
----
-
-# 8. Stack and Heap
-
-## 8.1 Stack
-
-The stack stores items such as:
-
-* function parameters,
-* local variables,
-* return addresses,
-* saved registers.
-
-Conceptually:
-
-```text
-Function Call
     │
+
     ▼
-Stack Frame Created
+
+ Resistor
+
     │
+
     ▼
-Function Executes
+
+   LED
+
     │
+
     ▼
-Stack Frame Removed
-```
+
+   GND
+
+When
+
+GPIO=1,
+
+the LED is ON.
+
+When
+
+GPIO=0,
+
+the LED is OFF.
 
 ---
 
-## 8.2 Heap
+# 🔘 5. Digital Input
 
-The heap is used for dynamic memory allocation.
-
-For example:
-
-```c
-ptr = malloc(100);
-```
-
-allocates memory during runtime.
-
-Embedded systems should use dynamic allocation carefully because fragmentation and unpredictable memory usage can reduce reliability.
-
----
-
-# 9. Memory Mapping
-
-## 9.1 Concept
-
-In an MCU, memory and peripheral hardware are assigned specific addresses.
-
-This is called a **memory map**.
-
-The CPU may see the system as
-
-```text
-Address Space
-     │
-     ├── Program Memory
-     ├── SRAM
-     ├── Peripheral Registers
-     ├── ROM
-     └── External Memory
-```
-
-Therefore,
-
-$$
-\boxed{
-\text{Address}
-\rightarrow
-\text{Specific Hardware Resource}
-}
-$$
-
----
-
-# 10. Memory-Mapped I/O
-
-A peripheral register can be accessed as if it were a memory location.
-
-For example, conceptually,
-
-```text
-0x....0000 → GPIO control register
-0x....0004 → GPIO output register
-0x....0008 → GPIO input register
-```
-
-The exact addresses depend on the ESP32 device.
-
-The CPU can therefore perform something conceptually similar to
-
-$$
-\text{Memory Write}
-\rightarrow
-\text{GPIO Register}
-\rightarrow
-\text{Physical Pin}
-$$
-
----
-
-# 11. Peripheral Registers
-
-A hardware peripheral is controlled by registers.
-
-Examples:
-
-* configuration register,
-* status register,
-* data register,
-* interrupt-enable register.
-
-A GPIO peripheral might conceptually contain
-
-| Register      | Function                   |
-| ------------- | -------------------------- |
-| `GPIO_ENABLE` | Configure output direction |
-| `GPIO_OUT`    | Set output value           |
-| `GPIO_IN`     | Read input value           |
-| `GPIO_SET`    | Set selected bits          |
-| `GPIO_CLEAR`  | Clear selected bits        |
-
-The exact names vary by architecture and software layer.
-
----
-
-# 12. Register Bit Fields
-
-One register often contains multiple control fields.
-
-For example, imagine an 8-bit register
-
-```text
-Bit 7   Bit 6   Bit 5   Bit 4   Bit 3   Bit 2   Bit 1   Bit 0
- EN      MODE    IRQ     ---      ---     CFG1    CFG0    STATUS
-```
-
-Different bits control different hardware functions.
-
-Register programming therefore requires operations such as:
-
-* set bit,
-* clear bit,
-* toggle bit,
-* test bit.
-
----
-
-# 13. Bitwise Operations
-
-Embedded programming heavily uses bitwise operators.
-
-## Set a Bit
-
-```c
-reg |= (1 << n);
-```
-
-This forces bit (n) to `1`.
-
----
-
-## Clear a Bit
-
-```c
-reg &= ~(1 << n);
-```
-
-This forces bit (n) to `0`.
-
----
-
-## Toggle a Bit
-
-```c
-reg ^= (1 << n);
-```
-
-This reverses bit (n).
-
----
-
-## Test a Bit
-
-```c
-if (reg & (1 << n)) {
-    // bit is set
-}
-```
-
----
-
-# 14. Register-Level Programming
-
-Register-level programming accesses hardware registers directly.
-
-Conceptually:
-
-```c
-REGISTER = VALUE;
-```
-
-or
-
-```c
-REGISTER |= MASK;
-```
-
-This gives very precise hardware control.
-
-The basic flow is
-
-```text
-C Code
-  │
-  ▼
-Register Address
-  │
-  ▼
-Peripheral Register
-  │
-  ▼
-Hardware Behavior
-```
-
----
-
-# 15. Advantages of Register-Level Programming
-
-Register-level programming provides:
-
-* precise control,
-* low overhead,
-* high performance,
-* detailed understanding of hardware,
-* deterministic peripheral configuration.
-
-It is useful for:
-
-* device-driver development,
-* high-performance code,
-* custom timing,
-* low-level debugging.
-
----
-
-# 16. Disadvantages of Register-Level Programming
-
-Direct register access also has disadvantages:
-
-* device-specific code,
-* reduced portability,
-* more difficult debugging,
-* higher risk of configuration errors,
-* dependency on datasheets and technical reference manuals.
-
-Therefore,
-
-$$
-\boxed{
-\text{Low-Level Control}
-\leftrightarrow
-\text{Software Complexity}
-}
-$$
-
----
-
-# 17. ESP32 Register-Level Concept
-
-An ESP32 GPIO output may conceptually be controlled through dedicated GPIO registers.
-
-The programming model is
-
-```text
-CPU
- │
- ▼
-GPIO Register
- │
- ▼
-GPIO Peripheral
- │
- ▼
-Physical Pin
- │
- ▼
-LED
-```
-
-A direct register-level implementation typically requires knowledge of:
-
-* peripheral base addresses,
-* register offsets,
-* bit definitions.
-
-For portable application development, ESP-IDF generally exposes higher-level APIs instead.
-
----
-
-# 18. Volatile Keyword
-
-Hardware registers can change independently of normal program flow.
-
-Therefore, low-level register pointers are commonly declared as `volatile`.
-
-Conceptually:
-
-```c
-volatile uint32_t *reg;
-```
-
-`volatile` tells the compiler that the value may change unexpectedly and should not be optimized away based on ordinary variable assumptions.
-
----
-
-# 19. Why `volatile` Matters
-
-Suppose the CPU repeatedly checks a status register:
-
-```c
-while ((*status_reg & READY_BIT) == 0) {
-}
-```
-
-The hardware may set `READY_BIT` later.
-
-Without appropriate volatile semantics, a compiler could incorrectly assume that the value never changes.
-
-Thus,
-
-$$
-\boxed{
-\text{Hardware Register}
-\Rightarrow
-\text{Volatile Access}
-}
-$$
-
-is an important low-level programming concept.
-
----
-
-# 20. Hardware Abstraction Layer
-
-A **Hardware Abstraction Layer (HAL)** provides software functions that hide low-level register details.
-
-Instead of writing
-
-```text
-Set register X
-Clear bit Y
-Configure register Z
-```
-
-the application can use
-
-```c
-gpio_set_level(pin, 1);
-```
-
-or an equivalent API.
-
-The architecture becomes
-
-```text
-Application
-    │
-    ▼
-HAL / Driver API
-    │
-    ▼
-Registers
-    │
-    ▼
-Peripheral
-    │
-    ▼
-Hardware
-```
-
----
-
-# 21. HAL Advantages
-
-HAL-based development provides:
-
-* improved readability,
-* faster development,
-* reduced hardware-specific code,
-* easier maintenance,
-* better portability,
-* safer peripheral configuration.
-
-The trade-off is that abstraction can add some overhead or hide lower-level details.
-
----
-
-# 22. ESP32 Software Stack
-
-A simplified ESP32 software stack can be represented as
-
-```text
-Application Code
-      │
-      ▼
-ESP-IDF APIs
-      │
-      ▼
-Drivers / HAL
-      │
-      ▼
-Low-Level Layer
-      │
-      ▼
-Peripheral Registers
-      │
-      ▼
-ESP32 Hardware
-```
-
-ESP-IDF provides APIs for:
-
-* GPIO,
-* UART,
-* SPI,
-* I²C,
-* timers,
-* Wi-Fi,
-* Bluetooth,
-* FreeRTOS integration.
-
----
-
-# 23. Register-Level versus HAL Programming
-
-| Feature              | Register-Level        | HAL / Driver API        |
-| -------------------- | --------------------- | ----------------------- |
-| Control              | Very high             | High                    |
-| Portability          | Low                   | Higher                  |
-| Complexity           | High                  | Lower                   |
-| Development speed    | Slower                | Faster                  |
-| Hardware knowledge   | Extensive             | Moderate                |
-| Performance overhead | Minimal               | Usually small           |
-| Readability          | Lower                 | Higher                  |
-| Best use             | Drivers, optimization | Application development |
-
----
-
-# 24. ESP32 GPIO Example Using HAL
-
-A typical ESP-IDF-style GPIO program concept is
-
-```c
-#include "driver/gpio.h"
-
-#define LED_PIN GPIO_NUM_2
-
-void app_main(void)
-{
-    gpio_reset_pin(LED_PIN);
-
-    gpio_set_direction(
-        LED_PIN,
-        GPIO_MODE_OUTPUT
-    );
-
-    while (1)
-    {
-        gpio_set_level(
-            LED_PIN,
-            1
-        );
-
-        gpio_set_level(
-            LED_PIN,
-            0
-        );
-    }
-}
-```
-
-The API hides the internal register-level implementation.
-
----
-
-# 25. GPIO Configuration Flow
-
-A GPIO output normally requires several configuration steps.
-
-```text
-Select GPIO Pin
-      │
-      ▼
-Configure Pin Function
-      │
-      ▼
-Configure Direction
-      │
-      ▼
-Set Output Level
-```
-
-In a HAL-based environment, these steps are handled by driver functions.
-
----
-
-# 26. GPIO Input Example
-
-Conceptually:
-
-```c
-gpio_set_direction(
-    BUTTON_PIN,
-    GPIO_MODE_INPUT
-);
-
-int value =
-    gpio_get_level(
-        BUTTON_PIN
-    );
-```
-
-The data flow is
-
-```text
-Push Button
-    │
-    ▼
-GPIO Input Circuit
-    │
-    ▼
-GPIO Register
-    │
-    ▼
-Driver API
-    │
-    ▼
-Application Variable
-```
-
----
-
-# 27. Pull-Up and Pull-Down Resistors
-
-Digital inputs should not normally be left floating.
-
-An input can be configured with:
-
-* pull-up,
-* pull-down,
-* external resistor.
-
-For a pull-up configuration:
-
-```text
-VCC
- │
- R
- │
- ├──── GPIO
- │
-Switch
- │
-GND
-```
-
-The input normally reads `1` and becomes `0` when the switch is pressed.
-
----
-
-# 28. Peripheral Multiplexing
-
-One ESP32 pin may support several functions.
-
-For example, a physical pin may be usable as:
-
-* GPIO,
-* UART,
-* SPI,
-* PWM,
-* ADC,
-
-depending on the selected chip and pin-matrix capabilities.
-
-Thus,
-
-$$
-\boxed{
-\text{Physical Pin}
-\neq
-\text{Single Fixed Function}
-}
-$$
-
-on many modern MCUs.
-
----
-
-# 29. Interrupts
-
-Polling repeatedly checks hardware status:
-
-```text
-Check Input
-   │
-   ▼
-Check Again
-   │
-   ▼
-Check Again
-```
-
-Interrupts allow hardware to notify the CPU.
-
-```text
-Peripheral Event
-      │
-      ▼
-Interrupt Controller
-      │
-      ▼
-CPU
-      │
-      ▼
-ISR
-```
-
-ISR means **Interrupt Service Routine**.
-
----
-
-# 30. Polling versus Interrupts
-
-| Feature                    | Polling         | Interrupt      |
-| -------------------------- | --------------- | -------------- |
-| CPU repeatedly checks      | Yes             | No             |
-| Response efficiency        | Lower           | Higher         |
-| Simplicity                 | High            | Moderate       |
-| Real-time response         | Depends on loop | Usually better |
-| CPU can perform other work | Limited         | Yes            |
-
----
-
-# 31. ESP32 GPIO Interrupt Concept
-
-A GPIO can generate an interrupt when an event occurs such as:
-
-* rising edge,
-* falling edge,
-* any edge,
-* selected logic level.
-
-The processing flow is
-
-```text
-Button Press
-    │
-    ▼
-GPIO Edge
-    │
-    ▼
-Interrupt Request
-    │
-    ▼
-CPU ISR
-    │
-    ▼
-Application Response
-```
-
----
-
-# 32. Timers
-
-Timers are hardware counters driven by a clock source.
-
-A timer can be used for:
-
-* delays,
-* periodic interrupts,
-* frequency measurement,
-* event timing,
-* PWM generation.
+A GPIO configured as an input reads the voltage level applied to the pin.
 
 Conceptually,
 
-$$
-COUNT[n+1]=COUNT[n]+1.
-$$
+VGPIO​≈0 V⇒Logic 0
 
-When the timer reaches a programmed value,
+and
 
-$$
-COUNT=COMPARE,
-$$
+VGPIO​≈3.3 V⇒Logic 1.
 
-an event can be generated.
+A push button provides a simple digital input.
 
 ---
 
-# 33. UART Peripheral
+# ⚠️ 6. ESP32 Voltage Level
 
-UART provides asynchronous serial communication.
+ESP32 GPIO uses approximately
 
-The typical frame is
+3.3 V
 
-```text
-Start | Data Bits | Stop
+logic.
+
+Do not directly apply a 5 V signal to a GPIO pin unless the specific board/interface provides appropriate level conversion.
+
+---
+
+# 🔌 7. Example Hardware Configuration
+
+For this laboratory, an example configuration is:
+
+| DeviceESP32 GPIO |        |
+| ---------------- | ------ |
+| LED              | GPIO 2 |
+| Push Button      | GPIO 4 |
+
+The exact pins can be changed according to the development board.
+
+Always check the board documentation because some ESP32 boards reserve particular GPIOs for bootstrapping, flash, USB, or other onboard functions.
+
+---
+
+# 💡 8. LED Circuit
+
+Connect the LED as follows:
+
+```
+GPIO 2
 ```
 
-A common configuration is
-
-```text
-115200 baud
-8 data bits
-No parity
-1 stop bit
-```
-
-or
-
-```text
-115200-8-N-1
-```
-
-The architecture is
-
-```text
-ESP32
   │
-  ▼
-UART Peripheral
+
   │
-  ▼
-TX / RX Pins
+
+ [330 Ω]
+
   │
+
   ▼
-PC or External MCU
-```
+
+ LED
+
+  │
+
+ GND
+
+The resistor limits LED current.
+
+A typical value is
+
+R=220–330 Ω.
 
 ---
 
-# 34. SPI Peripheral
+# 🔘 9. Push-Button Circuit
 
-SPI is a synchronous serial protocol.
+One convenient configuration uses an internal pull-up resistor.
 
-Typical signals are:
-
-* SCLK,
-* MOSI,
-* MISO,
-* CS.
-
-The master controls communication timing.
-
-```text
-Master
- │
- ├── SCLK
- ├── MOSI
- ├── MISO
- └── CS
-      │
-      ▼
-    Slave
+```
+          ESP32
 ```
 
-SPI is commonly used for:
+            │
 
-* displays,
-* ADCs,
-* flash memory,
-* sensors.
+        GPIO 4
+
+            │
+
+            ├──── Internal Pull-Up
+
+            │
+
+          Button
+
+            │
+
+            ▼
+
+           GND
+
+When the button is not pressed:
+
+BUTTON=1.
+
+When the button is pressed:
+
+BUTTON=0.
+
+Therefore, the button is **active-low**.
 
 ---
 
-# 35. I²C Peripheral
+# 🧠 10. Why Use a Pull-Up?
 
-I²C typically uses two wires:
+An unconnected digital input can float between HIGH and LOW.
 
-* SDA,
-* SCL.
+This produces unpredictable behavior.
 
-Multiple devices can share the same bus using addresses.
+The pull-up resistor establishes a known default state:
 
-```text
-MCU
- │
- ├── SDA ──────────┬── Sensor 1
- └── SCL ──────────┼── Sensor 2
-                   └── Sensor 3
-```
+Button Released→Logic 1​
 
-This is widely used for sensors and low-speed peripherals.
+and pressing the button connects the input to ground:
+
+Button Pressed→Logic 0​
 
 ---
 
-# 36. MCU Register-Level Development Flow
+# 🛠️ 11. Development Environment
 
-A low-level workflow is
+A typical ESP32 development workflow uses:
 
-```text
-Read Datasheet
-     │
-     ▼
-Read Technical Reference Manual
-     │
-     ▼
-Find Peripheral Base Address
-     │
-     ▼
-Find Register Offset
-     │
-     ▼
-Configure Bit Fields
-     │
-     ▼
-Test Peripheral
+```
+Source Code
 ```
 
-This process requires detailed understanding of the hardware.
-
----
-
-# 37. HAL-Based Development Flow
-
-A HAL-based workflow is simpler:
-
-```text
-Select Peripheral
-      │
-      ▼
-Call Driver Configuration API
-      │
-      ▼
-Call Read/Write API
-      │
-      ▼
-Test Application
-```
-
-This is more appropriate for many application-level projects.
-
----
-
-# 38. Example: LED Control at Three Abstraction Levels
-
-## Level 1 — Hardware Concept
-
-```text
-GPIO Output Register
-        │
-        ▼
-     GPIO Pin
-        │
-        ▼
-       LED
-```
-
-## Level 2 — Register-Level Concept
-
-```c
-GPIO_REGISTER |= LED_MASK;
-```
-
-## Level 3 — HAL API
-
-```c
-gpio_set_level(LED_PIN, 1);
-```
-
-All three ultimately affect the same hardware.
-
----
-
-# 39. Example: Button-to-LED System
-
-A simple embedded application is
-
-```text
-Button
-   │
-   ▼
-GPIO Input
-   │
-   ▼
-CPU
-   │
-   ▼
-GPIO Output
-   │
-   ▼
-LED
-```
-
-The algorithm is
-
-```text
-Read Button
     │
+
     ▼
-If Pressed?
- ┌──┴──┐
-Yes   No
- │     │
- ▼     ▼
-LED ON LED OFF
+
+ESP-IDF
+
+    │
+
+    ▼
+
+Compiler / Linker
+
+    │
+
+    ▼
+
+Firmware Binary
+
+    │
+
+    ▼
+
+USB / Serial
+
+    │
+
+    ▼
+
+ESP32
+
+The main stages are:
+
+Write→Build→Flash→Monitor​
+
+---
+
+# 💻 12. ESP-IDF Installation
+
+Install the current ESP-IDF development environment appropriate for the operating system.
+
+The environment normally provides:
+
+-  compiler toolchain,
+-  CMake build system,
+-  ESP-IDF libraries,
+-  flashing utilities,
+-  serial monitor,
+-  debugging tools.
+
+After installation, verify the command-line environment with:
+
+```
+idf.py --version
 ```
 
 ---
 
-# 40. Example HAL Implementation
+# 📁 13. Basic ESP-IDF Project Structure
 
-```c
+A simple project can have the following organization:
+
+```
+lab1_gpio/
+```
+
+│
+
+├── CMakeLists.txt
+
+│
+
+└── main/
+
+    ├── CMakeLists.txt
+
+    └── main.c
+
+The main application is placed in:
+
+```
+main/main.c
+```
+
+---
+
+# ⚙️ 14. Target Configuration
+
+Select the appropriate ESP32 target.
+
+For the original ESP32, for example:
+
+```
+idf.py set-target esp32
+```
+
+Other ESP32-family devices require their corresponding target.
+
+The target determines characteristics such as:
+
+-  CPU architecture,
+-  memory organization,
+-  peripheral implementation,
+-  toolchain,
+-  supported GPIO features.
+
+---
+
+# 🔨 15. Building the Project
+
+Compile the firmware using:
+
+```
+idf.py build
+```
+
+The build process performs approximately:
+
+```
+C Source
+```
+
+   │
+
+   ▼
+
+Compiler
+
+   │
+
+   ▼
+
+Object Files
+
+   │
+
+   ▼
+
+Linker
+
+   │
+
+   ▼
+
+Firmware
+
+Compilation errors must be corrected before flashing.
+
+---
+
+# 📥 16. Flashing the ESP32
+
+Connect the ESP32 board to the computer through USB.
+
+Then use:
+
+```
+idf.py flash
+```
+
+If a serial port must be specified, the exact command depends on the operating system and detected port.
+
+After flashing, the ESP32 executes the new firmware.
+
+---
+
+# 🖥️ 17. Serial Monitor
+
+The serial monitor can be opened using:
+
+```
+idf.py monitor
+```
+
+Build, flash, and monitor can also commonly be combined:
+
+```
+idf.py build flash monitor
+```
+
+Serial output is useful for:
+
+-  debugging,
+-  button-state observation,
+-  program-status messages.
+
+---
+
+# 💡 18. Experiment 1 — Blink an LED
+
+The first program periodically changes the GPIO output:
+
+```
+LED ON
+```
+
+  │
+
+Delay
+
+  │
+
+LED OFF
+
+  │
+
+Delay
+
+  │
+
+  └────────► Repeat
+
+The desired sequence is
+
+0→1→0→1→⋯
+
+---
+
+# 💻 19. LED Blink Program
+
+A simple ESP-IDF implementation is:
+
+```
 #include "driver/gpio.h"
+```
 
-#define BUTTON_PIN GPIO_NUM_0
-#define LED_PIN    GPIO_NUM_2
+\#include "esp\_rom\_sys.h"
 
-void app_main(void)
+
+
+\#define LED\_PIN GPIO\_NUM\_2
+
+
+
+void app\_main(void)
+
 {
-    gpio_reset_pin(BUTTON_PIN);
-    gpio_reset_pin(LED_PIN);
 
-    gpio_set_direction(
-        BUTTON_PIN,
-        GPIO_MODE_INPUT
+gpio\_reset\_pin(LED\_PIN);
+
+
+
+gpio\_set\_direction(
+
+LED\_PIN,
+
+GPIO\_MODE\_OUTPUT
+
     );
 
-    gpio_set_direction(
-        LED_PIN,
-        GPIO_MODE_OUTPUT
-    );
 
-    while (1)
+
+while (1)
+
     {
-        int button =
-            gpio_get_level(
-                BUTTON_PIN
+
+gpio\_set\_level(
+
+LED\_PIN,
+
+1
+
+        );
+
+
+
+esp\_rom\_delay\_us(500000);
+
+
+
+gpio\_set\_level(
+
+LED\_PIN,
+
+0
+
+        );
+
+
+
+esp\_rom\_delay\_us(500000);
+
+    }
+
+}
+
+Here, the ROM delay routine provides a simple blocking delay without explicitly creating an application FreeRTOS task delay.
+
+---
+
+# ⏱️ 20. LED Timing
+
+The program keeps the LED ON for
+
+TON​=0.5 s
+
+and OFF for
+
+TOFF​=0.5 s.
+
+Therefore,
+
+T=TON​+TOFF​=1 s.
+
+The blinking frequency is approximately
+
+f=T1​=1 Hz.
+
+---
+
+# 🔬 21. Experiment 1 Tasks
+
+1.  Build the project.
+2.  Flash the ESP32.
+3.  Verify that the LED blinks.
+4.  Change the delay to 250 ms.
+5.  Observe the new blinking frequency.
+6.  Change the delay to 1 s.
+7.  Record the observed behavior.
+
+---
+
+# 📊 22. LED Blink Results
+
+| ON TimeOFF TimeExpected PeriodExpected FrequencyObserved |         |       |        |   |
+| -------------------------------------------------------- | ------- | ----- | ------ | - |
+| 1000 ms                                                  | 1000 ms | 2 s   | 0.5 Hz |   |
+| 500 ms                                                   | 500 ms  | 1 s   | 1 Hz   |   |
+| 250 ms                                                   | 250 ms  | 0.5 s | 2 Hz   |   |
+
+Students should complete the final column experimentally.
+
+---
+
+# 🔘 23. Experiment 2 — Read a Push Button
+
+The next experiment configures GPIO 4 as an input with an internal pull-up.
+
+The system behavior is:
+
+```
+Push Button
+```
+
+     │
+
+     ▼
+
+GPIO Input
+
+     │
+
+     ▼
+
+CPU Reads GPIO
+
+     │
+
+     ▼
+
+Serial Output
+
+---
+
+# 💻 24. Push-Button Program
+
+```
+#include <stdio.h>
+```
+
+
+
+\#include "driver/gpio.h"
+
+\#include "esp\_rom\_sys.h"
+
+
+
+\#define BUTTON\_PIN GPIO\_NUM\_4
+
+
+
+void app\_main(void)
+
+{
+
+gpio\_reset\_pin(BUTTON\_PIN);
+
+
+
+gpio\_set\_direction(
+
+BUTTON\_PIN,
+
+GPIO\_MODE\_INPUT
+
+    );
+
+
+
+gpio\_set\_pull\_mode(
+
+BUTTON\_PIN,
+
+GPIO\_PULLUP\_ONLY
+
+    );
+
+
+
+while (1)
+
+    {
+
+int button =
+
+gpio\_get\_level(
+
+BUTTON\_PIN
+
             );
 
-        gpio_set_level(
-            LED_PIN,
-            button
+
+
+printf(
+
+"Button = %d\n",
+
+button
+
         );
+
+
+
+esp\_rom\_delay\_us(200000);
+
     }
+
 }
-```
-
-The exact active level depends on the circuit and board configuration.
 
 ---
 
-# 41. Read-Modify-Write Concept
+# 📊 25. Expected Button Results
 
-Peripheral control often requires changing one field without modifying other register bits.
+For the active-low circuit:
 
-Suppose
+| ButtonGPIO Level |   |
+| ---------------- | - |
+| Released         | 1 |
+| Pressed          | 0 |
 
-```text
-Register = 10110010
-```
+Thus,
 
-and only bit 2 should be set.
-
-A read-modify-write operation is
-
-```text
-Read Register
-      │
-      ▼
-Modify Selected Bit
-      │
-      ▼
-Write Register Back
-```
-
-In C:
-
-```c
-reg |= (1U << 2);
-```
+Pressed=(GPIO==0)​
 
 ---
 
-# 42. Masks
+# 💡 26. Experiment 3 — Button-Controlled LED
 
-A **bit mask** selects specific bits.
+Now combine input and output operations.
 
-For example,
+The system architecture is:
 
-```c
-#define BIT3 (1U << 3)
+```
+Push Button
 ```
 
-gives
+     │
 
-```text
-00001000
-```
+     ▼
 
-A multi-bit field may use
+GPIO Input
 
-```c
-#define FIELD_MASK (0x3U << 4)
-```
+     │
 
-which targets bits 5:4.
+     ▼
 
-Masks are fundamental in register-level embedded programming.
+ESP32 CPU
+
+     │
+
+     ▼
+
+Decision Logic
+
+     │
+
+     ▼
+
+GPIO Output
+
+     │
+
+     ▼
+
+    LED
 
 ---
 
-# 43. Setting a Multi-Bit Field
+# 🧠 27. Control Algorithm
 
-Suppose a two-bit mode field occupies bits 5:4.
+The required algorithm is:
 
-First clear the old value:
-
-```c
-reg &= ~(0x3U << 4);
+```
+START
 ```
 
-Then write the new value:
+  │
 
-```c
-reg |= ((mode & 0x3U) << 4);
-```
+  ▼
 
-This preserves unrelated register bits.
+Configure LED Output
+
+  │
+
+  ▼
+
+Configure Button Input
+
+  │
+
+  ▼
+
+Read Button
+
+  │
+
+  ▼
+
+Button Pressed?
+
+ ┌──────┴──────┐
+
+Yes            No
+
+ │              │
+
+ ▼              ▼
+
+LED ON        LED OFF
+
+ │              │
+
+ └──────┬───────┘
+
+        │
+
+        ▼
+
+      Repeat
 
 ---
 
-# 44. Atomic Set/Clear Registers
+# 💻 28. Button-Controlled LED Program
 
-Many MCU peripherals provide dedicated set and clear registers.
+```
+#include <stdio.h>
+```
+
+
+
+\#include "driver/gpio.h"
+
+\#include "esp\_rom\_sys.h"
+
+
+
+\#define LED\_PIN     GPIO\_NUM\_2
+
+\#define BUTTON\_PIN  GPIO\_NUM\_4
+
+
+
+void app\_main(void)
+
+{
+
+gpio\_reset\_pin(LED\_PIN);
+
+gpio\_reset\_pin(BUTTON\_PIN);
+
+
+
+gpio\_set\_direction(
+
+LED\_PIN,
+
+GPIO\_MODE\_OUTPUT
+
+    );
+
+
+
+gpio\_set\_direction(
+
+BUTTON\_PIN,
+
+GPIO\_MODE\_INPUT
+
+    );
+
+
+
+gpio\_set\_pull\_mode(
+
+BUTTON\_PIN,
+
+GPIO\_PULLUP\_ONLY
+
+    );
+
+
+
+while (1)
+
+    {
+
+int button =
+
+gpio\_get\_level(
+
+BUTTON\_PIN
+
+            );
+
+
+
+if (button == 0)
+
+        {
+
+gpio\_set\_level(
+
+LED\_PIN,
+
+1
+
+            );
+
+
+
+printf("Button pressed - LED ON\n");
+
+        }
+
+else
+
+        {
+
+gpio\_set\_level(
+
+LED\_PIN,
+
+0
+
+            );
+
+        }
+
+
+
+esp\_rom\_delay\_us(10000);
+
+    }
+
+}
+
+---
+
+# 📊 29. Expected Functional Results
+
+| Button StateGPIO InputLED Output |   |     |
+| -------------------------------- | - | --- |
+| Released                         | 1 | OFF |
+| Pressed                          | 0 | ON  |
+
+The relationship can be written as
+
+LED=BUTTON.
+
+This inversion occurs because the button uses an active-low configuration.
+
+---
+
+# 🧠 30. Polling
+
+The previous program repeatedly executes:
+
+```
+gpio_get_level(BUTTON_PIN);
+```
+
+This method is called **polling**.
+
+```
+Read Button
+```
+
+    │
+
+    ▼
+
+Process
+
+    │
+
+    ▼
+
+Read Button
+
+    │
+
+    ▼
+
+Process
+
+    │
+
+    └────► Repeat
+
+Polling is easy to understand but continuously consumes CPU execution time.
+
+---
+
+# ⚠️ 31. Push-Button Bouncing
+
+Mechanical push buttons do not always produce a perfect transition.
 
 Instead of:
 
-```text
-Read
-Modify
-Write
+```
+0 ─────────── 1
 ```
 
-software may perform:
+the signal may behave like:
 
-```text
-Write mask to SET register
+```
+0 ──1─0─1─0──1
 ```
 
-or
+for a short time.
 
-```text
-Write mask to CLEAR register
-```
-
-This can reduce race conditions and improve efficiency.
-
-The exact capabilities depend on the selected ESP32 device.
+This phenomenon is called **contact bounce**.
 
 ---
 
-# 45. Concurrency and Shared Registers
+# 🛠️ 32. Software Debouncing
 
-In embedded systems, registers or variables may be accessed by:
+One simple approach is to wait briefly after detecting a button press.
 
-* main code,
-* interrupts,
-* RTOS tasks,
-* hardware.
-
-Therefore, designers must consider:
-
-* race conditions,
-* atomic operations,
-* critical sections,
-* synchronization.
-
-This becomes especially important when using FreeRTOS on ESP32.
-
----
-
-# 46. ESP32 and FreeRTOS
-
-ESP-IDF commonly uses FreeRTOS concepts.
-
-The application may contain multiple tasks:
-
-```text
-Task 1 → Read Sensor
-Task 2 → Update Display
-Task 3 → Send Wi-Fi Data
-Task 4 → Control Actuator
+```
+if (gpio_get_level(BUTTON_PIN) == 0)
 ```
 
-The scheduler shares CPU time among these tasks.
+{
 
-This adds an additional software layer above the MCU peripherals.
+esp\_rom\_delay\_us(20000);
+
+
+
+if (gpio\_get\_level(BUTTON\_PIN) == 0)
+
+    {
+
+// Valid button press
+
+    }
+
+}
+
+Here,
+
+20000 μs=20 ms.
+
+This is sufficient for an introductory demonstration, although production systems often use more robust nonblocking debounce techniques.
 
 ---
 
-# 47. Embedded Software Layer Model
+# 🔢 33. Experiment 4 — Button Press Counter
 
-A complete ESP32 software stack can be represented as
+Extend the program so that each valid button press increments a counter:
 
-```text
+COUNTnext​=COUNT+1.
+
+Example serial output:
+
+```
+Button Press Count = 1
+```
+
+Button Press Count = 2
+
+Button Press Count = 3
+
+---
+
+# 💻 34. Button Counter Example
+
+```
+#include <stdio.h>
+```
+
+
+
+\#include "driver/gpio.h"
+
+\#include "esp\_rom\_sys.h"
+
+
+
+\#define BUTTON\_PIN GPIO\_NUM\_4
+
+
+
+void app\_main(void)
+
+{
+
+int count = 0;
+
+int previous = 1;
+
+
+
+gpio\_reset\_pin(BUTTON\_PIN);
+
+
+
+gpio\_set\_direction(
+
+BUTTON\_PIN,
+
+GPIO\_MODE\_INPUT
+
+    );
+
+
+
+gpio\_set\_pull\_mode(
+
+BUTTON\_PIN,
+
+GPIO\_PULLUP\_ONLY
+
+    );
+
+
+
+while (1)
+
+    {
+
+int current =
+
+gpio\_get\_level(
+
+BUTTON\_PIN
+
+            );
+
+
+
+if ((previous == 1) &&
+
+            (current == 0))
+
+        {
+
+esp\_rom\_delay\_us(20000);
+
+
+
+if (gpio\_get\_level(BUTTON\_PIN) == 0)
+
+            {
+
+count++;
+
+
+
+printf(
+
+"Button Press Count = %d\n",
+
+count
+
+                );
+
+            }
+
+        }
+
+
+
+previous = current;
+
+
+
+esp\_rom\_delay\_us(1000);
+
+    }
+
+}
+
+This also introduces **edge detection**.
+
+---
+
+# 📈 35. Edge Detection
+
+Instead of continuously responding to the button's level, an application can detect a transition.
+
+For an active-low button, a press corresponds to:
+
+1→0.
+
+Therefore,
+
+(previous=1)∧(current=0)​
+
+indicates a falling edge.
+
+---
+
+# 🧱 36. GPIO and Memory-Mapped I/O
+
+Although the application uses functions such as
+
+```
+gpio_set_level();
+```
+
+the hardware operation ultimately reaches GPIO peripheral registers.
+
+Conceptually:
+
+```
+gpio_set_level()
+```
+
+       │
+
+       ▼
+
+ESP-IDF GPIO Driver
+
+       │
+
+       ▼
+
+Low-Level Register Operation
+
+       │
+
+       ▼
+
+GPIO Peripheral
+
+       │
+
+       ▼
+
+Physical Pin
+
+       │
+
+       ▼
+
+LED
+
+This connects the laboratory to the theory of **memory-mapped I/O**.
+
+---
+
+# 🔬 37. HAL versus Register-Level Programming
+
+The laboratory code primarily uses GPIO driver/HAL-style functions:
+
+```
+gpio_set_direction();
+```
+
+gpio\_set\_level();
+
+gpio\_get\_level();
+
+A lower-level implementation would manipulate peripheral registers more directly.
+
+The conceptual difference is:
+
+```
+HAL / Driver
+```
+
 Application
-     │
-     ▼
-FreeRTOS Tasks
-     │
-     ▼
-ESP-IDF Drivers
-     │
-     ▼
-HAL / Low-Level Drivers
-     │
-     ▼
-Peripheral Registers
-     │
-     ▼
-ESP32 Hardware
+
+    │
+
+    ▼
+
+gpio\_set\_level()
+
+    │
+
+    ▼
+
+Register
+
+versus:
+
+```
+Register-Level
 ```
 
-Each layer provides a different level of abstraction.
+Application
+
+    │
+
+    ▼
+
+GPIO Register
+
+Both ultimately control the same GPIO hardware.
 
 ---
 
-# 48. When to Use Register-Level Programming
+# 📊 38. Comparison
 
-Register-level programming is useful when:
-
-* learning MCU hardware,
-* developing drivers,
-* optimizing execution time,
-* implementing unusual peripheral behavior,
-* debugging low-level issues,
-* minimizing overhead.
-
----
-
-# 49. When to Use HAL APIs
-
-HAL or driver APIs are usually preferable when:
-
-* developing applications quickly,
-* working with complex peripherals,
-* improving portability,
-* maintaining large projects,
-* reducing programming errors,
-* using Wi-Fi, Bluetooth, networking, or RTOS services.
+| CharacteristicRegister-LevelHAL/Driver |           |          |
+| -------------------------------------- | --------- | -------- |
+| Hardware control                       | Very high | High     |
+| Code complexity                        | Higher    | Lower    |
+| Portability                            | Lower     | Higher   |
+| Readability                            | Lower     | Higher   |
+| Hardware knowledge required            | High      | Moderate |
+| Development speed                      | Slower    | Faster   |
 
 ---
 
-# 50. Recommended Learning Progression
+# 🧪 39. Optional Advanced Experiment — Direct Register Investigation
 
-A useful learning path is
+Using the ESP32 technical reference manual and device header files:
 
-```text
-Digital Logic
-     │
-     ▼
-CPU Architecture
-     │
-     ▼
-Memory Map
-     │
-     ▼
-Registers
-     │
-     ▼
-GPIO Register Control
-     │
-     ▼
-HAL / Driver APIs
-     │
-     ▼
-Interrupts
-     │
-     ▼
-Timers / UART / SPI / I2C
-     │
-     ▼
-RTOS Applications
-     │
-     ▼
-IoT Systems
-```
+1.  Identify the GPIO peripheral.
+2.  Find the output-related registers.
+3.  Identify the register responsible for setting GPIO output bits.
+4.  Identify the register responsible for clearing GPIO output bits.
+5.  Determine which bit corresponds to the selected LED GPIO.
+6.  Compare this operation with `gpio_set_level()`.
+
+Do not assume register addresses from another ESP32-family device; register layouts vary among ESP32, ESP32-S2, ESP32-S3, ESP32-C3, and other variants.
 
 ---
 
-# 51. Discussion Questions
+# 🔍 40. Debugging with Serial Output
 
-1. What is an MCU?
-2. What are the main components of an MCU?
-3. What is the role of the CPU?
-4. What is the difference between flash and SRAM?
-5. What is a memory map?
-6. What is memory-mapped I/O?
-7. What is a peripheral register?
-8. Why are bit masks important?
-9. Why is `volatile` commonly used with hardware registers?
-10. What is register-level programming?
-11. What is a HAL?
-12. What are the advantages of using a HAL?
-13. What is the difference between polling and interrupts?
-14. Why might an input require pull-up or pull-down resistors?
-15. What is the difference between UART, SPI, and I²C?
-
----
-
-# 52. Practical Exercises
-
-## Exercise 1 — Memory Map
-
-Draw a conceptual MCU memory map containing:
-
-* ROM,
-* Flash,
-* SRAM,
-* GPIO registers,
-* UART registers.
-
----
-
-## Exercise 2 — Bit Manipulation
-
-Given
-
-```text
-register = 00101010
-```
-
-perform:
-
-1. set bit 0,
-2. clear bit 3,
-3. toggle bit 5.
-
----
-
-## Exercise 3 — GPIO HAL
-
-Write an ESP-IDF program that:
-
-* configures one LED output,
-* toggles it every second.
-
----
-
-## Exercise 4 — Button Input
-
-Read a push button and control an LED.
-
----
-
-## Exercise 5 — Interrupt
-
-Configure a button to generate a GPIO interrupt.
-
----
-
-## Exercise 6 — UART
-
-Transmit
-
-```text
-Hello ESP32
-```
-
-through a UART interface.
-
----
-
-# 53. Advanced Exercise — Register versus HAL Comparison
-
-Implement the same GPIO function using:
-
-### Method A
-
-Register-level programming.
-
-### Method B
-
-ESP-IDF GPIO API.
-
-Compare:
-
-| Characteristic     | Register-Level | HAL |
-| ------------------ | -------------- | --- |
-| Code length        |                |     |
-| Readability        |                |     |
-| Portability        |                |     |
-| Execution overhead |                |     |
-| Debug complexity   |                |     |
-
-Discuss the trade-off.
-
----
-
-# 54. Advanced Exercise — Simple Embedded System
-
-Build the architecture
-
-```text
-Button
-  │
-  ▼
-GPIO Input
-  │
-  ▼
-ESP32 CPU
-  │
-  ├────► LED
-  │
-  └────► UART
-              │
-              ▼
-          PC Terminal
-```
-
-The software should:
-
-1. read the button,
-2. update the LED,
-3. send the button state through UART.
-
-This integrates:
-
-* GPIO,
-* memory-mapped peripherals,
-* software APIs,
-* embedded communication.
-
----
-
-# 55. Extension to IoT Systems
-
-The MCU architecture studied here provides the foundation for larger connected systems.
+Use `printf()` to inspect program behavior.
 
 For example:
 
-```text
-Sensor
-  │
-  ▼
-GPIO / ADC / I2C
-  │
-  ▼
-ESP32
-  │
-  ▼
-Wi-Fi
-  │
-  ▼
-MQTT Broker
-  │
-  ▼
-Cloud / Dashboard
+```
+printf(
 ```
 
-The low-level concepts remain important because every high-level IoT operation ultimately depends on MCU peripherals and memory-mapped hardware.
+"Button=%d LED=%d\n",
+
+button,
+
+led
+
+);
+
+Expected output may be:
+
+```
+Button=1 LED=0
+```
+
+Button=1 LED=0
+
+Button=0 LED=1
+
+Button=0 LED=1
+
+Button=1 LED=0
+
+Serial debugging provides visibility into software state that cannot always be observed directly through LEDs.
 
 ---
 
-# 56. Expected Learning Outcomes
+# 🧪 41. Laboratory Procedure
 
-After studying this material, students will be able to:
+### Part A — Environment Setup
 
-* Explain the basic architecture of a microcontroller.
-* Identify CPU, memory, bus, and peripheral functions.
-* Explain ESP32 as an MCU platform.
-* Distinguish ROM, flash, SRAM, stack, and heap.
-* Explain memory mapping and memory-mapped I/O.
-* Describe peripheral registers and bit fields.
-* Perform bit masking and register manipulation.
-* Explain the role of `volatile`.
-* Distinguish register-level programming from HAL-based programming.
-* Use basic ESP-IDF GPIO APIs.
-* Explain interrupt, timer, UART, SPI, and I²C concepts.
-* Understand how low-level MCU architecture supports embedded and IoT systems.
+1.  Install ESP-IDF.
+2.  Connect the ESP32 board.
+3.  Verify the development tools.
+4.  Create a new ESP32 project.
+5.  Select the correct ESP32 target.
+6.  Build an example project.
+
+### Part B — LED Blinking
+
+1.  Connect the LED.
+2.  Configure the GPIO as output.
+3.  Write the blink program.
+4.  Build and flash.
+5.  Observe the LED.
+6.  Modify the blink frequency.
+
+### Part C — Push-Button Input
+
+1.  Connect the push button.
+2.  Enable the pull-up resistor.
+3.  Configure the GPIO as input.
+4.  Read the GPIO state.
+5.  Display the state using the serial monitor.
+
+### Part D — Integrated System
+
+1.  Read the button.
+2.  Control the LED.
+3.  Add software debounce.
+4.  Verify the complete system.
 
 ---
 
-# 📘 References
+# 📋 42. Experimental Results
 
-1. Espressif Systems, *ESP32 Technical Reference Manual*.
-2. Espressif Systems, *ESP-IDF Programming Guide*.
-3. J. Yiu, *The Definitive Guide to ARM Cortex-M3 and Cortex-M4 Processors*, Newnes.
-4. J. Catsoulis, *Designing Embedded Hardware*, O'Reilly.
-5. M. Barr and A. Massa, *Programming Embedded Systems*, O'Reilly.
-6. D. E. Simon, *An Embedded Software Primer*, Addison-Wesley.
-7. FreeRTOS Documentation, *Kernel and Task Management Concepts*.
+Complete the following table.
+
+| ExperimentExpected ResultObserved ResultPass/Fail |                      |   |   |
+| ------------------------------------------------- | -------------------- | - | - |
+| ESP32 builds successfully                         | No compilation error |   |   |
+| Firmware flashing                                 | Successful           |   |   |
+| LED HIGH                                          | LED ON               |   |   |
+| LED LOW                                           | LED OFF              |   |   |
+| Button released                                   | GPIO = 1             |   |   |
+| Button pressed                                    | GPIO = 0             |   |   |
+| Button pressed                                    | LED ON               |   |   |
+| Button released                                   | LED OFF              |   |   |
+| Serial monitor                                    | Correct button state |   |   |
 
 ---
 
-## 🔑 Key Concept
+# 📊 43. Timing Experiment
 
-The fundamental MCU architecture is
+| DelayExpected Blink FrequencyMeasured/Observed |        |   |
+| ---------------------------------------------- | ------ | - |
+| 100 ms ON/OFF                                  | 5 Hz   |   |
+| 250 ms ON/OFF                                  | 2 Hz   |   |
+| 500 ms ON/OFF                                  | 1 Hz   |   |
+| 1000 ms ON/OFF                                 | 0.5 Hz |   |
 
-$$
-\boxed{
-\text{CPU}
-+
-\text{Memory}
-+
-\text{Peripherals}
-+
-\text{System Bus}
-}
-$$
+Students should explain the relationship
 
-Memory-mapped I/O provides the connection
+f=TON​+TOFF​1​.
 
-$$
-\boxed{
-\text{CPU Address}
-\rightarrow
-\text{Peripheral Register}
-\rightarrow
-\text{Physical Hardware}
-}
-$$
+---
 
-while software abstraction can be viewed as
+# 💬 44. Discussion Questions
 
-$$
-\boxed{
-\text{Application}
-\rightarrow
-\text{HAL / Driver}
-\rightarrow
-\text{Registers}
-\rightarrow
-\text{ESP32 Hardware}
-}
-$$
+1.  What is bare-metal programming?
+2.  Why is GPIO important in embedded systems?
+3.  What is the difference between GPIO input and output?
+4.  Why is a resistor connected in series with an LED?
+5.  Why should a digital input not be left floating?
+6.  What is the purpose of an internal pull-up resistor?
+7.  Why does the push button read `0` when pressed in this circuit?
+8.  What is polling?
+9.  What are the disadvantages of continuous polling?
+10.  What is push-button bouncing?
+11.  What is software debouncing?
+12.  What is memory-mapped I/O?
+13.  How does `gpio_set_level()` ultimately control hardware?
+14.  What is the difference between register-level programming and HAL/driver programming?
+15.  Why should the exact ESP32 device be identified before directly accessing registers?
 
-This theory provides the foundation for later work involving **GPIO, interrupts, timers, UART, SPI, I²C, FreeRTOS, Wi-Fi, MQTT, sensor interfacing, embedded intelligence, and IoT systems**.
+---
+
+# 🧠 45. Post-Lab Exercises
+
+1. **Change Blink Frequency**
+    Modify the LED to blink at 2 Hz.
+2. **Two LEDs**
+    Alternate between two LEDs.
+3. **Button Toggle**
+    Press the button once to turn the LED ON and press it again to turn it OFF.
+4. **Button Counter**
+    Count button presses and print the value.
+5. **Binary Counter**
+    Connect four LEDs and display a 4-bit binary count.
+6. **Two Buttons**
+    Use one button to increment and another to decrement a counter.
+7. **LED Pattern**
+    Create a running-light sequence.
+8. **Improved Debouncing**
+    Implement a state-based debounce algorithm without a long blocking delay.
+9. **Register Investigation**
+    Identify the GPIO registers for the selected ESP32 device.
+10. **Interrupt Extension**
+     Replace button polling with a GPIO interrupt.
+
+---
+
+# 🚀 46. Advanced Exercise — Button Toggle State
+
+Instead of directly following the button level, maintain an internal LED state:
+
+LEDnext​=LEDcurrent​​
+
+for every valid button press.
+
+The behavior should be:
+
+```
+Initial: LED OFF
+```
+
+
+
+Press 1 → LED ON
+
+Press 2 → LED OFF
+
+Press 3 → LED ON
+
+Press 4 → LED OFF
+
+This introduces the concept of **stored state**, which is fundamental to embedded controllers and finite-state machines.
+
+---
+
+# 🔄 47. Embedded-System Data Flow
+
+This laboratory demonstrates two fundamental MCU data paths.
+
+### Output path
+
+CPU→GPIO Output→LED​
+
+### Input path
+
+Push Button→GPIO Input→CPU​
+
+Combining them produces:
+
+Sensor/Input→Processing→Actuator/Output​
+
+This is one of the fundamental architectures of embedded and cyber-physical systems.
+
+---
+
+# 🧾 48. Expected Learning Outcomes
+
+After completing this laboratory, students will be able to:
+
+-  Configure an ESP32 development environment.
+-  Build and flash ESP32 firmware.
+-  Use a serial monitor for debugging.
+-  Explain GPIO input and output operation.
+-  Configure an LED as a digital output.
+-  Implement LED blinking.
+-  Configure a push button as a digital input.
+-  Use an internal pull-up resistor.
+-  Read button states using polling.
+-  Control an LED from a button.
+-  Explain switch bouncing and basic debouncing.
+-  Understand the connection between driver APIs and hardware registers.
+-  Describe the basic MCU development workflow.
+
+---
+
+# 📘 49. References
+
+1.  Espressif Systems, *ESP32 Technical Reference Manual*.
+2.  Espressif Systems, *ESP-IDF Programming Guide*.
+3.  Espressif Systems, *ESP32 Series Datasheet*.
+4.  M. Barr and A. Massa, *Programming Embedded Systems*, O'Reilly.
+5.  D. E. Simon, *An Embedded Software Primer*, Addison-Wesley.
+6.  J. Catsoulis, *Designing Embedded Hardware*, O'Reilly.
+
+---
+
+## 🔑 50. Key Concept
+
+The fundamental workflow introduced in this laboratory is
+
+Write→Build→Flash→Run→Debug​
+
+For digital output:
+
+Software→GPIO Register→GPIO Pin→LED​
+
+For digital input:
+
+Push Button→GPIO Pin→GPIO Register→Software​
+
+The complete laboratory demonstrates the core embedded-system relationship:
+
+Input→MCU Processing→Output​
+
+This provides the foundation for subsequent laboratories involving **GPIO interrupts, ADC, PWM, timers, UART, I²C, SPI, FreeRTOS, sensors, actuators, and IoT systems**.
