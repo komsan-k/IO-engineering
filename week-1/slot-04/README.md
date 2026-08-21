@@ -1662,8 +1662,7 @@ total transmitted clocked bits.
 The protocol efficiency can be approximated by
 
 $$
-\eta
-=
+\eta =
 \frac{N_D}{N_T}
 \times100\%.
 $$
