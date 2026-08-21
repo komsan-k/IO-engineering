@@ -236,7 +236,7 @@ The approximate voltage represented by one least significant bit (LSB) is
 
 $$
 V_{LSB}
-\=
+\approx
 \frac{V_{FS}}{2^N}.
 $$
 
@@ -249,8 +249,7 @@ $$
 then
 
 $$
-V_{LSB}
-=
+V_{LSB}=
 \frac{3.3}{4096}.
 $$
 
@@ -592,10 +591,8 @@ $$
 and
 
 $$
-f_s
-=
-\frac{1}{0.01}
-=
+f_s =
+\frac{1}{0.01}=
 100~Hz.
 $$
 
@@ -779,8 +776,7 @@ The important parameters are:
 PWM frequency is related to the waveform period by
 
 $$
-f_{PWM}
-=
+f_{PWM}=
 \frac{1}{T_{PWM}}.
 $$
 
@@ -793,10 +789,8 @@ $$
 then
 
 $$
-f_{PWM}
-=
-\frac{1}{0.001}
-=
+f_{PWM}=
+\frac{1}{0.001}=
 1000~Hz.
 $$
 
@@ -815,8 +809,7 @@ $$
 Duty cycle represents the percentage of one PWM period for which the signal is HIGH.
 
 $$
-D
-=
+D =
 \frac{T_{ON}}{T_{PWM}}
 \times100\%.
 $$
@@ -830,8 +823,7 @@ $$
 we can also write
 
 $$
-D
-=
+D =
 \frac{T_{ON}}
 {T_{ON}+T_{OFF}}
 \times100\%.
@@ -904,8 +896,7 @@ $$
 For an ideal PWM waveform switching between 0 and $V_{HIGH}$, the average value is
 
 $$
-V_{AVG}
-=
+V_{AVG} =
 D V_{HIGH}
 $$
 
@@ -926,10 +917,8 @@ $$
 then
 
 $$
-V_{AVG}
-=
-0.5(3.3)
-=
+V_{AVG} =
+0.5(3.3) =
 1.65~V.
 $$
 
@@ -1031,8 +1020,7 @@ $$
 An approximate percentage mapping is
 
 $$
-D(\%)
-=
+D(\%) =
 \frac{\text{PWM Code}}
 {2^N-1}
 \times100.
@@ -1195,8 +1183,7 @@ $$
 A simple mapping is
 
 $$
-PWM
-=
+PWM=
 ADC
 \frac{255}{4095}.
 $$
@@ -1210,8 +1197,7 @@ $$
 then
 
 $$
-PWM
-=
+PWM=
 2048
 \frac{255}{4095}
 $$
@@ -1424,16 +1410,14 @@ These frequencies describe different processes.
 ### ADC Sampling Frequency
 
 $$
-f_s
-=
+f_s =
 \text{number of ADC samples per second}
 $$
 
 ### PWM Frequency
 
 $$
-f_{PWM}
-=
+f_{PWM} =
 \text{number of PWM periods per second}
 $$
 
@@ -1533,8 +1517,7 @@ LED Brightness
 A control rule might be
 
 $$
-D_{PWM}
-=
+D_{PWM} =
 1-
 \frac{ADC}{ADC_{MAX}}.
 $$
@@ -1565,8 +1548,7 @@ One simple method for reducing random variation is averaging.
 For $N$ samples:
 
 $$
-\bar{x}
-=
+\bar{x} =
 \frac{1}{N}
 \sum_{i=1}^{N}x_i.
 $$
@@ -1638,12 +1620,9 @@ $$
 Then
 
 $$
-T_s
-=
-\frac{1}{100}
-=
-0.01~s
-=
+T_s =
+\frac{1}{100} =
+0.01~s =
 10~ms.
 $$
 
@@ -1783,8 +1762,7 @@ $$
 Use
 
 $$
-D
-=
+D =
 \frac{V_{IN}}{V_{FS}}
 (2^N-1).
 $$
