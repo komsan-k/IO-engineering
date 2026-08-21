@@ -649,8 +649,8 @@ Instead, reject events that occur too close together.
 
 $$
 \Delta t =
-t_{\text{current-}}
-t_{\text{previous}}.
+t_{\text{current}}
+-t_{\text{previous}}.
 $$
 
 Accept the event only if
@@ -822,8 +822,7 @@ $$
 After division by factor $D$,
 
 $$
-f_{timer}
-=
+f_{timer}=
 \frac{f_{clk}}{D}.
 $$
 
@@ -831,17 +830,14 @@ The timer tick period is
 
 $$
 T_{tick}
-=
-\frac{1}{f_{timer}}
-=
-\frac{D}{f_{clk}}.
+\frac{1}{f_{timer}=}
+\frac{D}{f_{clk}=}.
 $$
 
 If an event occurs after $N$ timer ticks,
 
 $$
-T_{event}
-=
+T_{event}=
 NT_{tick}.
 $$
 
@@ -849,8 +845,7 @@ Therefore,
 
 $$
 \boxed{
-T_{event}
-=
+T_{event}=
 N\frac{D}{f_{clk}}
 }
 $$
