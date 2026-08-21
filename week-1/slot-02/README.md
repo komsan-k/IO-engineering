@@ -310,8 +310,7 @@ A useful design principle is
 
 $$
 \boxed{
-\text{ISR}
-=
+\text{ISR =}
 \text{Detect}
 +
 \text{Record}
@@ -649,10 +648,8 @@ For interrupt-driven applications, avoid a blocking `delay()` inside the ISR.
 Instead, reject events that occur too close together.
 
 $$
-\Delta t
-=
-t_{\text{current}}
--
+\Delta t =
+t_{\text{current-}}
 t_{\text{previous}}.
 $$
 
@@ -756,14 +753,11 @@ $$
 then
 
 $$
-\tau
-=
+\tau =
 10\,000
 \times
-1\times10^{-6}
-=
-0.01~s
-=
+1\times10^{-6}=
+0.01~s =
 10~ms.
 $$
 
