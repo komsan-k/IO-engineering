@@ -35,8 +35,7 @@ $$
 \text{Peripherals}
 +
 \text{Software}
-===============
-
+=
 \text{MCU System}
 }
 $$
