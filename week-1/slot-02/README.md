@@ -829,7 +829,7 @@ $$
 The timer tick period is
 
 $$
-T_{tick}
+T_{tick}=
 \frac{1}{f_{timer}}=
 \frac{D}{f_{clk}}.
 $$
@@ -869,11 +869,9 @@ $$
 To generate a 1-second event:
 
 $$
-N
-=
+N=
 \frac{1~s}
-{1~\mu s}
-=
+{1~\mu s}=
 1,000,000.
 $$
 
@@ -881,8 +879,7 @@ Therefore,
 
 $$
 \boxed{
-1,000,000~\text{ticks}
-=
+1,000,000~\text{ticks}=
 1~\text{second}
 }
 $$
@@ -1161,10 +1158,8 @@ $$
 **Interrupt latency** is the delay between the occurrence of an interrupt-generating event and the start of its ISR.
 
 $$
-T_{latency}
-=
-t_{\text{ISR start}}
--
+T_{latency}=
+t_{\text{ISR start}}-
 t_{\text{event}}.
 $$
 
@@ -1331,8 +1326,7 @@ void IRAM_ATTR ISR()
 Conceptually,
 
 $$
-N_{events}
-=
+N_{events}=
 N_{events}+1.
 $$
 
@@ -1574,8 +1568,7 @@ Add software debouncing so that
 
 $$
 \boxed{
-1~\text{physical press}
-=
+1~\text{physical press}=
 1~\text{software event}
 }
 $$
