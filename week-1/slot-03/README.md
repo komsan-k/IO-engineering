@@ -236,7 +236,7 @@ The approximate voltage represented by one least significant bit (LSB) is
 
 $$
 V_{LSB}
-\approx
+\=
 \frac{V_{FS}}{2^N}.
 $$
 
