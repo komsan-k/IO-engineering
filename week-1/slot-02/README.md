@@ -830,8 +830,8 @@ The timer tick period is
 
 $$
 T_{tick}
-\frac{1}{f_{timer}=}
-\frac{D}{f_{clk}=}.
+\frac{1}{f_{timer}}=
+\frac{D}{f_{clk}}.
 $$
 
 If an event occurs after $N$ timer ticks,
