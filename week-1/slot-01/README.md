@@ -27,7 +27,6 @@ The ESP32 family is a useful case study because it combines:
 The basic embedded-system model is
 
 $$
-
 \boxed{
 \text{CPU}
 +
@@ -36,10 +35,8 @@ $$
 \text{Peripherals}
 +
 \text{Software}
-=
 \text{MCU System}
 }
-
 $$
 
 ---
