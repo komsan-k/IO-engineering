@@ -23,8 +23,7 @@ A low-power IoT architecture can therefore be summarized as:
 
 $$
 \boxed{
-\text{Low-Power IoT}
-=
+\text{Low-Power IoT} =
 \text{Power Management}
 +
 \text{Sleep Modes}
