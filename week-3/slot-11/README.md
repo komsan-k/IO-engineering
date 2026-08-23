@@ -30,8 +30,7 @@ Three fundamental concepts are particularly important when learning BLE:
 
 $$
 \boxed{
-\text{BLE System}
-=
+\text{BLE System} =
 \text{Topology}
 +
 \text{GAP}
