@@ -63,8 +63,7 @@ Three important concepts are central to practical TinyML development:
 
 $$
 \boxed{
-\text{TinyML System}
-=
+\text{TinyML System} =
 \text{Efficient Model}
 +
 \text{Useful Features}
@@ -119,8 +118,7 @@ Thus:
 
 $$
 \boxed{
-\text{TinyML}
-=
+\text{TinyML} =
 \text{Machine Learning}
 +
 \text{Embedded Computing}
