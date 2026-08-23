@@ -392,8 +392,7 @@ Activity Classifier
 Classification predicts a discrete category.
 
 $$
-\mathbf{x}
-=
+\mathbf{x} =
 [x_1,x_2,\ldots,x_n]
 $$
 
@@ -481,8 +480,7 @@ Feature Extraction
 ```
 
 $$
-\mathbf{x}
-=
+\mathbf{x} =
 [
 \mu,
 \sigma^2,
@@ -561,8 +559,7 @@ Window 1
 # 📊 19. Mean
 
 $$
-\mu
-=
+\mu =
 \frac{1}{N}
 \sum_{i=1}^{N}x_i
 $$
@@ -572,8 +569,7 @@ $$
 # 📈 20. Variance
 
 $$
-\sigma^2
-=
+\sigma^2 =
 \frac{1}{N}
 \sum_{i=1}^{N}
 (x_i-\mu)^2
@@ -584,8 +580,7 @@ $$
 # 📏 21. Standard Deviation
 
 $$
-\sigma
-=
+\sigma =
 \sqrt{
 \frac{1}{N}
 \sum_{i=1}^{N}
@@ -598,8 +593,7 @@ $$
 # ⚡ 22. Root Mean Square
 
 $$
-x_{\mathrm{RMS}}
-=
+x_{\mathrm{RMS}} =
 \sqrt{
 \frac{1}{N}
 \sum_{i=1}^{N}
@@ -628,14 +622,12 @@ $$
 # 🔋 24. Signal Energy
 
 $$
-E
-=
+E =
 \sum_{i=1}^{N}x_i^2
 $$
 
 $$
-E_{\text{avg}}
-=
+E_{\text{avg}} =
 \frac{1}{N}
 \sum_{i=1}^{N}x_i^2
 $$
@@ -645,8 +637,7 @@ $$
 # 📐 25. Magnitude Feature
 
 $$
-a_{\text{mag}}
-=
+a_{\text{mag}} =
 \sqrt{
 a_x^2+a_y^2+a_z^2
 }
@@ -683,8 +674,7 @@ $$
 # 🌐 28. Frequency-Domain Features
 
 $$
-X[k]
-=
+X[k] =
 \sum_{n=0}^{N-1}
 x[n]
 e^{-j2\pi kn/N}
@@ -773,8 +763,7 @@ $$
 # 📏 32. Normalization
 
 $$
-x'
-=
+x' =
 \frac{x-x_{\min}}
 {x_{\max}-x_{\min}}
 $$
@@ -784,8 +773,7 @@ $$
 # 📐 33. Standardization
 
 $$
-z
-=
+z =
 \frac{x-\mu}{\sigma}
 $$
 
@@ -1038,8 +1026,7 @@ Possible techniques:
 
 $$
 \boxed{
-\text{Useful Augmentation}
-=
+\text{Useful Augmentation} =
 \text{Realistic Variation}
 +
 \text{Correct Label}
@@ -1077,8 +1064,7 @@ $$
 # 🧮 52. Neural Network Fundamentals
 
 $$
-z
-=
+z =
 \sum_{i=1}^{n}w_ix_i+b
 $$
 
@@ -1120,8 +1106,7 @@ Important constraints include:
 
 $$
 \boxed{
-\text{TinyML Design}
-=
+\text{TinyML Design} =
 \text{Accuracy}
 +
 \text{Memory Efficiency}
@@ -1137,8 +1122,7 @@ $$
 # 💾 55. Model Memory
 
 $$
-M_{\text{parameters}}
-=
+M_{\text{parameters}} =
 N_pB
 $$
 
@@ -1169,8 +1153,7 @@ Potential benefits:
 
 $$
 \boxed{
-\text{Best TinyML Model}
-=
+\text{Best TinyML Model} =
 \text{Sufficient Accuracy}
 +
 \text{Feasible Embedded Cost}
@@ -1192,8 +1175,7 @@ $$
 # 🎯 59. Accuracy
 
 $$
-\text{Accuracy}
-=
+\text{Accuracy} =
 \frac{\text{Number of Correct Predictions}}
 {\text{Total Predictions}}
 $$
@@ -1201,8 +1183,7 @@ $$
 For binary classification:
 
 $$
-\text{Accuracy}
-=
+\text{Accuracy} =
 \frac{TP+TN}
 {TP+TN+FP+FN}
 $$
@@ -1212,15 +1193,13 @@ $$
 # 📈 60. Precision and Recall
 
 $$
-\text{Precision}
-=
+\text{Precision} =
 \frac{TP}
 {TP+FP}
 $$
 
 $$
-\text{Recall}
-=
+\text{Recall} =
 \frac{TP}
 {TP+FN}
 $$
@@ -1230,8 +1209,7 @@ $$
 # ⚖️ 61. F1-Score
 
 $$
-F_1
-=
+F_1 =
 2
 \frac{
 \text{Precision}\times\text{Recall}
@@ -1291,8 +1269,7 @@ On-Device Testing
 # ⏱️ 65. Inference Latency
 
 $$
-T_{\text{inference}}
-=
+T_{\text{inference}} =
 t_{\text{end}}-t_{\text{start}}
 $$
 
@@ -1352,8 +1329,7 @@ Activity
 # 📐 68. Feature Vector Example
 
 $$
-\mathbf{x}
-=
+\mathbf{x} =
 [
 \mu_x,\sigma_x,RMS_x,
 \mu_y,\sigma_y,RMS_y,
@@ -1399,8 +1375,7 @@ float calculateMean(float *data, int N)
 
 $$
 \boxed{
-\text{Training Preprocessing}
-=
+\text{Training Preprocessing} =
 \text{Deployment Preprocessing}
 }
 $$
@@ -1766,8 +1741,7 @@ After studying this theory, students should be able to:
 
 $$
 \boxed{
-\text{TinyML}
-=
+\text{TinyML} =
 \text{Machine Learning}
 +
 \text{Microcontroller}
@@ -1815,8 +1789,7 @@ $$
 
 $$
 \boxed{
-\sigma^2
-=
+\sigma^2 =
 \frac{1}{N}
 \sum_{i=1}^{N}(x_i-\mu)^2
 }
@@ -1826,8 +1799,7 @@ $$
 
 $$
 \boxed{
-x_{\mathrm{RMS}}
-=
+x_{\mathrm{RMS}} =
 \sqrt{
 \frac{1}{N}
 \sum_{i=1}^{N}x_i^2
@@ -1858,8 +1830,7 @@ $$
 
 $$
 \boxed{
-\text{TinyML Performance}
-=
+\text{TinyML Performance} =
 f(
 \text{Data Quality},
 \text{Features},
@@ -1908,8 +1879,7 @@ However, the machine-learning model depends strongly on the quality of the datas
 
 $$
 \boxed{
-\text{Dataset Quality}
-=
+\text{Dataset Quality} =
 \text{Correct Labels}
 +
 \text{Representative Samples}
@@ -1934,8 +1904,7 @@ Therefore, TinyML engineering is not simply about maximizing classification accu
 
 $$
 \boxed{
-\text{Effective TinyML}
-=
+\text{Effective TinyML} =
 \text{Good Dataset}
 +
 \text{Useful Features}
