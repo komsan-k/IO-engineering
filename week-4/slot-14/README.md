@@ -57,8 +57,7 @@ Thus:
 
 $$
 \boxed{
-\text{Embedded AI}
-=
+\text{Embedded AI} =
 \text{Trained Model}
 +
 \text{Model Optimization}
@@ -88,8 +87,7 @@ $$
 The approximate parameter storage is:
 
 $$
-M_{\text{FP32}}
-=
+M_{\text{FP32}} =
 4N_p
 $$
 
@@ -104,14 +102,12 @@ $$
 parameters requires approximately:
 
 $$
-M_{\text{FP32}}
-=
+M_{\text{FP32}} =
 100,000\times4
 $$
 
 $$
-M_{\text{FP32}}
-=
+M_{\text{FP32}} =
 400,000~\text{bytes}
 $$
 
@@ -189,8 +185,7 @@ TinyML therefore focuses on finding a suitable balance:
 
 $$
 \boxed{
-\text{TinyML Model}
-=
+\text{TinyML Model} =
 \text{Acceptable Accuracy}
 +
 \text{Low Resource Cost}
@@ -624,8 +619,7 @@ Conceptually:
 
 $$
 \boxed{
-\text{QAT}
-=
+\text{QAT} =
 \text{Training}
 +
 \text{Quantization Effects}
@@ -687,8 +681,7 @@ Thus:
 
 $$
 \boxed{
-\text{Pruning}
-=
+\text{Pruning} =
 \text{Remove Less-Important Parameters}
 }
 $$
@@ -753,8 +746,7 @@ Sparsity describes the proportion of zero-valued parameters.
 A simple definition is:
 
 $$
-\text{Sparsity}
-=
+\text{Sparsity} =
 \frac{
 N_{\text{zero}}
 }{
@@ -821,8 +813,7 @@ Therefore:
 
 $$
 \boxed{
-\text{Pruning Level}
-=
+\text{Pruning Level} =
 \text{Compression}
 \leftrightarrow
 \text{Accuracy}
@@ -855,8 +846,7 @@ Conceptually:
 
 $$
 \boxed{
-\text{Optimized Model}
-=
+\text{Optimized Model} =
 \text{Pruning}
 +
 \text{Quantization}
@@ -1136,8 +1126,7 @@ Decision
 Suppose the model expects:
 
 $$
-\mathbf{x}
-=
+\mathbf{x} =
 [x_1,x_2,x_3,x_4]
 $$
 
@@ -1296,8 +1285,7 @@ Prediction
 Suppose the model uses:
 
 $$
-\mathbf{x}
-=
+\mathbf{x} =
 [
 \mu_x,
 \sigma_x,
@@ -1550,8 +1538,7 @@ Serial.println(" us");
 ```
 
 $$
-T_{\text{inference}}
-=
+T_{\text{inference}} =
 t_{\text{end}}-t_{\text{start}}
 $$
 
@@ -1560,8 +1547,7 @@ $$
 # 💾 53. Measuring Memory Usage
 
 $$
-M_{\text{total}}
-=
+M_{\text{total}} =
 M_{\text{model}}
 +
 M_{\text{tensor}}
@@ -1592,8 +1578,7 @@ $$
 
 $$
 \boxed{
-\text{Embedded ML Quality}
-=
+\text{Embedded ML Quality} =
 f(
 \text{Accuracy},
 \text{Latency},
@@ -1799,10 +1784,8 @@ A_{\text{INT8}}
 $$
 
 $$
-\Delta A
-=
-A_{\text{INT8}}
--
+\Delta A =
+A_{\text{INT8}} -
 A_{\text{FP32}}
 $$
 
@@ -2222,8 +2205,7 @@ After studying this theory, students should be able to:
 
 $$
 \boxed{
-\text{Model Optimization}
-=
+\text{Model Optimization} =
 \text{Reduce Resource Usage}
 +
 \text{Preserve Required Performance}
@@ -2282,8 +2264,7 @@ $$
 
 $$
 \boxed{
-\text{Sparsity}
-=
+\text{Sparsity} =
 \frac{N_{\text{zero}}}{N_{\text{total}}}
 }
 $$
@@ -2292,8 +2273,7 @@ $$
 
 $$
 \boxed{
-N_P
-=
+N_P =
 N_{\text{in}}N_{\text{out}}
 +
 N_{\text{out}}
@@ -2304,8 +2284,7 @@ $$
 
 $$
 \boxed{
-T_{\text{inference}}
-=
+T_{\text{inference}} =
 t_{\text{end}}-t_{\text{start}}
 }
 $$
@@ -2314,8 +2293,7 @@ $$
 
 $$
 \boxed{
-\text{Performance}
-=
+\text{Performance} =
 f(
 \text{Accuracy},
 \text{Memory},
@@ -2335,8 +2313,7 @@ Two major optimization techniques are:
 
 $$
 \boxed{
-\text{Optimization}
-=
+\text{Optimization} =
 \text{Quantization}
 +
 \text{Pruning}
@@ -2414,8 +2391,7 @@ A successful embedded model should therefore be evaluated not only by accuracy b
 
 $$
 \boxed{
-\text{TinyML Quality}
-=
+\text{TinyML Quality} =
 \text{Accuracy}
 +
 \text{Small Memory}
