@@ -40,8 +40,7 @@ A secure embedded system can be represented conceptually as:
 
 $$
 \boxed{
-\text{Embedded Security}
-=
+\text{Embedded Security} =
 \text{Hardware Trust}
 +
 \text{Cryptography}
@@ -60,8 +59,7 @@ Embedded-system security is commonly based on three fundamental properties:
 
 $$
 \boxed{
-\text{CIA}
-=
+\text{CIA} =
 \text{Confidentiality}
 +
 \text{Integrity}
@@ -795,8 +793,7 @@ Therefore:
 
 $$
 \boxed{
-\text{Private Signing Key}
-=
+\text{Private Signing Key} =
 \text{Critical Security Asset}
 }
 $$
@@ -1417,8 +1414,7 @@ A nonce is a value intended for one-time use within a particular cryptographic c
 
 $$
 \boxed{
-\text{Nonce}
-=
+\text{Nonce} =
 \text{Number Used Once}
 }
 $$
@@ -1444,8 +1440,7 @@ Security consumes embedded resources.
 A simplified timing model is:
 
 $$
-T_{\text{secure}}
-=
+T_{\text{secure}} =
 T_{\text{application}}
 +
 T_{\text{crypto}}
@@ -1458,8 +1453,7 @@ $$
 Similarly, memory usage may increase:
 
 $$
-M_{\text{secure}}
-=
+M_{\text{secure}} =
 M_{\text{application}}
 +
 M_{\text{TLS}}
@@ -1965,8 +1959,7 @@ Security must be maintained throughout the device lifecycle.
 A simplified risk model can be expressed as:
 
 $$
-R
-=
+R =
 P_{\text{attack}}
 \times
 I_{\text{impact}}
@@ -1981,8 +1974,7 @@ A more practical qualitative model may consider:
 
 $$
 \boxed{
-\text{Risk}
-=
+\text{Risk} =
 f(
 \text{Threat},
 \text{Vulnerability},
@@ -2215,8 +2207,7 @@ After studying this theory, students should be able to:
 
 $$
 \boxed{
-\text{Security}
-=
+\text{Security} =
 \text{Confidentiality}
 +
 \text{Integrity}
@@ -2259,8 +2250,7 @@ $$
 
 $$
 \boxed{
-V(K_{\text{pub}},F,\sigma)
-=
+V(K_{\text{pub}},F,\sigma) =
 \begin{cases}
 1,&\text{Accept}\\
 0,&\text{Reject}
@@ -2298,8 +2288,7 @@ $$
 
 $$
 \boxed{
-\text{Security}
-=
+\text{Security} =
 \sum
 \text{Multiple Protective Layers}
 }
@@ -2336,8 +2325,7 @@ The four central concepts are:
 
 $$
 \boxed{
-\text{Secure Embedded System}
-=
+\text{Secure Embedded System} =
 \text{Hardware Security}
 +
 \text{Cryptography}
