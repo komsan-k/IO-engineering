@@ -38,8 +38,7 @@ The primary design requirement is not simply high ML accuracy. The system must p
 
 $$
 \boxed{
-\text{Real-Time TinyML}
-=
+\text{Real-Time TinyML} =
 \text{Accurate Inference}
 +
 \text{Timing Constraint}
@@ -195,8 +194,7 @@ Output
 Therefore, total processing latency can be represented as:
 
 $$
-T_{\text{total}}
-=
+T_{\text{total}} =
 T_{\text{sample}}
 +
 T_{\text{pre}}
@@ -218,8 +216,7 @@ $$
 
 $$
 \boxed{
-T_{\text{infer}}
-=
+T_{\text{infer}} =
 t_{\text{end}}-t_{\text{start}}
 }
 $$
@@ -248,10 +245,8 @@ End   = 14,500 µs
 then:
 
 $$
-T_{\text{infer}}
-=
-14,500-10,000
-=
+T_{\text{infer}} =
+14,500-10,000 =
 4,500~\mu s
 $$
 
@@ -296,10 +291,8 @@ $$
 then the theoretical model-only throughput is approximately:
 
 $$
-R_{\text{infer}}
-=
-\frac{1}{0.01}
-=
+R_{\text{infer}} =
+\frac{1}{0.01} =
 100
 $$
 
@@ -327,8 +320,7 @@ Therefore:
 
 $$
 T_s=
-\frac{1}{100}
-=
+\frac{1}{100} =
 0.01~\text{s}
 $$
 
@@ -413,8 +405,7 @@ $$
 seconds, where $T_h$ is the hop interval, then the inference rate is approximately:
 
 $$
-f_{\text{prediction}}
-=
+f_{\text{prediction}} =
 \frac{1}{T_h}
 $$
 
@@ -449,14 +440,12 @@ $$
 Then:
 
 $$
-T_{\text{total}}
-=
+T_{\text{total}} =
 20+2+3+8+1
 $$
 
 $$
-T_{\text{total}}
-=
+T_{\text{total}} =
 34~\text{ms}
 $$
 
@@ -502,8 +491,7 @@ For deadline-sensitive systems, average execution time is insufficient.
 A practical measured approximation is:
 
 $$
-T_{\text{max}}
-=
+T_{\text{max}} =
 \max
 \{
 T_1,T_2,\ldots,T_N
@@ -540,8 +528,7 @@ Conceptually:
 
 $$
 \boxed{
-\text{Execution Efficiency}
-=
+\text{Execution Efficiency} =
 \frac{\text{Useful ML Computation}}
 {\text{Available Processing Resources}}
 }
@@ -554,8 +541,7 @@ $$
 Neural networks rely heavily on **multiply-accumulate (MAC)** operations:
 
 $$
-y
-=
+y =
 \sum_{i=1}^{N}w_ix_i+b
 $$
 
@@ -672,8 +658,7 @@ Possible techniques include:
 For a dense layer:
 
 $$
-N_p
-=
+N_p =
 N_{\text{in}}N_{\text{out}}
 +
 N_{\text{out}}
@@ -721,8 +706,7 @@ However, feature extraction itself also consumes CPU time.
 Therefore:
 
 $$
-T_{\text{total}}
-=
+T_{\text{total}} =
 T_{\text{feature}}
 +
 T_{\text{infer}}
@@ -815,8 +799,7 @@ Tensor Arena
 A conceptual RAM budget is:
 
 $$
-M_{\text{RAM}}
-=
+M_{\text{RAM}} =
 M_{\text{tensor}}
 +
 M_{\text{sensor}}
@@ -941,8 +924,7 @@ When the final position is reached, writing returns to the beginning.
 A write index can be updated as:
 
 $$
-i_{\text{next}}
-=
+i_{\text{next}} =
 (i+1)\bmod N
 $$
 
@@ -1394,8 +1376,7 @@ The same preprocessing used during model development should be reproduced on the
 
 $$
 \boxed{
-\text{Training Preprocessing}
-=
+\text{Training Preprocessing} =
 \text{Deployment Preprocessing}
 }
 $$
@@ -1454,8 +1435,7 @@ Predicted Class
 Mathematically:
 
 $$
-\hat{c}
-=
+\hat{c} =
 \arg\max_i y_i
 $$
 
@@ -1490,8 +1470,7 @@ No complete sort is required.
 Energy per inference can be approximated as:
 
 $$
-E_{\text{infer}}
-=
+E_{\text{infer}} =
 VI_{\text{avg}}T_{\text{infer}}
 $$
 
@@ -1542,8 +1521,7 @@ $$
 For active and sleep states:
 
 $$
-I_{\text{avg}}
-=
+I_{\text{avg}} =
 D I_{\text{active}}
 +
 (1-D)I_{\text{sleep}}
@@ -1958,8 +1936,7 @@ For the previous example:
 
 $$
 U_D=
-\frac{25}{250}
-=
+\frac{25}{250} =
 0.10
 $$
 
@@ -2171,8 +2148,7 @@ then:
 
 $$
 R_M=
-\frac{20}{10000}
-=
+\frac{20}{10000} =
 0.002
 $$
 
@@ -2253,8 +2229,7 @@ $$
 calculate:
 
 $$
-R_{\text{infer}}
-=
+R_{\text{infer}} =
 \frac{1}{T_{\text{infer}}}
 $$
 
@@ -2294,8 +2269,7 @@ accelerometer samples.
 Use:
 
 $$
-i_{\text{next}}
-=
+i_{\text{next}} =
 (i+1)\bmod100
 $$
 
@@ -2335,8 +2309,7 @@ Calculate:
 Mean:
 
 $$
-\bar{T}
-=
+\bar{T} =
 \frac{1}{N}
 \sum_{i=1}^{N}T_i
 $$
@@ -2344,8 +2317,7 @@ $$
 Standard deviation:
 
 $$
-\sigma_T
-=
+\sigma_T =
 \sqrt{
 \frac{1}{N}
 \sum_{i=1}^{N}
@@ -2636,8 +2608,7 @@ $$
 
 $$
 \boxed{
-T_{\text{total}}
-=
+T_{\text{total}} =
 T_{\text{sample}}
 +
 T_{\text{pre}}
@@ -2656,10 +2627,8 @@ $$
 
 $$
 \boxed{
-T_{\text{infer}}
-=
-t_{\text{end}}
--
+T_{\text{infer}} =
+t_{\text{end}} -
 t_{\text{start}}
 }
 $$
@@ -2696,8 +2665,7 @@ $$
 
 $$
 \boxed{
-M_{\text{RAM}}
-=
+M_{\text{RAM}} =
 M_{\text{tensor}}
 +
 M_{\text{buffer}}
@@ -2714,8 +2682,7 @@ $$
 
 $$
 \boxed{
-i_{\text{next}}
-=
+i_{\text{next}} =
 (i+1)\bmod N
 }
 $$
@@ -2724,8 +2691,7 @@ $$
 
 $$
 \boxed{
-R_M
-=
+R_M =
 \frac{N_M}{N_D}
 }
 $$
@@ -2781,8 +2747,7 @@ Three major design areas are particularly important:
 
 $$
 \boxed{
-\text{Real-Time TinyML}
-=
+\text{Real-Time TinyML} =
 \text{Latency}
 +
 \text{Execution Efficiency}
@@ -2830,8 +2795,7 @@ The final TinyML system should be evaluated using multiple dimensions:
 
 $$
 \boxed{
-\text{System Quality}
-=
+\text{System Quality} =
 f(
 \text{Accuracy},
 \text{Latency},
