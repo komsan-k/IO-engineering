@@ -81,8 +81,7 @@ A general model is:
 
 $$
 \boxed{
-\text{Smart System}
-=
+\text{Smart System} =
 \text{Sensing}
 +
 \text{Embedded Computing}
@@ -394,8 +393,7 @@ Humidity ───────┤
 Let $M$ represent soil moisture.
 
 $$
-\text{Watering Alert}
-=
+\text{Watering Alert} =
 \begin{cases}
 1,&M<M_{\min}\\
 0,&M\ge M_{\min}
@@ -498,8 +496,7 @@ $$
 Use:
 
 $$
-\text{Accuracy}
-=
+\text{Accuracy} =
 \frac{\text{Correct Predictions}}
 {\text{Total Predictions}}
 \times100\%
@@ -697,8 +694,7 @@ LED       MQTT Status
 Let measured distance be $d$.
 
 $$
-\text{Occupancy}
-=
+\text{Occupancy} =
 \begin{cases}
 1,&d<d_{\text{threshold}}\\
 0,&d\ge d_{\text{threshold}}
@@ -812,14 +808,12 @@ Fall Detected
 Important metrics include:
 
 $$
-\text{Precision}
-=
+\text{Precision} =
 \frac{TP}{TP+FP}
 $$
 
 $$
-\text{Recall}
-=
+\text{Recall} =
 \frac{TP}{TP+FN}
 $$
 
@@ -1059,8 +1053,7 @@ Students should consider:
 
 $$
 \boxed{
-\text{Good Dataset}
-=
+\text{Good Dataset} =
 \text{Representative}
 +
 \text{Balanced}
@@ -1091,8 +1084,7 @@ Smart systems often have timing constraints.
 The end-to-end response time can be modeled as:
 
 $$
-T_{\text{response}}
-=
+T_{\text{response}} =
 T_{\text{sensing}}
 +
 T_{\text{processing}}
@@ -1109,8 +1101,7 @@ Students should measure relevant components where possible.
 For TinyML:
 
 $$
-T_{\text{inference}}
-=
+T_{\text{inference}} =
 t_{\text{end}}-t_{\text{start}}
 $$
 
@@ -1130,8 +1121,7 @@ Students should report:
 Conceptually:
 
 $$
-M_{\text{total}}
-=
+M_{\text{total}} =
 M_{\text{firmware}}
 +
 M_{\text{model}}
@@ -1156,8 +1146,7 @@ For battery-operated projects, students should consider:
 Average current can be approximated by:
 
 $$
-I_{\text{avg}}
-=
+I_{\text{avg}} =
 \frac{
 \sum I_iT_i
 }{
@@ -1278,21 +1267,18 @@ The diagonal elements represent correct predictions.
 For a classification problem:
 
 $$
-\text{Accuracy}
-=
+\text{Accuracy} =
 \frac{TP+TN}
 {TP+TN+FP+FN}
 $$
 
 $$
-\text{Precision}
-=
+\text{Precision} =
 \frac{TP}{TP+FP}
 $$
 
 $$
-\text{Recall}
-=
+\text{Recall} =
 \frac{TP}{TP+FN}
 $$
 
@@ -1510,8 +1496,7 @@ The **Smart System Mini Project** integrates the major topics of modern MCU-base
 
 $$
 \boxed{
-\text{Smart System}
-=
+\text{Smart System} =
 \text{MCU}
 +
 \text{Sensors}
