@@ -533,7 +533,7 @@ A **Message Authentication Code (MAC)** can provide integrity and authenticity u
 Conceptually:
 
 $$
-T=\operatorname{MAC}_K(M)
+T= MAC_K(M)
 $$
 
 The receiver recomputes the MAC using the same secret key.
@@ -541,7 +541,7 @@ The receiver recomputes the MAC using the same secret key.
 One widely used construction is HMAC:
 
 $$
-\operatorname{HMAC}(K,M)
+HMAC(K,M)
 $$
 
 This is different from a hardware **multiply-accumulate (MAC)** operation.
