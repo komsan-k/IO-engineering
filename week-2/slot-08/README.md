@@ -72,8 +72,7 @@ Therefore,
 
 $$
 \boxed{
-\text{Software Timer}
-=
+\text{Software Timer} =
 \text{Time-Based RTOS Event}
 }
 $$
@@ -983,8 +982,7 @@ Each object consumes some memory.
 Therefore:
 
 $$
-M_{RTOS}
-=
+M_{RTOS} =
 M_{tasks}
 +
 M_{queues}
@@ -1207,8 +1205,7 @@ Therefore:
 
 $$
 \boxed{
-\text{Dynamic Allocation}
-=
+\text{Dynamic Allocation} =
 \text{Flexibility}
 +
 \text{Runtime Memory Management}
@@ -1649,8 +1646,7 @@ Therefore:
 
 $$
 \boxed{
-\text{Stack Size}
-=
+\text{Stack Size} =
 \text{Enough for Safety}
 +
 \text{Avoid Excessive Waste}
@@ -2113,10 +2109,8 @@ $$
 then:
 
 $$
-U_M
-=
-\frac{200}{320}\times100
-=
+U_M =
+\frac{200}{320}\times100 =
 62.5\%.
 $$
 
@@ -3025,8 +3019,7 @@ The central design principle is:
 
 $$
 \boxed{
-\text{Reliable ESP32 RTOS System}
-=
+\text{Reliable ESP32 RTOS System} =
 \text{Correct Timing}
 +
 \text{Controlled Memory Usage}
