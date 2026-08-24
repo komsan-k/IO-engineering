@@ -374,8 +374,7 @@ Conceptually:
 
 $$
 \boxed{
-\text{GAP}
-=
+\text{GAP} =
 \text{Discovery}
 +
 \text{Advertising}
@@ -611,8 +610,7 @@ A simplified expression is:
 
 $$
 \boxed{
-\text{GATT}
-=
+\text{GATT} =
 \text{Services}
 +
 \text{Characteristics}
@@ -1397,8 +1395,7 @@ BLE power consumption is influenced by parameters such as:
 Conceptually:
 
 $$
-P_{\text{avg}}
-=
+P_{\text{avg}} =
 \frac{
 E_{\text{active}}+E_{\text{sleep}}
 }{
@@ -1479,8 +1476,7 @@ BLE application throughput depends on multiple parameters, including:
 A simplified conceptual relationship is:
 
 $$
-R_{\text{application}}
-=
+R_{\text{application}} =
 \frac{
 \text{Useful Application Data}
 }{
@@ -1526,8 +1522,7 @@ Therefore:
 
 $$
 \boxed{
-\text{BLE Range}
-=
+\text{BLE Range} =
 f(
 P_{TX},
 \text{Sensitivity},
@@ -1604,8 +1599,7 @@ $$
 +
 \text{ESP32 Gateway}
 +
-\text{MQTT}
-=
+\text{MQTT} =
 \text{Connected IoT System}
 }
 $$
@@ -2019,8 +2013,7 @@ After studying this theory, students should be able to:
 
 $$
 \boxed{
-\text{BLE Application}
-=
+\text{BLE Application} =
 \text{GAP}
 +
 \text{GATT}
@@ -2031,8 +2024,7 @@ $$
 
 $$
 \boxed{
-\text{GAP}
-=
+\text{GAP} =
 \text{Advertising}
 +
 \text{Scanning}
@@ -2047,8 +2039,7 @@ $$
 
 $$
 \boxed{
-\text{GATT}
-=
+\text{GATT} =
 \text{Services}
 +
 \text{Characteristics}
@@ -2061,8 +2052,7 @@ $$
 
 $$
 \boxed{
-\text{ESP32}
-=
+\text{ESP32} =
 \text{GAP Peripheral}
 +
 \text{GATT Server}
@@ -2073,8 +2063,7 @@ $$
 
 $$
 \boxed{
-\text{Smartphone}
-=
+\text{Smartphone} =
 \text{GAP Central}
 +
 \text{GATT Client}
