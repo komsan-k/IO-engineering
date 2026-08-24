@@ -1398,17 +1398,16 @@ A prerecorded backup demonstration is recommended in case of network or hardware
 
 | Assessment Component | Weight |
 |---|---:|
-| Problem definition and objectives | 10% |
-| System architecture | 10% |
-| Hardware implementation | 15% |
-| Firmware/software implementation | 15% |
-| Communication / IoT integration | 10% |
-| Intelligence / TinyML / decision logic | 10% |
-| Testing and experimental results | 10% |
-| Security and reliability considerations | 5% |
-| Final report | 5% |
-| Demonstration and presentation | 10% |
-| **Total** | **100%** |
+| Problem definition and objectives | 1% |
+| System architecture | 1% |
+| Hardware understandings | 1% |
+| Firmware/software implementation | 2% |
+| Communication | 1% |
+| Intelligence / TinyML / decision logic | 1% |
+| Testing and experimental results | 1% |
+| Security and reliability considerations | 1% |
+| Demonstration and presentation | 1% |
+| **Total** | **20%** |
 
 For projects that do not use TinyML, the intelligence component can be evaluated through decision logic, automation, data processing, or another approved intelligent function.
 
