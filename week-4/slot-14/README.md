@@ -1152,8 +1152,7 @@ Class 2 → Running
 the output might conceptually be:
 
 $$
-\mathbf{y}
-=
+\mathbf{y} =
 [0.05,0.90,0.05]
 $$
 
@@ -1190,11 +1189,8 @@ $$
 the quantized input is:
 
 $$
-q=
-\operatorname{round}
-\left(
-\frac{0.73}{0.01}
-\right)-3
+q= round(
+\frac{0.73}{0.01})-3
 $$
 
 $$
