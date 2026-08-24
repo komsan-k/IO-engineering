@@ -1848,11 +1848,7 @@ $$
 Calculate:
 
 $$
-q=
-\operatorname{round}
-\left(
-\frac{r}{S}
-\right)+Z
+q= round(\frac{r}{S})+Z
 $$
 
 Then reconstruct:
@@ -2222,11 +2218,7 @@ $$
 
 $$
 \boxed{
-q=
-\operatorname{round}
-\left(
-\frac{r}{S}
-\right)+Z
+q = round(\frac{r}{S})+Z
 }
 $$
 
@@ -2332,11 +2324,9 @@ although the complete `.tflite` model and runtime memory will not necessarily sh
 **Pruning** introduces sparsity by removing or zeroing less-important model parameters:
 
 $$
-w_i'=
-\begin{cases}
+w_i'= \begin{cases}
 0,&|w_i|<T\\
-w_i,&|w_i|\ge T
-\end{cases}
+w_i,&|w_i|\ge T \end{cases}
 $$
 
 However, sparsity does not automatically produce faster MCU inference. Actual improvements depend on runtime and hardware support.
