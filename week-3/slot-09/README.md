@@ -40,8 +40,7 @@ Therefore,
 
 $$
 \boxed{
-\text{Connected Embedded System}
-=
+\text{Connected Embedded System} =
 \text{MCU}
 +
 \text{Networking}
@@ -723,8 +722,7 @@ Therefore:
 
 $$
 \boxed{
-\text{HTTPS}
-=
+\text{HTTPS} =
 \text{HTTP over TLS}
 }
 $$
@@ -1339,8 +1337,7 @@ Therefore:
 
 $$
 \boxed{
-\text{ESP32}
-=
+\text{ESP32} =
 \text{REST Client}
 }
 $$
@@ -1699,8 +1696,7 @@ Therefore:
 
 $$
 \boxed{
-\text{Embedded Networking}
-=
+\text{Embedded Networking} =
 \text{Connectivity}
 +
 \text{Resource Constraints}
@@ -2103,8 +2099,7 @@ $$
 ### Packet Loss
 
 $$
-P_{loss}
-=
+P_{loss} =
 \frac{N_{sent}-N_{received}}
 {N_{sent}}
 \times100\%.
@@ -2126,8 +2121,7 @@ $$
 REST communication latency can be approximated conceptually as:
 
 $$
-T_{REST}
-=
+T_{REST} =
 T_{network}
 +
 T_{server}
@@ -2572,8 +2566,7 @@ $$
 \boxed{
 \text{Embedded AI}
 +
-\text{Networking}
-=
+\text{Networking} =
 \text{Connected Intelligence}
 }
 $$
@@ -3015,8 +3008,7 @@ $$
 
 $$
 \boxed{
-\text{HTTPS}
-=
+\text{HTTPS} =
 \text{HTTP over TLS}
 }
 $$
@@ -3075,8 +3067,7 @@ The overall architecture can be summarized as:
 
 $$
 \boxed{
-\text{Connected ESP32 System}
-=
+\text{Connected ESP32 System} =
 \text{Embedded Processing}
 +
 \text{Wi-Fi}
