@@ -756,8 +756,7 @@ This supports the design principle:
 
 $$
 \boxed{
-\text{ISR}
-=
+\text{ISR} =
 \text{Fast Response}
 }
 $$
@@ -766,8 +765,7 @@ and
 
 $$
 \boxed{
-\text{Task}
-=
+\text{Task} =
 \text{Longer Processing}
 }
 $$
@@ -1747,8 +1745,7 @@ Synchronization improves correctness but introduces overhead.
 A simplified execution time can be represented as:
 
 $$
-T_{\text{total}}
-=
+T_{\text{total}} =
 T_{\text{work}}
 +
 T_{\text{sync}}
@@ -2188,8 +2185,7 @@ $$
 +
 \text{Shared Resource}
 +
-\text{No Synchronization}
-=
+\text{No Synchronization} =
 \text{Race Condition}
 }
 $$
@@ -2270,8 +2266,7 @@ $$
 +
 \text{Shared Resources}
 +
-\text{Synchronization}
-=
+\text{Synchronization} =
 \text{Reliable Concurrent System}
 }
 $$
