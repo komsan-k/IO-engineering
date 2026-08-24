@@ -23,8 +23,7 @@ The overall relationship can be summarized as:
 
 $$
 \boxed{
-\text{FreeRTOS Application}
-=
+\text{FreeRTOS Application} =
 \text{Tasks}
 +
 \text{Timers}
