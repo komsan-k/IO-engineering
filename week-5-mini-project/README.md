@@ -345,8 +345,7 @@ Unlock
 
 $$
 \text{Access}
-=
-\begin{cases}
+= \begin{cases}
 \text{Granted}, & C=C_{\text{authorized}}\\
 \text{Denied}, & C\neq C_{\text{authorized}}
 \end{cases}
