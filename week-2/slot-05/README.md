@@ -18,8 +18,7 @@ $$
 +
 \text{Scheduler}
 +
-\text{RTOS Services}
-=
+\text{RTOS Services} =
 \text{Real-Time Embedded System}
 }
 $$
@@ -52,8 +51,7 @@ A better interpretation is
 
 $$
 \boxed{
-\text{Real-Time}
-=
+\text{Real-Time} =
 \text{Correct Result at the Required Time}
 }
 $$
@@ -174,8 +172,7 @@ Conceptually,
 
 $$
 \boxed{
-\text{Task}
-=
+\text{Task} =
 \text{Code}
 +
 \text{Stack}
@@ -456,8 +453,7 @@ CPU | A | B | C | A | B | C |
 A simplified scheduler model is
 
 $$
-T_{next}
-=
+T_{next} =
 \arg\max_{T_i\in R} P_i
 $$
 
@@ -595,8 +591,7 @@ Thus,
 
 $$
 \boxed{
-\text{Efficient Task}
-=
+\text{Efficient Task} =
 \text{Event Driven}
 +
 \text{Blocks When Idle}
@@ -1129,8 +1124,7 @@ $$
 U=
 \frac{2}{10}
 +
-\frac{5}{50}
-=
+\frac{5}{50} =
 0.3.
 $$
 
@@ -1469,8 +1463,7 @@ $$
 +
 \text{Timing}
 +
-\text{Synchronization}
-=
+\text{Synchronization} =
 \text{RTOS Application}
 }
 $$
@@ -1479,8 +1472,7 @@ $$
 
 $$
 \boxed{
-\text{Task}
-=
+\text{Task} =
 \text{Code}
 +
 \text{Stack}
@@ -1495,8 +1487,7 @@ $$
 
 $$
 \boxed{
-T_{next}
-=
+T_{next} =
 \arg\max_{T_i\in Ready}P_i
 }
 $$
