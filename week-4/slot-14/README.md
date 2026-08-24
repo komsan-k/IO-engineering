@@ -1640,8 +1640,7 @@ Optimization can begin by:
 
 $$
 \boxed{
-\text{Efficient Architecture}
->
+\text{Efficient Architecture} >
 \text{Needlessly Large Model + Optimization}
 }
 $$
