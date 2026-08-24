@@ -310,8 +310,7 @@ where:
 The quantization operation can be expressed approximately as:
 
 $$
-q=
-round(\frac{r}{S} \right)+Z
+q = round(\frac{r}{S}) +Z
 $$
 
 followed by clipping to the supported integer range.
