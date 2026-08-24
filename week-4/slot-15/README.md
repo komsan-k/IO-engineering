@@ -1388,11 +1388,7 @@ $$
 For an INT8 input tensor:
 
 $$
-q=
-\operatorname{round}
-\left(
-\frac{x}{S}
-\right)+Z
+q= round( \frac{x}{S})+Z
 $$
 
 The result should be clipped to:
@@ -1902,8 +1898,7 @@ Measured processing times are:
 Total processing:
 
 $$
-T_P
-=
+T_P =
 2+8+1+12+1+1
 $$
 
