@@ -193,8 +193,7 @@ Therefore,
 
 $$
 \boxed{
-\text{Queue}
-=
+\text{Queue} =
 \text{Thread-Safe Message Buffer}
 }
 $$
@@ -1138,8 +1137,7 @@ Then:
 $$
 M_Q
 \approx
-10\times16
-=
+10\times16 =
 160~bytes.
 $$
 
@@ -1174,8 +1172,7 @@ Therefore:
 
 $$
 \boxed{
-\text{Queue Length}
-=
+\text{Queue Length} =
 \text{Buffering Requirement}
 \leftrightarrow
 \text{Memory Cost}
