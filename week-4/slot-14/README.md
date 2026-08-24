@@ -2323,9 +2323,9 @@ although the complete `.tflite` model and runtime memory will not necessarily sh
 **Pruning** introduces sparsity by removing or zeroing less-important model parameters:
 
 $$
-w_i'= \begin{cases}
-0,&|w_i|<T\\
-w_i,&|w_i|\ge T \end{cases}
+w_i' = \begin{cases}
+0, & |w_i| < T,\\
+w_i, & |w_i| \geq T. \end{cases}
 $$
 
 However, sparsity does not automatically produce faster MCU inference. Actual improvements depend on runtime and hardware support.
