@@ -2242,7 +2242,7 @@ $$
 
 $$
 \boxed{
-T=\operatorname{MAC}_K(M)
+T=MAC_K(M)
 }
 $$
 
