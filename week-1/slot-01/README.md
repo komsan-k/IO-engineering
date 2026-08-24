@@ -327,7 +327,7 @@ REG |= (1U << 5);
 This sets bit 5 of `REG`.
 
 $$
-R_{\text{new}} = R_{\text{old}} \operatorname{OR} (1 << 5)
+R_{\text{new}} = R_{\text{old}} OR (1 << 5)
 $$
 
 ---
