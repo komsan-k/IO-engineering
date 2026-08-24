@@ -606,8 +606,7 @@ A conceptual verification model is:
 
 $$
 V(K_{\text{pub}},F,\sigma)
-=
-\begin{cases}
+= \begin{cases}
 1,&\text{Accept firmware}\\
 0,&\text{Reject firmware}
 \end{cases}
