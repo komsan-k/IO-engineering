@@ -29,8 +29,7 @@ Conceptually:
 
 $$
 \boxed{
-\text{MCU System}
-=
+\text{MCU System} =
 \text{CPU}
 +
 \text{Memory}
@@ -328,8 +327,7 @@ REG |= (1U << 5);
 This sets bit 5 of `REG`.
 
 $$
-R_{\text{new}}
-=
+R_{\text{new}} =
 R_{\text{old}}
 \operatorname{OR}
 (1\ll5)
@@ -601,8 +599,7 @@ REG |= (1U << 5);
 Conceptually:
 
 $$
-R_{\text{new}}
-=
+R_{\text{new}} =
 R_{\text{old}}
 \lor
 M
@@ -1021,8 +1018,7 @@ GPIO / Network
 
 $$
 \boxed{
-\text{TinyML System}
-=
+\text{TinyML System} =
 \text{MCU}
 +
 \text{Memory}
@@ -1040,8 +1036,7 @@ $$
 A simplified timing model is:
 
 $$
-T_{\text{operation}}
-=
+T_{\text{operation}} =
 T_{\text{software}}
 +
 T_{\text{driver}}
@@ -1229,8 +1224,7 @@ After completing this topic, students should be able to:
 
 $$
 \boxed{
-\text{MCU}
-=
+\text{MCU} =
 \text{CPU}
 +
 \text{Memory}
@@ -1243,8 +1237,7 @@ $$
 
 $$
 \boxed{
-\text{Embedded System}
-=
+\text{Embedded System} =
 \text{MCU}
 +
 \text{Hardware}
