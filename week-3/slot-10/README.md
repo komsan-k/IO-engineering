@@ -31,8 +31,7 @@ Temperature Sensor
 
 $$
 \boxed{
-\text{MQTT System}
-=
+\text{MQTT System} =
 \text{Publisher}
 +
 \text{Broker}
@@ -503,8 +502,7 @@ MQTT defines three QoS levels:
 
 $$
 \boxed{
-\text{QoS 0}
-=
+\text{QoS 0} =
 \text{At Most Once}
 }
 $$
@@ -533,8 +531,7 @@ Disadvantage:
 
 $$
 \boxed{
-\text{QoS 1}
-=
+\text{QoS 1} =
 \text{At Least Once}
 }
 $$
@@ -555,8 +552,7 @@ If an acknowledgment is lost, retransmission may occur.
 
 $$
 \boxed{
-\text{QoS 1}
-=
+\text{QoS 1} =
 \text{Delivery Expected}
 +
 \text{Duplicates Possible}
@@ -569,8 +565,7 @@ $$
 
 $$
 \boxed{
-\text{QoS 2}
-=
+\text{QoS 2} =
 \text{Exactly Once}
 }
 $$
@@ -621,8 +616,7 @@ Sender
 
 $$
 \boxed{
-\text{QoS Selection}
-=
+\text{QoS Selection} =
 f(
 \text{Reliability},
 \text{Latency},
@@ -1150,8 +1144,7 @@ Authorized Subscribers
 
 $$
 \boxed{
-\text{Secure MQTT Transport}
-=
+\text{Secure MQTT Transport} =
 \text{MQTT over TLS}
 }
 $$
@@ -1370,8 +1363,7 @@ $$
 \boxed{
 \text{Embedded Intelligence}
 +
-\text{MQTT Connectivity}
-=
+\text{MQTT Connectivity} =
 \text{Connected Intelligence}
 }
 $$
@@ -1779,8 +1771,7 @@ $$
 
 $$
 \boxed{
-\text{QoS 0}
-=
+\text{QoS 0} =
 \text{At Most Once}
 }
 $$
@@ -1789,8 +1780,7 @@ $$
 
 $$
 \boxed{
-\text{QoS 1}
-=
+\text{QoS 1} =
 \text{At Least Once}
 }
 $$
@@ -1799,8 +1789,7 @@ $$
 
 $$
 \boxed{
-\text{QoS 2}
-=
+\text{QoS 2} =
 \text{Exactly Once}
 }
 $$
