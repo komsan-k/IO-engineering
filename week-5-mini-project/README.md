@@ -394,8 +394,8 @@ Let $M$ represent soil moisture.
 $$
 \text{Watering Alert} =
 \begin{cases}
-1,&M<M_{\min}\\
-0,&M\ge M_{\min}
+1, & M < M_{\min} \\
+0, & M \ge M_{\min}
 \end{cases}
 $$
 
