@@ -1,76 +1,116 @@
-
 # 📘 Theory: MCU Architecture, Memory Mapping, Register-Level Programming, and HAL Basics
+## ESP32 MCU Case Study
 
-## ESP32 MCU Case
+---
 
-## 1. Introduction
+## 🧩 1. Introduction
 
-A **microcontroller unit (MCU)** is a compact computing system that integrates a processor core, memory, digital and analog peripherals, communication interfaces, timers, and control logic on a single chip. Unlike a general-purpose computer, an MCU is designed to interact directly with physical devices such as sensors, actuators, switches, displays, motors, and communication modules.
+A **Microcontroller Unit (MCU)** is a compact computing system designed to perform dedicated embedded-control tasks. Unlike a general-purpose computer, an MCU integrates the processor, memory, communication interfaces, timers, and input/output peripherals into a single integrated circuit.
 
-The ESP32 family is a useful case study because it combines:
+The ESP32 family provides a useful case study because it combines conventional MCU functions with wireless communication and hardware peripherals suitable for **IoT, embedded systems, cyber-physical systems, robotics, and edge intelligence**.
 
-* a programmable CPU,
-* internal SRAM and ROM,
-* external flash support,
-* GPIO,
-* timers,
-* ADC/DAC capabilities on selected devices,
-* PWM,
-* UART,
-* SPI,
-* I²C,
-* Wi-Fi,
-* Bluetooth,
-* interrupt controllers,
-* low-power subsystems.
+A simplified MCU can be represented as:
 
-The basic embedded-system model is
+```text
+              Microcontroller Unit
+                      │
+        ┌─────────────┼─────────────┐
+        ▼             ▼             ▼
+       CPU          Memory      Peripherals
+        │             │             │
+        │        ┌────┴────┐    ┌───┴─────────┐
+        │        ▼         ▼    ▼             ▼
+        │       RAM      Flash GPIO       Timers/ADC
+        │
+        └──────────── System Bus ──────────────┘
+```
+
+Conceptually:
 
 $$
 \boxed{
+\text{MCU System}
+=
 \text{CPU}
 +
 \text{Memory}
 +
 \text{Peripherals}
 +
-\text{Software = }
-\text{MCU System}
+\text{Software}
 }
 $$
 
+This manuscript introduces four fundamental topics:
+
+1. **MCU architecture**
+2. **Memory mapping**
+3. **Register-level programming**
+4. **Hardware Abstraction Layer (HAL)**
+
 ---
 
-# 2. MCU Architecture
+## 🎯 2. Learning Objectives
 
-## 2.1 Basic MCU Structure
+After studying this theory, students should be able to:
 
-A typical MCU can be represented as
+- explain the basic architecture of an MCU;
+- identify the major components of the ESP32;
+- distinguish CPU, memory, and peripheral functions;
+- explain memory-mapped I/O;
+- describe the role of peripheral registers;
+- perform basic register-level operations;
+- apply bitwise operators to hardware registers;
+- distinguish register-level programming from HAL programming;
+- explain the advantages and disadvantages of hardware abstraction;
+- understand how Arduino and ESP-IDF APIs relate to lower-level hardware;
+- select an appropriate programming abstraction for an embedded application.
+
+---
+
+## 🧠 3. What Is a Microcontroller?
+
+A microcontroller is essentially a small computer implemented on a single chip.
+
+Typical MCU components include:
 
 ```text
-                 ┌─────────────────┐
-                 │      CPU        │
-                 │  ALU + Control  │
-                 └────────┬────────┘
-                          │
-                    System Bus
-                          │
-        ┌─────────────────┼─────────────────┐
-        ▼                 ▼                 ▼
-      Memory          Peripherals       Interrupts
-        │                 │                 │
-   Flash / SRAM       GPIO / UART      IRQ Controller
-                      SPI / I2C
-                      ADC / Timer
+┌──────────────────────────────────────┐
+│                 MCU                  │
+│                                      │
+│  ┌────────┐       ┌──────────────┐   │
+│  │  CPU   │       │    Memory    │   │
+│  └───┬────┘       └──────┬───────┘   │
+│      │                   │           │
+│  ────┴──── System Bus ───┴────────   │
+│      │                   │           │
+│  ┌───▼────┐       ┌──────▼───────┐   │
+│  │  GPIO  │       │   Timers     │   │
+│  └────────┘       └──────────────┘   │
+│                                      │
+│  ┌────────┐       ┌──────────────┐   │
+│  │  ADC   │       │ UART/I²C/SPI │   │
+│  └────────┘       └──────────────┘   │
+└──────────────────────────────────────┘
 ```
 
-The CPU executes instructions, memory stores code and data, and peripherals interface the MCU with the outside world.
+The CPU executes instructions, while peripherals interact with the physical environment.
 
 ---
 
-## 2.2 CPU Core
+## ⚙️ 4. ESP32 as a Microcontroller Platform
 
-The processor executes the instruction cycle
+The ESP32 family is designed for embedded and connected applications. Depending on the particular ESP32 variant, features may include one or more processor cores, SRAM, external flash interface, GPIO, ADC, PWM-capable peripherals, hardware timers, watchdog timers, UART, SPI, I²C, Wi-Fi, Bluetooth/BLE, DMA, interrupt controllers, and hardware security mechanisms.
+
+> Exact CPU architecture, peripheral availability, register definitions, and memory layout vary across ESP32-family devices. Always use the documentation for the specific target device.
+
+---
+
+## 🧮 5. Central Processing Unit
+
+The **CPU** executes program instructions.
+
+A simplified instruction cycle is:
 
 $$
 \boxed{
@@ -82,623 +122,612 @@ $$
 }
 $$
 
-During execution, the CPU performs operations such as:
+The processor repeatedly fetches an instruction from memory, decodes it, executes the required operation, updates registers or memory, and proceeds to the next instruction.
 
-* arithmetic,
-* logical operations,
-* data movement,
-* branch operations,
-* memory accesses,
-* peripheral accesses.
-
-For example,
+Example:
 
 ```c
 c = a + b;
 ```
 
-may eventually produce processor instructions that:
-
-1. load `a`,
-2. load `b`,
-3. add them,
-4. store the result.
+At the processor level, this involves operations such as loading operands, adding them, and storing the result.
 
 ---
 
-# 3. ESP32 MCU Architecture
+## 🧱 6. CPU Registers
 
-The original ESP32 commonly uses dual Xtensa LX6 CPU cores, while newer ESP32 variants may use Xtensa or RISC-V cores depending on the device.
+CPU registers are small, fast storage locations located within the processor. They may hold operands, addresses, intermediate values, and program state.
 
-Therefore, when designing for the ESP32 family, the exact architecture should always be checked for the selected chip.
-
-A simplified ESP32 architecture is
-
-```text
-                    ┌──────────────────┐
-                    │   CPU Core(s)    │
-                    └────────┬─────────┘
-                             │
-                       System Bus
-                             │
-          ┌──────────────────┼──────────────────┐
-          ▼                  ▼                  ▼
-       Memory              GPIO            Communication
-   ROM / SRAM / Flash       │              UART / SPI / I2C
-                            │
-          ┌─────────────────┼──────────────────┐
-          ▼                 ▼                  ▼
-        Timers             ADC               PWM
-                                               │
-                                               ▼
-                                           Actuators
-```
-
-Wireless subsystems add
-
-```text
-Wi-Fi
-Bluetooth
-```
-
-to the embedded platform.
+CPU registers should not be confused with **peripheral control registers**, which configure hardware modules such as GPIO, timers, UART, and ADC.
 
 ---
 
-# 4. Harvard and Von Neumann Concepts
+## 🚌 7. System Bus and Interconnect
 
-MCU architectures are often explained using two classical memory organizations.
-
-## 4.1 Von Neumann Architecture
-
-Instructions and data share a common memory and bus.
-
-```text
-CPU
- │
- ▼
-Common Bus
- │
- ▼
-Instructions + Data
-```
-
----
-
-## 4.2 Harvard Architecture
-
-Instructions and data use separate paths.
+The CPU communicates with memory and peripherals through the MCU's internal interconnect.
 
 ```text
              CPU
-          /       \
-         ▼         ▼
-Instruction     Data
- Memory        Memory
+              │
+              ▼
+       System Interconnect
+        /       |       \
+       ▼        ▼        ▼
+   Memory      GPIO     UART/ADC/Timer
 ```
 
-Many modern MCUs use a modified Harvard architecture internally to improve performance while still presenting a unified software address space.
-
----
-
-# 5. MCU Memory Types
-
-An MCU commonly contains several forms of memory.
-
-| Memory Type                | Purpose                                             |
-| -------------------------- | --------------------------------------------------- |
-| **ROM**                    | Boot code, fixed functions                          |
-| **Flash**                  | Program storage and persistent data                 |
-| **SRAM**                   | Runtime variables and stack                         |
-| **Registers**              | Fast CPU and peripheral state                       |
-| **RTC Memory**             | Low-power data retention on supported ESP32 devices |
-| **External Flash / PSRAM** | Additional program or data storage                  |
-
----
-
-# 6. Program Memory
-
-Program instructions are commonly stored in nonvolatile flash.
-
-For example:
+A simplified abstraction is:
 
 ```text
-Power OFF
-   │
-   ▼
-Program remains stored
-   │
-   ▼
-Power ON
-   │
-   ▼
-Bootloader starts
-   │
-   ▼
-Application runs
-```
-
-This makes flash suitable for firmware storage.
-
----
-
-# 7. SRAM
-
-SRAM stores temporary runtime information.
-
-Examples include:
-
-```c
-int counter;
-float temperature;
-char buffer[128];
-```
-
-These values normally exist while the MCU is powered.
-
-SRAM is used for:
-
-* local variables,
-* global variables,
-* stack,
-* heap,
-* communication buffers.
-
----
-
-# 8. Stack and Heap
-
-## 8.1 Stack
-
-The stack stores items such as:
-
-* function parameters,
-* local variables,
-* return addresses,
-* saved registers.
-
-Conceptually:
-
-```text
-Function Call
-    │
-    ▼
-Stack Frame Created
-    │
-    ▼
-Function Executes
-    │
-    ▼
-Stack Frame Removed
+Address → Which resource?
+Data    → What value?
+Control → Read or write?
 ```
 
 ---
 
-## 8.2 Heap
+## 💾 8. MCU Memory
 
-The heap is used for dynamic memory allocation.
+Embedded systems use different memory types for different purposes.
 
-For example:
-
-```c
-ptr = malloc(100);
-```
-
-allocates memory during runtime.
-
-Embedded systems should use dynamic allocation carefully because fragmentation and unpredictable memory usage can reduce reliability.
+| Memory | Typical Purpose |
+|---|---|
+| **Flash** | Program and persistent data |
+| **SRAM** | Runtime variables, stack, heap |
+| **ROM** | Fixed system routines/boot functions |
+| **Registers** | CPU/peripheral control and state |
 
 ---
 
-# 9. Memory Mapping
+## 💽 9. Flash Memory
 
-## 9.1 Concept
-
-In an MCU, memory and peripheral hardware are assigned specific addresses.
-
-This is called a **memory map**.
-
-The CPU may see the system as
-
-```text
-Address Space
-     │
-     ├── Program Memory
-     ├── SRAM
-     ├── Peripheral Registers
-     ├── ROM
-     └── External Memory
-```
-
-Therefore,
+Flash is **non-volatile**, meaning its contents remain when power is removed. It commonly stores application firmware, constants, filesystem data, configuration data, and OTA firmware partitions.
 
 $$
-\boxed{
-\text{Address}
-\rightarrow
-\text{Specific Hardware Resource}
-}
+\text{Power Off}
+\Rightarrow
+\text{Flash Contents Retained}
 $$
 
 ---
 
-# 10. Memory-Mapped I/O
+## 🧠 10. SRAM
 
-A peripheral register can be accessed as if it were a memory location.
+SRAM is normally used for runtime information such as global variables, static variables, stack, heap, and runtime buffers.
 
-For example, conceptually,
+$$
+\text{Power Off}
+\Rightarrow
+\text{Runtime SRAM Contents Lost}
+$$
+
+---
+
+## 📚 11. Stack and Heap
+
+The **stack** is commonly used for local variables, function-call information, and saved execution context. The **heap** supports dynamic memory allocation.
+
+Example:
+
+```c
+int *buffer = malloc(100 * sizeof(int));
+```
+
+---
+
+## 🗺️ 12. What Is Memory Mapping?
+
+A processor accesses memory locations through numerical addresses. **Memory mapping** defines how the MCU's address space corresponds to memory and hardware resources.
 
 ```text
-0x....0000 → GPIO control register
-0x....0004 → GPIO output register
-0x....0008 → GPIO input register
+Address          Resource
+--------------------------------
+0x........       Program/Data
+0x........       SRAM
+0x........       Peripheral
+0x........       System Resource
 ```
 
-The exact addresses depend on the ESP32 device.
+---
 
-The CPU can therefore perform something conceptually similar to
+## 🧭 13. Address Space
+
+If a processor supports an address width of $n$ bits, the theoretical number of distinct addresses is:
 
 $$
-\text{Memory Write}
-\rightarrow
-\text{GPIO Register}
-\rightarrow
-\text{Physical Pin}
+2^n
 $$
 
----
-
-# 11. Peripheral Registers
-
-A hardware peripheral is controlled by registers.
-
-Examples:
-
-* configuration register,
-* status register,
-* data register,
-* interrupt-enable register.
-
-A GPIO peripheral might conceptually contain
-
-| Register      | Function                   |
-| ------------- | -------------------------- |
-| `GPIO_ENABLE` | Configure output direction |
-| `GPIO_OUT`    | Set output value           |
-| `GPIO_IN`     | Read input value           |
-| `GPIO_SET`    | Set selected bits          |
-| `GPIO_CLEAR`  | Clear selected bits        |
-
-The exact names vary by architecture and software layer.
-
----
-
-# 12. Register Bit Fields
-
-One register often contains multiple control fields.
-
-For example, imagine an 8-bit register
-
-```text
-Bit 7   Bit 6   Bit 5   Bit 4   Bit 3   Bit 2   Bit 1   Bit 0
- EN      MODE    IRQ     ---      ---     CFG1    CFG0    STATUS
-```
-
-Different bits control different hardware functions.
-
-Register programming therefore requires operations such as:
-
-* set bit,
-* clear bit,
-* toggle bit,
-* test bit.
-
----
-
-# 13. Bitwise Operations
-
-Embedded programming heavily uses bitwise operators.
-
-## Set a Bit
-
-```c
-reg |= (1 << n);
-```
-
-This forces bit (n) to `1`.
-
----
-
-## Clear a Bit
-
-```c
-reg &= ~(1 << n);
-```
-
-This forces bit (n) to `0`.
-
----
-
-## Toggle a Bit
-
-```c
-reg ^= (1 << n);
-```
-
-This reverses bit (n).
-
----
-
-## Test a Bit
-
-```c
-if (reg & (1 << n)) {
-    // bit is set
-}
-```
-
----
-
-# 14. Register-Level Programming
-
-Register-level programming accesses hardware registers directly.
-
-Conceptually:
-
-```c
-REGISTER = VALUE;
-```
-
-or
-
-```c
-REGISTER |= MASK;
-```
-
-This gives very precise hardware control.
-
-The basic flow is
-
-```text
-C Code
-  │
-  ▼
-Register Address
-  │
-  ▼
-Peripheral Register
-  │
-  ▼
-Hardware Behavior
-```
-
----
-
-# 15. Advantages of Register-Level Programming
-
-Register-level programming provides:
-
-* precise control,
-* low overhead,
-* high performance,
-* detailed understanding of hardware,
-* deterministic peripheral configuration.
-
-It is useful for:
-
-* device-driver development,
-* high-performance code,
-* custom timing,
-* low-level debugging.
-
----
-
-# 16. Disadvantages of Register-Level Programming
-
-Direct register access also has disadvantages:
-
-* device-specific code,
-* reduced portability,
-* more difficult debugging,
-* higher risk of configuration errors,
-* dependency on datasheets and technical reference manuals.
-
-Therefore,
+For a 32-bit address space:
 
 $$
-\boxed{
-\text{Low-Level Control}
-\leftrightarrow
-\text{Software Complexity}
-}
+2^{32}=4,294,967,296
 $$
+
+distinct byte addresses, corresponding to 4 GiB of theoretical address space.
+
+This does **not** mean that an MCU physically contains 4 GiB of RAM.
 
 ---
 
-# 17. ESP32 Register-Level Concept
+## 🔌 14. Memory-Mapped I/O
 
-An ESP32 GPIO output may conceptually be controlled through dedicated GPIO registers.
-
-The programming model is
+In **memory-mapped I/O**, peripheral registers are assigned addresses within the processor's address space.
 
 ```text
 CPU
+ │
+ ▼
+Address 0xXXXXXXXX
  │
  ▼
 GPIO Register
  │
  ▼
-GPIO Peripheral
- │
- ▼
 Physical Pin
- │
- ▼
-LED
 ```
 
-A direct register-level implementation typically requires knowledge of:
+Thus:
 
-* peripheral base addresses,
-* register offsets,
-* bit definitions.
-
-For portable application development, ESP-IDF generally exposes higher-level APIs instead.
+$$
+\boxed{
+\text{Writing a Memory-Mapped Register}
+\rightarrow
+\text{Changing Hardware State}
+}
+$$
 
 ---
 
-# 18. Volatile Keyword
+## ⚙️ 15. Peripheral Registers
 
-Hardware registers can change independently of normal program flow.
+A peripheral typically exposes several registers, for example:
 
-Therefore, low-level register pointers are commonly declared as `volatile`.
+```text
+GPIO Peripheral
+     │
+     ├── ENABLE Register
+     ├── OUTPUT Register
+     ├── INPUT Register
+     ├── SET Register
+     └── CLEAR Register
+```
+
+---
+
+## 🔢 16. Register Structure
+
+A 32-bit peripheral register may contain individual control bits. For example, if bit 2 is set:
+
+$$
+R=0000\ldots0100_2
+$$
+
+then:
+
+$$
+R=2^2=4
+$$
+
+or:
+
+```text
+0x00000004
+```
+
+---
+
+## 🔧 17. Register-Level Programming
+
+**Register-level programming** directly reads and writes hardware control registers.
+
+```c
+REG |= (1U << 5);
+```
+
+This sets bit 5 of `REG`.
+
+$$
+R_{\text{new}}
+=
+R_{\text{old}}
+\operatorname{OR}
+(1\ll5)
+$$
+
+---
+
+## 🧮 18. Bitwise Operators
+
+| Operator | Meaning | Example |
+|---|---|---|
+| `&` | AND | `A & B` |
+| `\|` | OR | `A \| B` |
+| `^` | XOR | `A ^ B` |
+| `~` | NOT | `~A` |
+| `<<` | Left shift | `1 << n` |
+| `>>` | Right shift | `A >> n` |
+
+---
+
+## 🟢 19. Setting a Bit
+
+```c
+REG |= (1U << n);
+```
+
+For $n=3$:
+
+```text
+1          = 00000001
+1 << 3     = 00001000
+```
+
+---
+
+## 🔴 20. Clearing a Bit
+
+```c
+REG &= ~(1U << n);
+```
+
+For bit 3:
+
+```text
+1 << 3       00001000
+~(1 << 3)    11110111
+```
+
+---
+
+## 🔄 21. Toggling a Bit
+
+```c
+REG ^= (1U << n);
+```
+
+This changes:
+
+```text
+0 → 1
+1 → 0
+```
+
+---
+
+## 🔍 22. Reading a Bit
+
+```c
+if (REG & (1U << n)) {
+    // Bit is set
+}
+```
+
+---
+
+## 🎭 23. Bit Masks
+
+A **bit mask** selects particular bits in a register.
+
+```text
+Register = 10110110
+Mask     = 00001111
+Result   = 00000110
+```
+
+---
+
+## 💡 24. Example: LED Control Concept
+
+An LED connected to a GPIO pin normally requires:
+
+1. configuring the GPIO as an output;
+2. setting the output state.
 
 Conceptually:
 
 ```c
-volatile uint32_t *reg;
+GPIO_ENABLE |= LED_MASK;
+GPIO_OUT    |= LED_MASK;
 ```
 
-`volatile` tells the compiler that the value may change unexpectedly and should not be optimized away based on ordinary variable assumptions.
+The exact register names depend on the target MCU.
 
 ---
 
-# 19. Why `volatile` Matters
+## 🔘 25. Example: Push Button Input
 
-Suppose the CPU repeatedly checks a status register:
+A button can be read through a GPIO input register.
 
 ```c
-while ((*status_reg & READY_BIT) == 0) {
+if (GPIO_INPUT & BUTTON_MASK) {
+    // Button active
 }
 ```
 
-The hardware may set `READY_BIT` later.
-
-Without appropriate volatile semantics, a compiler could incorrectly assume that the value never changes.
-
-Thus,
-
-$$
-\boxed{
-\text{Hardware Register}
-\Rightarrow
-\text{Volatile Access}
-}
-$$
-
-is an important low-level programming concept.
+Pull-up/pull-down configuration and active-high/active-low behavior must also be considered.
 
 ---
 
-# 20. Hardware Abstraction Layer
+## ⚠️ 26. Why Direct Register Programming Is Difficult
 
-A **Hardware Abstraction Layer (HAL)** provides software functions that hide low-level register details.
+Direct register programming requires knowledge of register addresses, widths, bit positions, reset values, read/write behavior, timing requirements, peripheral dependencies, and device-specific restrictions.
 
-Instead of writing
+This motivates the use of a **Hardware Abstraction Layer**.
 
-```text
-Set register X
-Clear bit Y
-Configure register Z
+---
+
+## 🧱 27. Hardware Abstraction Layer
+
+A **Hardware Abstraction Layer (HAL)** hides many hardware-specific details.
+
+Instead of:
+
+```c
+REG |= (1U << PIN);
 ```
 
-the application can use
+the programmer may use:
 
 ```c
 gpio_set_level(pin, 1);
 ```
 
-or an equivalent API.
+or:
 
-The architecture becomes
+```cpp
+digitalWrite(pin, HIGH);
+```
+
+The conceptual hierarchy is:
 
 ```text
 Application
-    │
-    ▼
-HAL / Driver API
-    │
-    ▼
-Registers
-    │
-    ▼
-Peripheral
-    │
-    ▼
+     │
+     ▼
+High-Level API / HAL
+     │
+     ▼
+Driver
+     │
+     ▼
+Peripheral Registers
+     │
+     ▼
 Hardware
 ```
 
 ---
 
-# 21. HAL Advantages
+## 🧠 28. Why Use HAL?
 
-HAL-based development provides:
+HAL programming provides:
 
-* improved readability,
-* faster development,
-* reduced hardware-specific code,
-* easier maintenance,
-* better portability,
-* safer peripheral configuration.
-
-The trade-off is that abstraction can add some overhead or hide lower-level details.
+- easier development;
+- improved readability;
+- reduced dependence on register layouts;
+- fewer hardware-specific errors;
+- better maintainability;
+- better portability.
 
 ---
 
-# 22. ESP32 Software Stack
+## ⚖️ 29. Register Level vs. HAL
 
-A simplified ESP32 software stack can be represented as
+| Feature | Register Level | HAL |
+|---|---|---|
+| Hardware control | Very high | High |
+| Abstraction | Low | High |
+| Ease of learning | Difficult | Easier |
+| Portability | Low | Better |
+| Code readability | Lower | Higher |
+| Hardware knowledge required | High | Moderate |
+| Development speed | Slower | Faster |
+| Fine optimization potential | High | Depends on API |
+
+---
+
+## 🏗️ 30. Software Abstraction Layers
 
 ```text
-Application Code
-      │
-      ▼
-ESP-IDF APIs
-      │
-      ▼
-Drivers / HAL
-      │
-      ▼
-Low-Level Layer
-      │
-      ▼
-Peripheral Registers
-      │
-      ▼
-ESP32 Hardware
+┌─────────────────────────────┐
+│      User Application       │
+├─────────────────────────────┤
+│ Arduino API / ESP-IDF API   │
+├─────────────────────────────┤
+│ Drivers / HAL / LL Layers   │
+├─────────────────────────────┤
+│ Peripheral Registers        │
+├─────────────────────────────┤
+│ ESP32 Hardware              │
+└─────────────────────────────┘
 ```
 
-ESP-IDF provides APIs for:
+---
 
-* GPIO,
-* UART,
-* SPI,
-* I²C,
-* timers,
-* Wi-Fi,
-* Bluetooth,
-* FreeRTOS integration.
+## 🔵 31. Arduino Abstraction
+
+Arduino provides high-level functions such as:
+
+```cpp
+pinMode()
+digitalWrite()
+digitalRead()
+analogRead()
+delay()
+Serial.begin()
+```
+
+Example:
+
+```cpp
+pinMode(2, OUTPUT);
+digitalWrite(2, HIGH);
+```
 
 ---
 
-# 23. Register-Level versus HAL Programming
+## 🟢 32. ESP-IDF
 
-| Feature              | Register-Level        | HAL / Driver API        |
-| -------------------- | --------------------- | ----------------------- |
-| Control              | Very high             | High                    |
-| Portability          | Low                   | Higher                  |
-| Complexity           | High                  | Lower                   |
-| Development speed    | Slower                | Faster                  |
-| Hardware knowledge   | Extensive             | Moderate                |
-| Performance overhead | Minimal               | Usually small           |
-| Readability          | Lower                 | Higher                  |
-| Best use             | Drivers, optimization | Application development |
+**ESP-IDF** is Espressif's official development framework for ESP32-family devices.
+
+Example:
+
+```c
+gpio_set_direction(GPIO_NUM_2, GPIO_MODE_OUTPUT);
+gpio_set_level(GPIO_NUM_2, 1);
+```
+
+ESP-IDF provides APIs for GPIO, timers, UART, SPI, I²C, Wi-Fi, BLE, FreeRTOS, networking, OTA, and security.
 
 ---
 
-# 24. ESP32 GPIO Example Using HAL
+## 🔽 33. Low-Level Access
 
-A typical ESP-IDF-style GPIO program concept is
+Low-level access may be required for precise timing, specialized peripherals, performance optimization, custom drivers, hardware debugging, and learning MCU architecture.
+
+A good embedded engineer should understand the lower layers even when primarily using high-level APIs.
+
+---
+
+## 🔄 34. Read-Modify-Write
+
+A common operation is:
+
+```c
+REG |= (1U << 5);
+```
+
+Conceptually:
+
+$$
+R_{\text{new}}
+=
+R_{\text{old}}
+\lor
+M
+$$
+
+where:
+
+$$
+M=1\ll5
+$$
+
+Some hardware registers have special semantics, so read-modify-write is not always safe.
+
+---
+
+## ⚡ 35. Atomic Register Operations
+
+In concurrent or interrupt-driven systems, read-modify-write sequences can create race conditions. Some peripherals therefore provide dedicated `SET` and `CLEAR` registers or other atomic mechanisms.
+
+---
+
+## ⏱️ 36. Volatile Keyword
+
+Hardware registers can change independently of normal program flow. C/C++ therefore commonly uses `volatile` for memory-mapped hardware access.
+
+```c
+volatile uint32_t *reg;
+```
+
+`volatile` does **not** provide thread safety, atomicity, or synchronization.
+
+---
+
+## 🧮 37. Generic Memory-Mapped Register Access
+
+```c
+#define REG_ADDR 0xXXXXXXXX
+
+volatile uint32_t *reg =
+    (volatile uint32_t *)REG_ADDR;
+
+*reg |= (1U << 3);
+```
+
+In real ESP32 applications, official headers and documented register macros should be used.
+
+---
+
+## 📖 38. Datasheets and Technical Reference Manuals
+
+Important documents include:
+
+### Datasheet
+
+- electrical characteristics;
+- pin functions;
+- package information;
+- major peripherals;
+- operating limits.
+
+### Technical Reference Manual
+
+- peripheral architecture;
+- register definitions;
+- register fields;
+- timing;
+- interrupts;
+- hardware behavior.
+
+### API Documentation
+
+- functions;
+- parameters;
+- return values;
+- configuration structures;
+- driver usage.
+
+---
+
+## 🧭 39. Understanding a Register Description
+
+| Bits | Name | Access | Description |
+|---|---|---|---|
+| 31:8 | Reserved | — | Reserved |
+| 7 | ENABLE | R/W | Enable peripheral |
+| 6:4 | MODE | R/W | Operating mode |
+| 3:1 | Reserved | — | Reserved |
+| 0 | START | R/W | Start operation |
+
+---
+
+## 🧮 40. Multi-Bit Register Fields
+
+To replace a multi-bit field:
+
+```c
+REG = (REG & ~FIELD_MASK) |
+      ((value << FIELD_SHIFT) & FIELD_MASK);
+```
+
+This clears the old field, shifts and masks the new value, and inserts it into the register.
+
+---
+
+## 🧩 41. GPIO Example Using Arduino
+
+```cpp
+const int LED_PIN = 2;
+
+void setup() {
+    pinMode(LED_PIN, OUTPUT);
+}
+
+void loop() {
+    digitalWrite(LED_PIN, HIGH);
+    delay(500);
+
+    digitalWrite(LED_PIN, LOW);
+    delay(500);
+}
+```
+
+---
+
+## ⚙️ 42. GPIO Example Using ESP-IDF
 
 ```c
 #include "driver/gpio.h"
@@ -707,163 +736,107 @@ A typical ESP-IDF-style GPIO program concept is
 
 void app_main(void)
 {
-    gpio_reset_pin(LED_PIN);
+    gpio_set_direction(LED_PIN, GPIO_MODE_OUTPUT);
 
-    gpio_set_direction(
-        LED_PIN,
-        GPIO_MODE_OUTPUT
-    );
+    while (1) {
+        gpio_set_level(LED_PIN, 1);
+        vTaskDelay(pdMS_TO_TICKS(500));
 
-    while (1)
-    {
-        gpio_set_level(
-            LED_PIN,
-            1
-        );
-
-        gpio_set_level(
-            LED_PIN,
-            0
-        );
+        gpio_set_level(LED_PIN, 0);
+        vTaskDelay(pdMS_TO_TICKS(500));
     }
 }
 ```
 
-The API hides the internal register-level implementation.
-
 ---
 
-# 25. GPIO Configuration Flow
+## 🔍 43. Comparing the Programming Levels
 
-A GPIO output normally requires several configuration steps.
+The same operation, **Turn LED ON**, can be expressed as:
 
-```text
-Select GPIO Pin
-      │
-      ▼
-Configure Pin Function
-      │
-      ▼
-Configure Direction
-      │
-      ▼
-Set Output Level
+### Application Level
+
+```cpp
+LED_ON();
 ```
 
-In a HAL-based environment, these steps are handled by driver functions.
+### Arduino API
 
----
+```cpp
+digitalWrite(LED_PIN, HIGH);
+```
 
-# 26. GPIO Input Example
-
-Conceptually:
+### ESP-IDF Driver
 
 ```c
-gpio_set_direction(
-    BUTTON_PIN,
-    GPIO_MODE_INPUT
-);
-
-int value =
-    gpio_get_level(
-        BUTTON_PIN
-    );
+gpio_set_level(LED_PIN, 1);
 ```
 
-The data flow is
+### Physical Result
 
 ```text
-Push Button
-    │
-    ▼
-GPIO Input Circuit
-    │
-    ▼
-GPIO Register
-    │
-    ▼
-Driver API
-    │
-    ▼
-Application Variable
+GPIO Voltage Changes
+        │
+        ▼
+      LED ON
 ```
 
 ---
 
-# 27. Pull-Up and Pull-Down Resistors
+## 🔘 44. Button-to-LED Example
 
-Digital inputs should not normally be left floating.
+```cpp
+const int BUTTON = 4;
+const int LED = 2;
 
-An input can be configured with:
-
-* pull-up,
-* pull-down,
-* external resistor.
-
-For a pull-up configuration:
-
-```text
-VCC
- │
- R
- │
- ├──── GPIO
- │
-Switch
- │
-GND
-```
-
-The input normally reads `1` and becomes `0` when the switch is pressed.
-
----
-
-# 28. Peripheral Multiplexing
-
-One ESP32 pin may support several functions.
-
-For example, a physical pin may be usable as:
-
-* GPIO,
-* UART,
-* SPI,
-* PWM,
-* ADC,
-
-depending on the selected chip and pin-matrix capabilities.
-
-Thus,
-
-$$
-\boxed{
-\text{Physical Pin}
-\neq
-\text{Single Fixed Function}
+void setup() {
+    pinMode(BUTTON, INPUT_PULLUP);
+    pinMode(LED, OUTPUT);
 }
-$$
 
-on many modern MCUs.
+void loop() {
+    int state = digitalRead(BUTTON);
+
+    if (state == LOW) {
+        digitalWrite(LED, HIGH);
+    } else {
+        digitalWrite(LED, LOW);
+    }
+}
+```
 
 ---
 
-# 29. Interrupts
+## 🧠 45. Polling
 
-Polling repeatedly checks hardware status:
+Polling repeatedly checks an input:
 
 ```text
-Check Input
-   │
-   ▼
-Check Again
-   │
-   ▼
-Check Again
+Read Button
+    │
+    ▼
+Check State
+    │
+    ▼
+Update LED
+    │
+    └──────► Repeat
 ```
 
-Interrupts allow hardware to notify the CPU.
+Polling is simple but can waste processor time if events are infrequent.
+
+---
+
+## 🚨 46. Interrupt Connection
 
 ```text
-Peripheral Event
+External Event
+      │
+      ▼
+GPIO Peripheral
+      │
+      ▼
+Interrupt Flag
       │
       ▼
 Interrupt Controller
@@ -875,816 +848,533 @@ CPU
 ISR
 ```
 
-ISR means **Interrupt Service Routine**.
+HAL/driver functions usually configure the underlying registers on behalf of the programmer.
 
 ---
 
-# 30. Polling versus Interrupts
-
-| Feature                    | Polling         | Interrupt      |
-| -------------------------- | --------------- | -------------- |
-| CPU repeatedly checks      | Yes             | No             |
-| Response efficiency        | Lower           | Higher         |
-| Simplicity                 | High            | Moderate       |
-| Real-time response         | Depends on loop | Usually better |
-| CPU can perform other work | Limited         | Yes            |
-
----
-
-# 31. ESP32 GPIO Interrupt Concept
-
-A GPIO can generate an interrupt when an event occurs such as:
-
-* rising edge,
-* falling edge,
-* any edge,
-* selected logic level.
-
-The processing flow is
+## ⏲️ 47. Timer Connection
 
 ```text
-Button Press
-    │
-    ▼
-GPIO Edge
-    │
-    ▼
-Interrupt Request
-    │
-    ▼
-CPU ISR
-    │
-    ▼
-Application Response
-```
-
----
-
-# 32. Timers
-
-Timers are hardware counters driven by a clock source.
-
-A timer can be used for:
-
-* delays,
-* periodic interrupts,
-* frequency measurement,
-* event timing,
-* PWM generation.
-
-Conceptually,
-
-$$
-COUNT[n+1]=COUNT[n]+1.
-$$
-
-When the timer reaches a programmed value,
-
-$$
-COUNT=COMPARE,
-$$
-
-an event can be generated.
-
----
-
-# 33. UART Peripheral
-
-UART provides asynchronous serial communication.
-
-The typical frame is
-
-```text
-Start | Data Bits | Stop
-```
-
-A common configuration is
-
-```text
-115200 baud
-8 data bits
-No parity
-1 stop bit
-```
-
-or
-
-```text
-115200-8-N-1
-```
-
-The architecture is
-
-```text
-ESP32
+Clock
   │
   ▼
-UART Peripheral
+Prescaler
   │
   ▼
-TX / RX Pins
+Counter
   │
   ▼
-PC or External MCU
+Compare / Alarm
+  │
+  ▼
+Interrupt
+```
+
+Registers may control prescaler, counter value, alarm value, enable state, and interrupts.
+
+---
+
+## 📡 48. Communication Peripheral Registers
+
+Communication interfaces such as UART, SPI, and I²C expose registers for configuration, data, status, and interrupts.
+
+Instead of configuring UART registers directly, an application may use:
+
+```cpp
+Serial.begin(115200);
 ```
 
 ---
 
-# 34. SPI Peripheral
-
-SPI is a synchronous serial protocol.
-
-Typical signals are:
-
-* SCLK,
-* MOSI,
-* MISO,
-* CS.
-
-The master controls communication timing.
-
-```text
-Master
- │
- ├── SCLK
- ├── MOSI
- ├── MISO
- └── CS
-      │
-      ▼
-    Slave
-```
-
-SPI is commonly used for:
-
-* displays,
-* ADCs,
-* flash memory,
-* sensors.
-
----
-
-# 35. I²C Peripheral
-
-I²C typically uses two wires:
-
-* SDA,
-* SCL.
-
-Multiple devices can share the same bus using addresses.
-
-```text
-MCU
- │
- ├── SDA ──────────┬── Sensor 1
- └── SCL ──────────┼── Sensor 2
-                   └── Sensor 3
-```
-
-This is widely used for sensors and low-speed peripherals.
-
----
-
-# 36. MCU Register-Level Development Flow
-
-A low-level workflow is
-
-```text
-Read Datasheet
-     │
-     ▼
-Read Technical Reference Manual
-     │
-     ▼
-Find Peripheral Base Address
-     │
-     ▼
-Find Register Offset
-     │
-     ▼
-Configure Bit Fields
-     │
-     ▼
-Test Peripheral
-```
-
-This process requires detailed understanding of the hardware.
-
----
-
-# 37. HAL-Based Development Flow
-
-A HAL-based workflow is simpler:
-
-```text
-Select Peripheral
-      │
-      ▼
-Call Driver Configuration API
-      │
-      ▼
-Call Read/Write API
-      │
-      ▼
-Test Application
-```
-
-This is more appropriate for many application-level projects.
-
----
-
-# 38. Example: LED Control at Three Abstraction Levels
-
-## Level 1 — Hardware Concept
-
-```text
-GPIO Output Register
-        │
-        ▼
-     GPIO Pin
-        │
-        ▼
-       LED
-```
-
-## Level 2 — Register-Level Concept
-
-```c
-GPIO_REGISTER |= LED_MASK;
-```
-
-## Level 3 — HAL API
-
-```c
-gpio_set_level(LED_PIN, 1);
-```
-
-All three ultimately affect the same hardware.
-
----
-
-# 39. Example: Button-to-LED System
-
-A simple embedded application is
-
-```text
-Button
-   │
-   ▼
-GPIO Input
-   │
-   ▼
-CPU
-   │
-   ▼
-GPIO Output
-   │
-   ▼
-LED
-```
-
-The algorithm is
-
-```text
-Read Button
-    │
-    ▼
-If Pressed?
- ┌──┴──┐
-Yes   No
- │     │
- ▼     ▼
-LED ON LED OFF
-```
-
----
-
-# 40. Example HAL Implementation
-
-```c
-#include "driver/gpio.h"
-
-#define BUTTON_PIN GPIO_NUM_0
-#define LED_PIN    GPIO_NUM_2
-
-void app_main(void)
-{
-    gpio_reset_pin(BUTTON_PIN);
-    gpio_reset_pin(LED_PIN);
-
-    gpio_set_direction(
-        BUTTON_PIN,
-        GPIO_MODE_INPUT
-    );
-
-    gpio_set_direction(
-        LED_PIN,
-        GPIO_MODE_OUTPUT
-    );
-
-    while (1)
-    {
-        int button =
-            gpio_get_level(
-                BUTTON_PIN
-            );
-
-        gpio_set_level(
-            LED_PIN,
-            button
-        );
-    }
-}
-```
-
-The exact active level depends on the circuit and board configuration.
-
----
-
-# 41. Read-Modify-Write Concept
-
-Peripheral control often requires changing one field without modifying other register bits.
-
-Suppose
-
-```text
-Register = 10110010
-```
-
-and only bit 2 should be set.
-
-A read-modify-write operation is
-
-```text
-Read Register
-      │
-      ▼
-Modify Selected Bit
-      │
-      ▼
-Write Register Back
-```
-
-In C:
-
-```c
-reg |= (1U << 2);
-```
-
----
-
-# 42. Masks
-
-A **bit mask** selects specific bits.
-
-For example,
-
-```c
-#define BIT3 (1U << 3)
-```
-
-gives
-
-```text
-00001000
-```
-
-A multi-bit field may use
-
-```c
-#define FIELD_MASK (0x3U << 4)
-```
-
-which targets bits 5:4.
-
-Masks are fundamental in register-level embedded programming.
-
----
-
-# 43. Setting a Multi-Bit Field
-
-Suppose a two-bit mode field occupies bits 5:4.
-
-First clear the old value:
-
-```c
-reg &= ~(0x3U << 4);
-```
-
-Then write the new value:
-
-```c
-reg |= ((mode & 0x3U) << 4);
-```
-
-This preserves unrelated register bits.
-
----
-
-# 44. Atomic Set/Clear Registers
-
-Many MCU peripherals provide dedicated set and clear registers.
-
-Instead of:
-
-```text
-Read
-Modify
-Write
-```
-
-software may perform:
-
-```text
-Write mask to SET register
-```
-
-or
-
-```text
-Write mask to CLEAR register
-```
-
-This can reduce race conditions and improve efficiency.
-
-The exact capabilities depend on the selected ESP32 device.
-
----
-
-# 45. Concurrency and Shared Registers
-
-In embedded systems, registers or variables may be accessed by:
-
-* main code,
-* interrupts,
-* RTOS tasks,
-* hardware.
-
-Therefore, designers must consider:
-
-* race conditions,
-* atomic operations,
-* critical sections,
-* synchronization.
-
-This becomes especially important when using FreeRTOS on ESP32.
-
----
-
-# 46. ESP32 and FreeRTOS
-
-ESP-IDF commonly uses FreeRTOS concepts.
-
-The application may contain multiple tasks:
-
-```text
-Task 1 → Read Sensor
-Task 2 → Update Display
-Task 3 → Send Wi-Fi Data
-Task 4 → Control Actuator
-```
-
-The scheduler shares CPU time among these tasks.
-
-This adds an additional software layer above the MCU peripherals.
-
----
-
-# 47. Embedded Software Layer Model
-
-A complete ESP32 software stack can be represented as
+## 🧱 49. HAL Design Concept
 
 ```text
 Application
      │
      ▼
-FreeRTOS Tasks
+HAL Function
      │
      ▼
-ESP-IDF Drivers
+Device Driver
      │
      ▼
-HAL / Low-Level Drivers
+Register Operations
      │
      ▼
-Peripheral Registers
-     │
-     ▼
-ESP32 Hardware
+Hardware
 ```
 
-Each layer provides a different level of abstraction.
+Example:
+
+```c
+HAL_LED_Write(1);
+```
 
 ---
 
-# 48. When to Use Register-Level Programming
+## 🧩 50. Creating a Simple Custom HAL
 
-Register-level programming is useful when:
+```cpp
+void LED_Init() {
+    pinMode(2, OUTPUT);
+}
 
-* learning MCU hardware,
-* developing drivers,
-* optimizing execution time,
-* implementing unusual peripheral behavior,
-* debugging low-level issues,
-* minimizing overhead.
+void LED_On() {
+    digitalWrite(2, HIGH);
+}
 
----
-
-# 49. When to Use HAL APIs
-
-HAL or driver APIs are usually preferable when:
-
-* developing applications quickly,
-* working with complex peripherals,
-* improving portability,
-* maintaining large projects,
-* reducing programming errors,
-* using Wi-Fi, Bluetooth, networking, or RTOS services.
+void LED_Off() {
+    digitalWrite(2, LOW);
+}
+```
 
 ---
 
-# 50. Recommended Learning Progression
+## 🏗️ 51. Benefits of Modular HAL Design
 
-A useful learning path is
+A HAL improves:
+
+$$
+\boxed{
+\text{Maintainability}
++
+\text{Portability}
++
+\text{Readability}
+}
+$$
+
+---
+
+## 🔗 52. MCU Programming Stack
 
 ```text
-Digital Logic
-     │
-     ▼
-CPU Architecture
-     │
-     ▼
-Memory Map
-     │
-     ▼
-Registers
-     │
-     ▼
-GPIO Register Control
-     │
-     ▼
-HAL / Driver APIs
-     │
-     ▼
-Interrupts
-     │
-     ▼
-Timers / UART / SPI / I2C
-     │
-     ▼
-RTOS Applications
-     │
-     ▼
-IoT Systems
+┌─────────────────────────────┐
+│        Application          │
+├─────────────────────────────┤
+│ Algorithms / State Machine  │
+├─────────────────────────────┤
+│ Middleware / RTOS           │
+├─────────────────────────────┤
+│ Drivers / HAL               │
+├─────────────────────────────┤
+│ Register Definitions        │
+├─────────────────────────────┤
+│ MCU Hardware                │
+└─────────────────────────────┘
 ```
 
 ---
 
-# 51. Discussion Questions
-
-1. What is an MCU?
-2. What are the main components of an MCU?
-3. What is the role of the CPU?
-4. What is the difference between flash and SRAM?
-5. What is a memory map?
-6. What is memory-mapped I/O?
-7. What is a peripheral register?
-8. Why are bit masks important?
-9. Why is `volatile` commonly used with hardware registers?
-10. What is register-level programming?
-11. What is a HAL?
-12. What are the advantages of using a HAL?
-13. What is the difference between polling and interrupts?
-14. Why might an input require pull-up or pull-down resistors?
-15. What is the difference between UART, SPI, and I²C?
-
----
-
-# 52. Practical Exercises
-
-## Exercise 1 — Memory Map
-
-Draw a conceptual MCU memory map containing:
-
-* ROM,
-* Flash,
-* SRAM,
-* GPIO registers,
-* UART registers.
-
----
-
-## Exercise 2 — Bit Manipulation
-
-Given
-
-```text
-register = 00101010
-```
-
-perform:
-
-1. set bit 0,
-2. clear bit 3,
-3. toggle bit 5.
-
----
-
-## Exercise 3 — GPIO HAL
-
-Write an ESP-IDF program that:
-
-* configures one LED output,
-* toggles it every second.
-
----
-
-## Exercise 4 — Button Input
-
-Read a push button and control an LED.
-
----
-
-## Exercise 5 — Interrupt
-
-Configure a button to generate a GPIO interrupt.
-
----
-
-## Exercise 6 — UART
-
-Transmit
-
-```text
-Hello ESP32
-```
-
-through a UART interface.
-
----
-
-# 53. Advanced Exercise — Register versus HAL Comparison
-
-Implement the same GPIO function using:
-
-### Method A
-
-Register-level programming.
-
-### Method B
-
-ESP-IDF GPIO API.
-
-Compare:
-
-| Characteristic     | Register-Level | HAL |
-| ------------------ | -------------- | --- |
-| Code length        |                |     |
-| Readability        |                |     |
-| Portability        |                |     |
-| Execution overhead |                |     |
-| Debug complexity   |                |     |
-
-Discuss the trade-off.
-
----
-
-# 54. Advanced Exercise — Simple Embedded System
-
-Build the architecture
-
-```text
-Button
-  │
-  ▼
-GPIO Input
-  │
-  ▼
-ESP32 CPU
-  │
-  ├────► LED
-  │
-  └────► UART
-              │
-              ▼
-          PC Terminal
-```
-
-The software should:
-
-1. read the button,
-2. update the LED,
-3. send the button state through UART.
-
-This integrates:
-
-* GPIO,
-* memory-mapped peripherals,
-* software APIs,
-* embedded communication.
-
----
-
-# 55. Extension to IoT Systems
-
-The MCU architecture studied here provides the foundation for larger connected systems.
-
-For example:
+## 🤖 53. Connection to IoT Systems
 
 ```text
 Sensor
   │
   ▼
-GPIO / ADC / I2C
+ADC / I²C
   │
   ▼
-ESP32
+ESP32 Peripheral
+  │
+  ▼
+Driver / HAL
+  │
+  ▼
+Application
   │
   ▼
 Wi-Fi
   │
   ▼
-MQTT Broker
+MQTT
   │
   ▼
-Cloud / Dashboard
+Cloud
 ```
 
-The low-level concepts remain important because every high-level IoT operation ultimately depends on MCU peripherals and memory-mapped hardware.
-
 ---
 
-# 56. Expected Learning Outcomes
+## 🧠 54. Connection to TinyML
 
-After studying this material, students will be able to:
-
-* Explain the basic architecture of a microcontroller.
-* Identify CPU, memory, bus, and peripheral functions.
-* Explain ESP32 as an MCU platform.
-* Distinguish ROM, flash, SRAM, stack, and heap.
-* Explain memory mapping and memory-mapped I/O.
-* Describe peripheral registers and bit fields.
-* Perform bit masking and register manipulation.
-* Explain the role of `volatile`.
-* Distinguish register-level programming from HAL-based programming.
-* Use basic ESP-IDF GPIO APIs.
-* Explain interrupt, timer, UART, SPI, and I²C concepts.
-* Understand how low-level MCU architecture supports embedded and IoT systems.
-
----
-
-# 📘 References
-
-1. Espressif Systems, *ESP32 Technical Reference Manual*.
-2. Espressif Systems, *ESP-IDF Programming Guide*.
-3. J. Yiu, *The Definitive Guide to ARM Cortex-M3 and Cortex-M4 Processors*, Newnes.
-4. J. Catsoulis, *Designing Embedded Hardware*, O'Reilly.
-5. M. Barr and A. Massa, *Programming Embedded Systems*, O'Reilly.
-6. D. E. Simon, *An Embedded Software Primer*, Addison-Wesley.
-7. FreeRTOS Documentation, *Kernel and Task Management Concepts*.
-
----
-
-## 🔑 Key Concept
-
-The fundamental MCU architecture is
+```text
+Sensor
+   │
+   ▼
+Peripheral
+   │
+   ▼
+HAL / Driver
+   │
+   ▼
+Data Buffer
+   │
+   ▼
+TinyML Model
+   │
+   ▼
+Prediction
+   │
+   ▼
+GPIO / Network
+```
 
 $$
 \boxed{
+\text{TinyML System}
+=
+\text{MCU}
++
+\text{Memory}
++
+\text{Sensors}
++
+\text{Inference Software}
+}
+$$
+
+---
+
+## ⚡ 55. Performance Considerations
+
+A simplified timing model is:
+
+$$
+T_{\text{operation}}
+=
+T_{\text{software}}
++
+T_{\text{driver}}
++
+T_{\text{hardware}}
+$$
+
+Register-level optimization becomes important for extremely tight timing, high interrupt rates, specialized hardware behavior, or highly optimized drivers.
+
+---
+
+## 🛡️ 56. Safety of Register-Level Programming
+
+Incorrect register manipulation can cause unexpected peripheral behavior, crashes, watchdog resets, communication failure, GPIO conflicts, and system instability.
+
+> Never write arbitrary values to undocumented or reserved registers.
+
+---
+
+## 🧪 57. Practical Exercise 1 — Bit Operations
+
+Given:
+
+```text
+REG = 00110100
+```
+
+Set bit 1.
+
+Result:
+
+```text
+00110110
+```
+
+---
+
+## 🧪 58. Practical Exercise 2 — Clear a Bit
+
+Given:
+
+```text
+REG = 00110110
+```
+
+Clear bit 2.
+
+Result:
+
+```text
+00110010
+```
+
+---
+
+## 🧪 59. Practical Exercise 3 — Read a Bit
+
+Given:
+
+```text
+REG = 10100100
+```
+
+Test bit 5 with:
+
+```text
+Mask = 00100000
+```
+
+The result is nonzero, therefore:
+
+$$
+\boxed{\text{Bit 5}=1}
+$$
+
+---
+
+## 🧪 60. Practical Exercise 4 — HAL Design
+
+Create:
+
+```c
+LED_Init();
+LED_On();
+LED_Off();
+LED_Toggle();
+```
+
+Then write an application that uses only these functions.
+
+---
+
+## 🧪 61. Practical Exercise 5 — Compare APIs
+
+Implement LED blinking using:
+
+- Arduino `digitalWrite()`;
+- ESP-IDF `gpio_set_level()`.
+
+Compare readability, setup complexity, portability, and hardware knowledge required.
+
+---
+
+## 📊 62. Comparison Exercise
+
+| Characteristic | Register Level | ESP-IDF | Arduino |
+|---|---:|---:|---:|
+| Ease of use | | | |
+| Hardware control | | | |
+| Portability | | | |
+| Readability | | | |
+| Learning difficulty | | | |
+| Development speed | | | |
+
+---
+
+## 💬 63. Discussion Questions
+
+1. What is a microcontroller?
+2. How does an MCU differ from a general-purpose computer?
+3. What are the major components of an MCU?
+4. What is the role of the CPU?
+5. What is SRAM?
+6. What is flash memory?
+7. What is the difference between volatile and non-volatile memory?
+8. What are the stack and heap?
+9. What is an address space?
+10. What is memory mapping?
+11. What is memory-mapped I/O?
+12. What is a peripheral register?
+13. Why are GPIO registers needed?
+14. What is register-level programming?
+15. What is a bit mask?
+16. How do you set a register bit?
+17. How do you clear a register bit?
+18. How do you toggle a bit?
+19. How do you test a bit?
+20. What is a read-modify-write operation?
+21. Why can read-modify-write create problems in concurrent systems?
+22. What does `volatile` mean in embedded C?
+23. Why is `volatile` not a replacement for synchronization?
+24. What is a HAL?
+25. Why is HAL useful?
+26. What is the difference between HAL and register-level programming?
+27. What is ESP-IDF?
+28. What role does the Arduino core play on ESP32?
+29. When might low-level programming be preferred?
+30. Why should reserved register bits be handled carefully?
+31. What information is found in a datasheet?
+32. What information is found in a technical reference manual?
+33. How do MCU peripherals support IoT systems?
+34. How does TinyML depend on MCU architecture?
+35. Why should embedded engineers understand both high- and low-level programming?
+
+---
+
+## 🧾 64. Expected Learning Outcomes
+
+After completing this topic, students should be able to:
+
+- describe the architecture of a microcontroller;
+- identify CPU, memory, buses, and peripherals;
+- explain ESP32 as an embedded computing platform;
+- distinguish SRAM, flash, and ROM conceptually;
+- explain stack and heap memory;
+- describe an MCU address space;
+- explain memory-mapped I/O;
+- describe peripheral registers;
+- manipulate register bits using masks;
+- use AND, OR, XOR, NOT, and shift operators;
+- explain read-modify-write operations;
+- explain the role of `volatile`;
+- distinguish register-level and HAL programming;
+- use Arduino APIs for hardware control;
+- recognize ESP-IDF driver-based programming;
+- design a simple custom HAL;
+- understand the relationship between application software and physical hardware;
+- use MCU documentation when developing low-level embedded applications.
+
+---
+
+## 🔑 65. Key Concepts
+
+### MCU Architecture
+
+$$
+\boxed{
+\text{MCU}
+=
 \text{CPU}
 +
 \text{Memory}
 +
 \text{Peripherals}
-+
-\text{System Bus}
 }
 $$
 
-Memory-mapped I/O provides the connection
+### Embedded System
 
 $$
 \boxed{
-\text{CPU Address}
-\rightarrow
-\text{Peripheral Register}
-\rightarrow
-\text{Physical Hardware}
+\text{Embedded System}
+=
+\text{MCU}
++
+\text{Hardware}
++
+\text{Software}
 }
 $$
 
-while software abstraction can be viewed as
+### Address Space
+
+$$
+\boxed{
+N_{\text{addresses}}=2^n
+}
+$$
+
+### Memory-Mapped I/O
+
+$$
+\boxed{
+\text{Memory Address}
+\leftrightarrow
+\text{Hardware Register}
+}
+$$
+
+### Set Bit
+
+```c
+REG |= (1U << n);
+```
+
+### Clear Bit
+
+```c
+REG &= ~(1U << n);
+```
+
+### Toggle Bit
+
+```c
+REG ^= (1U << n);
+```
+
+### Read Bit
+
+```c
+REG & (1U << n)
+```
+
+### Hardware Abstraction
 
 $$
 \boxed{
 \text{Application}
 \rightarrow
-\text{HAL / Driver}
+\text{HAL/Driver}
 \rightarrow
 \text{Registers}
 \rightarrow
-\text{ESP32 Hardware}
+\text{Hardware}
 }
 $$
 
-This theory provides the foundation for later work involving **GPIO, interrupts, timers, UART, SPI, I²C, FreeRTOS, Wi-Fi, MQTT, sensor interfacing, embedded intelligence, and IoT systems**.
+---
+
+## 🎯 66. Summary
+
+Understanding MCU architecture is fundamental to embedded-system engineering.
+
+The processor communicates with hardware peripherals through the MCU's internal architecture and associated control registers.
+
+The basic relationship is:
+
+```text
+Application
+     │
+     ▼
+API / HAL
+     │
+     ▼
+Driver
+     │
+     ▼
+Memory-Mapped Registers
+     │
+     ▼
+MCU Peripheral
+     │
+     ▼
+Physical Hardware
+```
+
+**Memory mapping** allows hardware resources to appear within the processor's address space.
+
+**Register-level programming** provides detailed control by directly manipulating peripheral configuration and state.
+
+**HAL programming** provides a higher-level interface that improves readability, maintainability, and development speed.
+
+For ESP32 development:
+
+$$
+\boxed{
+\text{Arduino}
+\rightarrow
+\text{ESP-IDF}
+\rightarrow
+\text{HAL/Low-Level Interfaces}
+\rightarrow
+\text{Registers}
+\rightarrow
+\text{Hardware}
+}
+$$
+
+A strong embedded-systems engineer should understand all these levels, even when most application development is performed using higher-level frameworks.
+
+---
+
+## 📘 References
+
+1. Espressif Systems, *ESP32 Series Datasheets*.  
+2. Espressif Systems, *ESP32 Series Technical Reference Manuals*.  
+3. Espressif Systems, *ESP-IDF Programming Guide*.  
+4. Espressif Systems, *ESP-IDF GPIO Driver Documentation*.  
+5. Arduino, *Arduino Language Reference*.  
+6. J. Yiu, *The Definitive Guide to ARM Cortex-M3 and Cortex-M4 Processors*, Newnes.  
+7. J. W. Valvano, *Embedded Systems: Introduction to ARM Cortex-M Microcontrollers*.  
+8. M. Barr and A. Massa, *Programming Embedded Systems*, O'Reilly Media.  
+9. P. Marwedel, *Embedded System Design*, Springer.  
+10. J.-P. Vasseur and A. Dunkels, *Interconnecting Smart Objects with IP: The Next Internet*, Morgan Kaufmann.
+
+---
