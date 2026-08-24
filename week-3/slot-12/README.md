@@ -57,8 +57,7 @@ A typical ESP32 IoT node contains several power-consuming components:
 The total system power can be approximated as:
 
 $$
-P_{\text{total}}
-=
+P_{\text{total}} =
 P_{\text{CPU}}
 +
 P_{\text{memory}}
@@ -129,8 +128,7 @@ Sleep
 The average power becomes approximately:
 
 $$
-P_{\text{avg}}
-=
+P_{\text{avg}} =
 \frac{
 P_{\text{active}}t_{\text{active}}
 +
@@ -330,8 +328,7 @@ Sample ─┘
 For example:
 
 $$
-T_{\text{avg}}
-=
+T_{\text{avg}} =
 \frac{1}{N}
 \sum_{i=1}^{N}T_i
 $$
@@ -541,8 +538,7 @@ Sleep
 The cycle can be expressed as:
 
 $$
-T_{\text{cycle}}
-=
+T_{\text{cycle}} =
 T_{\text{active}}
 +
 T_{\text{sleep}}
@@ -696,8 +692,7 @@ Boot
 A simple idealized battery-life estimate is:
 
 $$
-T_{\text{battery}}
-=
+T_{\text{battery}} =
 \frac{C_{\text{battery}}}
 {I_{\text{avg}}}
 $$
@@ -710,8 +705,7 @@ where:
 For capacity in mAh and current in mA:
 
 $$
-T_{\text{hours}}
-=
+T_{\text{hours}} =
 \frac{C_{\text{mAh}}}
 {I_{\text{avg,mA}}}
 $$
@@ -733,8 +727,7 @@ This is only an approximation because real battery life also depends on:
 For two operating states:
 
 $$
-I_{\text{avg}}
-=
+I_{\text{avg}} =
 \frac{
 I_{\text{active}}t_{\text{active}}
 +
@@ -771,8 +764,7 @@ $$
 Then:
 
 $$
-I_{\text{avg}}
-=
+I_{\text{avg}} =
 \frac{
 (80)(2)+(0.02)(58)
 }{
@@ -788,8 +780,7 @@ $$
 For an idealized 2000-mAh battery:
 
 $$
-T
-=
+T =
 \frac{2000}{2.69}
 \approx743~\text{hours}
 $$
@@ -821,8 +812,7 @@ Conceptually:
 
 $$
 \boxed{
-\text{LPWAN}
-=
+\text{LPWAN} =
 \text{Long Range}
 +
 \text{Low Data Rate}
@@ -922,8 +912,7 @@ Conceptually:
 
 $$
 \boxed{
-\text{LoRaWAN}
-=
+\text{LoRaWAN} =
 \text{LoRa PHY}
 +
 \text{MAC/Network Architecture}
@@ -1231,8 +1220,7 @@ The choice of wireless technology depends on:
 
 $$
 \boxed{
-\text{Technology Selection}
-=
+\text{Technology Selection} =
 f(
 \text{Range},
 \text{Data Rate},
@@ -1299,8 +1287,7 @@ Thus:
 
 $$
 \boxed{
-\text{Low-Power Sensor Node}
-=
+\text{Low-Power Sensor Node} =
 \text{Deep Sleep}
 +
 \text{Short Active Time}
@@ -1318,8 +1305,7 @@ Communication efficiency should consider energy rather than only instantaneous p
 Energy required for a transmission can be approximated as:
 
 $$
-E_{\text{TX}}
-=
+E_{\text{TX}} =
 P_{\text{TX}}t_{\text{TX}}
 $$
 
@@ -1528,8 +1514,7 @@ ESP32 Sleep
 The system's actual current is:
 
 $$
-I_{\text{system}}
-=
+I_{\text{system}} =
 I_{\text{ESP32}}
 +
 I_{\text{sensors}}
@@ -1667,8 +1652,7 @@ Current
 The energy used during one cycle is:
 
 $$
-E_{\text{cycle}}
-=
+E_{\text{cycle}} =
 \int_0^T V(t)I(t)\,dt
 $$
 
@@ -2078,8 +2062,7 @@ $$
 
 $$
 \boxed{
-I_{\text{avg}}
-=
+I_{\text{avg}} =
 \frac{
 I_{\text{active}}t_{\text{active}}
 +
@@ -2094,8 +2077,7 @@ $$
 
 $$
 \boxed{
-T_{\text{battery}}
-=
+T_{\text{battery}} =
 \frac{C_{\text{battery}}}
 {I_{\text{avg}}}
 }
@@ -2121,8 +2103,7 @@ $$
 
 $$
 \boxed{
-\text{LPWAN}
-=
+\text{LPWAN} =
 \text{Long Range}
 +
 \text{Low Data Rate}
@@ -2201,8 +2182,7 @@ Thus:
 
 $$
 \boxed{
-\text{Efficient IoT}
-=
+\text{Efficient IoT} =
 \text{Power Management}
 +
 \text{Duty Cycling}
