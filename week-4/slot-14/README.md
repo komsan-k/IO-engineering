@@ -710,8 +710,7 @@ $$
 a simplified rule is:
 
 $$
-w_i'=
-\begin{cases}
+w_i'= \begin{cases}
 0, & |w_i|<T\\
 w_i, & |w_i|\ge T
 \end{cases}
