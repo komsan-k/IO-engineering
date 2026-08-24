@@ -420,11 +420,7 @@ $$
 the quantized value is:
 
 $$
-q=
-\operatorname{round}
-\left(
-\frac{0.75}{0.01}
-\right)
+q= round(\frac{0.75}{0.01})
 $$
 
 $$
