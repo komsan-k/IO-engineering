@@ -330,7 +330,7 @@ $$
 R_{\text{new}} =
 R_{\text{old}}
 \operatorname{OR}
-(1\ll5)
+(1 << 5)
 $$
 
 ---
