@@ -59,9 +59,9 @@ A teaching textbook
 
 | Assessment Item                                      |  Marks |
 | ---------------------------------------------------- | -----: |
-| Quiz (GPIO, Registers, Interrupts, ADC/PWM, I²C/SPI) |      5 |
+| Quiz (GPIO, Registers, Interrupts, ADC/PWM, I²C/SPI) |      4 |
 | Laboratory Completion (Labs 1–4)                     |      8 |
-| Code Quality & Documentation                         |      3 |
+| Code Quality & Documentation                         |      4 |
 | Demonstration & Oral Explanation                     |      4 |
 | **Total**                                            | **20** |
 
@@ -93,9 +93,9 @@ A teaching textbook
 
 | Assessment Item                  |  Marks |
 | -------------------------------- | -----: |
-| Quiz (FreeRTOS Concepts)         |      5 |
+| Quiz (FreeRTOS Concepts)         |      4 |
 | Laboratory Completion (Labs 5–8) |      8 |
-| RTOS Program Design & Debugging  |      3 |
+| RTOS Program Design & Debugging  |      4 |
 | Demonstration & Discussion       |      4 |
 | **Total**                        | **20** |
 
@@ -126,9 +126,9 @@ A teaching textbook
 
 | Assessment Item                       |  Marks |
 | ------------------------------------- | -----: |
-| Quiz (Wi-Fi, MQTT, BLE, LPWAN)        |      5 |
+| Quiz (Wi-Fi, MQTT, BLE, LPWAN)        |      4 |
 | Laboratory Completion (Labs 9–12)     |      8 |
-| IoT Connectivity & Data Communication |      3 |
+| IoT Connectivity & Data Communication |      4 |
 | Live Demonstration                    |      4 |
 | **Total**                             | **20** |
 
@@ -158,9 +158,9 @@ A teaching textbook
 
 | Assessment Item                         |  Marks |
 | --------------------------------------- | -----: |
-| Quiz (TinyML & Embedded Security)       |      5 |
+| Quiz (TinyML & Embedded Security)       |      4 |
 | Laboratory Completion (Labs 13–16)      |      8 |
-| AI Deployment & Security Implementation |      3 |
+| AI Deployment & Security Implementation |      4 |
 | Final Demonstration                     |      4 |
 | **Total**                               | **20** |
 
