@@ -1,4 +1,4 @@
-# LAB 4 — Interruptions for Externals, Timer, and Watchdog
+# LAB 2 — Interruptions for Externals, Timer, and Watchdog
 
 ## 1. Objective
 The objectives of this lab are:
