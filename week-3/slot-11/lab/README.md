@@ -1184,8 +1184,7 @@ Calculate notification delivery ratio:
 
 $$
 \text{Delivery Ratio}
-=
-\frac{N_{\text{received}}}
+= \frac{N_{\text{received}}}
      {N_{\text{sent}}}
 \times 100\%.
 $$
