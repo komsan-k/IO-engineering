@@ -162,8 +162,7 @@ For ready tasks, the scheduler generally selects:
 
 $$
 T_{\text{run}}
-=
-\arg\max_{T_i\in\mathcal{R}}
+= \arg\max_{T_i\in\mathcal{R}}
 P_i,
 $$
 
@@ -1149,10 +1148,8 @@ Mathematically:
 
 $$
 T_{\text{exec}}
-=
-t_{\text{end}}
--
-t_{\text{start}}.
+= t_{\text{end}}
+- t_{\text{start}}.
 $$
 
 Record:
@@ -1177,8 +1174,7 @@ then the measured period is:
 
 $$
 T_i
-=
-t_i-t_{i-1}.
+= t_i-t_{i-1}.
 $$
 
 For a nominal:
@@ -1491,28 +1487,23 @@ Useful scheduling metrics include:
 
 $$
 T_{\text{exec}}
-=
-t_{\text{finish}}
--
-t_{\text{start}}.
+= t_{\text{finish}}
+- t_{\text{start}}.
 $$
 
 ### Response Time
 
 $$
 T_{\text{response}}
-=
-t_{\text{start}}
--
-t_{\text{ready}}.
+= t_{\text{start}}
+- t_{\text{ready}}.
 $$
 
 ### Task Period
 
 $$
 T_i
-=
-t_i-t_{i-1}.
+= t_i-t_{i-1}.
 $$
 
 ### Jitter
@@ -1521,8 +1512,7 @@ A simple timing error can be represented as:
 
 $$
 J_i
-=
-T_i-T_{\text{desired}}.
+= T_i-T_{\text{desired}}.
 $$
 
 These measurements help evaluate real-time behavior.
@@ -1857,8 +1847,7 @@ The experiments should demonstrate the important relationship:
 $$
 \boxed{
 \text{Scheduling}
-=
-\text{Priority}
+= \text{Priority}
 +
 \text{Task State}
 }
