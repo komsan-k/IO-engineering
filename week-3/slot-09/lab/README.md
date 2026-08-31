@@ -1396,26 +1396,4 @@ In this lab, the ESP32 is extended from a standalone real-time embedded system i
 
 The lab also demonstrates how FreeRTOS queues can connect sensor acquisition and network communication tasks. This separation improves modularity and provides a foundation for more advanced IoT messaging protocols.
 
-The laboratory progression is:
 
-```text
-LAB 5
-Scheduling & Tasks
-      ↓
-LAB 6
-Semaphores & Mutexes
-      ↓
-LAB 7
-Inter-Task Communication via Queues
-      ↓
-LAB 8
-Software Timers & Memory Management
-      ↓
-LAB 9
-Wi-Fi Networking & HTTP Clients
-      ↓
-LAB 10
-MQTT Telemetry & Publish/Subscribe
-```
-
-The next lab focuses on **MQTT telemetry, broker communication, publish/subscribe messaging, JSON payloads, and QoS**.
