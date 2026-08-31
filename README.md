@@ -317,9 +317,9 @@ Students can design intelligent, connected, and secure embedded systems for IoT,
 
 ---
 
-## 👨‍🏫 Instructor
+## 👨‍🏫 Lecturer
 
-Komsan Kanjanasit
+Komsan Kanjanasit ,PhD
 
 College of Computing, Prince of Songkla University, Thailand  
 
