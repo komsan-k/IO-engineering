@@ -193,7 +193,7 @@ Use:
 - Push button
 - LED
 - 220–330 $\Omega$ resistor
-- 10 k$\Omega$ resistor if an external pull-up is used
+- 10 k $\Omega$ resistor if an external pull-up is used
 - Breadboard
 - Jumper wires
 
