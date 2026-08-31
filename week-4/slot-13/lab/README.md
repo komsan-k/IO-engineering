@@ -59,8 +59,7 @@ Therefore, each sensor sample can be represented by the feature vector:
 
 $$
 \mathbf{x}(t)
-=
-[
+= [
 a_x(t),
 a_y(t),
 a_z(t),
@@ -155,8 +154,7 @@ A measurement vector can therefore be written as:
 
 $$
 \mathbf{x}
-=
-[a_x,a_y,a_z,g_x,g_y,g_z].
+= [a_x,a_y,a_z,g_x,g_y,g_z].
 $$
 
 The accelerometer describes **linear acceleration**, while the gyroscope describes **angular velocity**.
@@ -831,8 +829,7 @@ A single gesture can be represented as:
 
 $$
 \mathbf{X}
-=
-\begin{bmatrix}
+= \begin{bmatrix}
 a_x(1) & a_y(1) & a_z(1) & g_x(1) & g_y(1) & g_z(1)\\
 a_x(2) & a_y(2) & a_z(2) & g_x(2) & g_y(2) & g_z(2)\\
 \vdots & \vdots & \vdots & \vdots & \vdots & \vdots\\
@@ -916,16 +913,14 @@ The total number of gesture examples is:
 
 $$
 N_{\text{examples}}
-=
-C\times R.
+= C\times R.
 $$
 
 Therefore:
 
 $$
 N_{\text{examples}}
-=
-5\times50
+= 5\times50
 =
 250.
 $$
@@ -934,10 +929,8 @@ If each example contains 100 samples:
 
 $$
 N_{\text{samples}}
-=
-250\times100
-=
-25{,}000.
+= 250\times100
+= 25{,}000.
 $$
 
 Thus, the complete dataset contains:
@@ -1007,8 +1000,7 @@ The acceleration magnitude can be calculated as:
 
 $$
 a_{\text{mag}}
-=
-\sqrt{
+= \sqrt{
 a_x^2+a_y^2+a_z^2
 }.
 $$
@@ -1017,8 +1009,7 @@ Similarly, gyroscope magnitude is:
 
 $$
 g_{\text{mag}}
-=
-\sqrt{
+= \sqrt{
 g_x^2+g_y^2+g_z^2
 }.
 $$
@@ -1035,8 +1026,7 @@ For a window containing $N$ samples, simple statistical features can be calculat
 
 $$
 \mu_x
-=
-\frac{1}{N}
+= \frac{1}{N}
 \sum_{i=1}^{N}x_i.
 $$
 
@@ -1044,8 +1034,7 @@ $$
 
 $$
 \sigma_x^2
-=
-\frac{1}{N}
+= \frac{1}{N}
 \sum_{i=1}^{N}
 (x_i-\mu_x)^2.
 $$
@@ -1054,8 +1043,7 @@ $$
 
 $$
 x_{\text{RMS}}
-=
-\sqrt{
+= \sqrt{
 \frac{1}{N}
 \sum_{i=1}^{N}
 x_i^2
@@ -1066,16 +1054,14 @@ $$
 
 $$
 x_{\max}
-=
-\max(x_1,x_2,\ldots,x_N).
+= \max(x_1,x_2,\ldots,x_N).
 $$
 
 ### Minimum
 
 $$
 x_{\min}
-=
-\min(x_1,x_2,\ldots,x_N).
+= \min(x_1,x_2,\ldots,x_N).
 $$
 
 These features can later be used with lightweight classifiers.
@@ -1129,8 +1115,7 @@ A common standardization method is:
 
 $$
 x'
-=
-\frac{x-\mu}{\sigma},
+= \frac{x-\mu}{\sigma},
 $$
 
 where:
@@ -1144,8 +1129,7 @@ Another simple approach is min-max normalization:
 
 $$
 x'
-=
-\frac{x-x_{\min}}
+= \frac{x-x_{\min}}
 {x_{\max}-x_{\min}}.
 $$
 
@@ -1444,16 +1428,14 @@ Calculate:
 
 $$
 a_{\text{mag}}
-=
-\sqrt{a_x^2+a_y^2+a_z^2}
+= \sqrt{a_x^2+a_y^2+a_z^2}
 $$
 
 and
 
 $$
 g_{\text{mag}}
-=
-\sqrt{g_x^2+g_y^2+g_z^2}.
+= \sqrt{g_x^2+g_y^2+g_z^2}.
 $$
 
 Add these values to the dataset.
@@ -1618,23 +1600,3 @@ In this lab, the ESP32 and MPU6050 are used to construct a complete **IMU gestur
 
 The use of fixed-length gesture windows converts the continuous IMU stream into structured machine-learning examples. Careful attention to class balance, consistent gesture execution, sampling rate, labeling, normalization, and data partitioning is important because the quality of the final TinyML model depends strongly on the quality of the training dataset.
 
-The laboratory progression is:
-
-```text
-LAB 10
-MQTT Telemetry & Remote Control
-      ↓
-LAB 11
-BLE GATT Server & Sensor Notifications
-      ↓
-LAB 12
-Low-Power Operation, Deep Sleep & Wake-Up
-      ↓
-LAB 13
-IMU Gesture Data Collection & Dataset Preparation
-      ↓
-LAB 14
-TinyML Model Quantization & Deployment
-```
-
-The next lab focuses on **training a gesture-classification model, quantizing it to INT8, converting it to TensorFlow Lite for Microcontrollers, and evaluating model size, memory usage, and classification accuracy on the ESP32**.
