@@ -512,10 +512,8 @@ $$
 Therefore, the callback frequency is approximately:
 
 $$
-f=
-\frac{1}{0.5}
-=
-2~\text{Hz}.
+f= \frac{1}{0.5}
+= 2~\text{Hz}.
 $$
 
 ---
@@ -1001,10 +999,8 @@ Define heap consumption as:
 
 $$
 M_{\text{used}}
-=
-H_{\text{before}}
--
-H_{\text{after}},
+= H_{\text{before}}
+- H_{\text{after}},
 $$
 
 where:
@@ -1385,10 +1381,8 @@ Calculate relative heap consumption:
 
 $$
 M_{\text{used}}
-=
-H_{\text{baseline}}
--
-H_{\text{workload}}.
+= H_{\text{baseline}}
+- H_{\text{workload}}.
 $$
 
 ---
@@ -1478,10 +1472,8 @@ Mathematically:
 
 $$
 T_{\text{callback}}
-=
-t_{\text{end}}
--
-t_{\text{start}}.
+= t_{\text{end}}
+- t_{\text{start}}.
 $$
 
 Record:
@@ -2111,16 +2103,14 @@ then approximate heap consumption is:
 
 $$
 M_{\text{used}}
-=
-H_0-H.
+= H_0-H.
 $$
 
 The relative change can be expressed as:
 
 $$
 M_{\%}
-=
-\frac{H_0-H}{H_0}
+= \frac{H_0-H}{H_0}
 \times100\%.
 $$
 
@@ -2144,16 +2134,14 @@ Timing error is:
 
 $$
 E_i
-=
-T_i-T_d.
+= T_i-T_d.
 $$
 
 A simple absolute jitter metric is:
 
 $$
 J_i
-=
-|T_i-T_d|.
+= |T_i-T_d|.
 $$
 
 Record:
@@ -2298,8 +2286,7 @@ This can be summarized as:
 $$
 \boxed{
 \text{Robust RTOS Design}
-=
-\text{Correct Timing}
+= \text{Correct Timing}
 +
 \text{Safe Communication}
 +
@@ -2701,8 +2688,7 @@ The main design relationship can be summarized as:
 $$
 \boxed{
 \text{Real-Time Reliability}
-=
-\text{Timing Discipline}
+= \text{Timing Discipline}
 +
 \text{Memory Discipline}
 }
@@ -2769,8 +2755,7 @@ The RTOS foundation can therefore be summarized as:
 $$
 \boxed{
 \text{RTOS System Design}
-=
-\text{Scheduling}
+= \text{Scheduling}
 +
 \text{Synchronization}
 +
