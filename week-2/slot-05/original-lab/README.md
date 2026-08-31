@@ -1,4 +1,4 @@
-# LAB 5 — Scheduling using pthread and FreeRTOS
+# Original LAB 5 — Scheduling using pthread and FreeRTOS
 
 ## 1. Objective
 The objective of this lab is to:
