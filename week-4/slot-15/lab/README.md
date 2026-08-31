@@ -198,8 +198,7 @@ then the duration of one inference window is:
 
 $$
 T_w
-=
-\frac{N}{f_s}.
+= \frac{N}{f_s}.
 $$
 
 For:
@@ -212,8 +211,7 @@ we obtain:
 
 $$
 T_w
-=
-\frac{100}{50}
+= \frac{100}{50}
 =
 2~\text{s}.
 $$
@@ -348,10 +346,8 @@ This approximately corresponds to:
 
 $$
 f_s
-=
-\frac{1}{0.020}
-=
-50~\text{Hz}.
+= \frac{1}{0.020}
+= 50~\text{Hz}.
 $$
 
 Example:
@@ -436,8 +432,7 @@ sample 50 occurs at approximately:
 
 $$
 t_{50}
-=
-50\times20~\text{ms}
+= 50\times20~\text{ms}
 =
 1000~\text{ms}.
 $$
@@ -489,8 +484,7 @@ Mathematically:
 
 $$
 x'
-=
-\frac{x-\mu}{\sigma}.
+= \frac{x-\mu}{\sigma}.
 $$
 
 ---
@@ -638,8 +632,7 @@ The quantization equation is:
 
 $$
 q
-=
-\operatorname{round}
+= \operatorname{round}
 \left(
 \frac{x}{s}
 \right)
@@ -712,10 +705,8 @@ The inference latency is:
 
 $$
 T_{\text{inf}}
-=
-t_{\text{end}}
--
-t_{\text{start}}.
+= t_{\text{end}}
+- t_{\text{start}}.
 $$
 
 ---
@@ -761,16 +752,14 @@ The predicted class is:
 
 $$
 \hat{y}
-=
-\arg\max_k p_k.
+= \arg\max_k p_k.
 $$
 
 Example:
 
 $$
 \mathbf{p}
-=
-[
+= [
 0.03,
 0.80,
 0.07,
@@ -860,8 +849,7 @@ Mathematically:
 
 $$
 \text{Decision}
-=
-\begin{cases}
+= \begin{cases}
 \hat{y}, & C\geq T_C,\\
 \text{Unknown}, & C<T_C.
 \end{cases}
@@ -1096,20 +1084,16 @@ The overlap is:
 
 $$
 N_{\text{overlap}}
-=
-N_{\text{window}}
--
-N_{\text{step}}.
+= N_{\text{window}}
+- N_{\text{step}}.
 $$
 
 Therefore:
 
 $$
 N_{\text{overlap}}
-=
-100-25
-=
-75.
+= 100-25
+= 75.
 $$
 
 ---
@@ -1120,11 +1104,9 @@ The overlap percentage is:
 
 $$
 P_{\text{overlap}}
-=
-\frac{
+= \frac{
 N_{\text{window}}
--
-N_{\text{step}}
+- N_{\text{step}}
 }{
 N_{\text{window}}
 }
@@ -1135,11 +1117,9 @@ For a window of 100 samples and step of 25:
 
 $$
 P_{\text{overlap}}
-=
-\frac{100-25}{100}
+= \frac{100-25}{100}
 \times100\%
-=
-75\%.
+= 75\%.
 $$
 
 ---
@@ -1172,8 +1152,7 @@ If the step size is $N_s$ samples and the sampling frequency is $f_s$, the infer
 
 $$
 T_u
-=
-\frac{N_s}{f_s}.
+= \frac{N_s}{f_s}.
 $$
 
 For:
@@ -1192,20 +1171,16 @@ we obtain:
 
 $$
 T_u
-=
-\frac{25}{50}
-=
-0.5~\text{s}.
+= \frac{25}{50}
+= 0.5~\text{s}.
 $$
 
 The classification update rate is:
 
 $$
 f_u
-=
-\frac{1}{T_u}
-=
-2~\text{Hz}.
+= \frac{1}{T_u}
+= 2~\text{Hz}.
 $$
 
 ---
@@ -1242,8 +1217,7 @@ For the last $M$ predictions:
 
 $$
 \hat{y}_{\text{final}}
-=
-\operatorname{mode}
+= \operatorname{mode}
 \{
 \hat{y}_1,
 \hat{y}_2,
@@ -1314,8 +1288,7 @@ The total response time may include:
 
 $$
 T_{\text{total}}
-=
-T_{\text{window}}
+= T_{\text{window}}
 +
 T_{\text{pre}}
 +
@@ -1356,8 +1329,7 @@ Calculate:
 
 $$
 \bar{T}_{\text{inf}}
-=
-\frac{1}{N}
+= \frac{1}{N}
 \sum_{i=1}^{N}T_i.
 $$
 
@@ -1365,16 +1337,14 @@ Also identify:
 
 $$
 T_{\min}
-=
-\min(T_i)
+= \min(T_i)
 $$
 
 and:
 
 $$
 T_{\max}
-=
-\max(T_i).
+= \max(T_i).
 $$
 
 ---
@@ -1397,8 +1367,7 @@ Calculate:
 
 $$
 \text{Live Accuracy}
-=
-\frac{
+= \frac{
 N_{\text{correct}}
 }{
 N_{\text{total}}
@@ -1476,8 +1445,7 @@ Define:
 
 $$
 R_{\text{accept}}
-=
-\frac{
+= \frac{
 N_{\text{accepted}}
 }{
 N_{\text{total}}
@@ -1535,8 +1503,7 @@ An approximate RAM requirement can be considered as:
 
 $$
 M_{\text{RAM}}
-=
-M_{\text{tensor}}
+= M_{\text{tensor}}
 +
 M_{\text{buffer}}
 +
@@ -1549,8 +1516,7 @@ The IMU window alone requires approximately:
 
 $$
 100\times6\times4
-=
-2400~\text{bytes}
+= 2400~\text{bytes}
 $$
 
 when each value is stored as a 32-bit `float`.
@@ -2008,29 +1974,4 @@ In this lab, a trained TinyML gesture-recognition model is executed directly on 
 
 Confidence-based decision making, overlapping windows, and prediction smoothing improve the robustness and responsiveness of the real-time system. Performance is evaluated in terms of classification accuracy, inference latency, memory usage, confidence threshold, and actuator response.
 
-The complete laboratory sequence now demonstrates the full embedded-intelligence workflow:
 
-```text
-LAB 13
-IMU Gesture Data Collection
-      ↓
-Dataset Preparation
-      ↓
-LAB 14
-Model Training
-      ↓
-Optimization & Quantization
-      ↓
-MCU Deployment
-      ↓
-LAB 15
-Live Sensor Processing
-      ↓
-TinyML Edge Inference
-      ↓
-Intelligent Decision
-      ↓
-LED Actuation
-```
-
-The next lab can extend this system toward **embedded security**, including AES-256 encryption, SHA-256 integrity checking, secure boot concepts, and authenticated firmware or OTA updates.
