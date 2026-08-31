@@ -193,8 +193,7 @@ The classification output is:
 
 $$
 \hat{y}
-=
-\arg\max_k p_k,
+= \arg\max_k p_k,
 $$
 
 where $p_k$ is the predicted probability of gesture class $k$.
@@ -392,8 +391,7 @@ Standardization is:
 
 $$
 x'
-=
-\frac{x-\mu}{\sigma}.
+= \frac{x-\mu}{\sigma}.
 $$
 
 The mean and standard deviation should be calculated using the **training dataset only**.
@@ -456,8 +454,7 @@ The ESP32 will later calculate:
 
 $$
 x_i'
-=
-\frac{x_i-\mu_i}{\sigma_i}.
+= \frac{x_i-\mu_i}{\sigma_i}.
 $$
 
 ---
@@ -535,8 +532,7 @@ For a dense layer:
 
 $$
 \mathbf{z}
-=
-\mathbf{W}\mathbf{x}
+= \mathbf{W}\mathbf{x}
 +
 \mathbf{b}.
 $$
@@ -545,16 +541,14 @@ The ReLU activation is:
 
 $$
 f(z)
-=
-\max(0,z).
+= \max(0,z).
 $$
 
 The output layer uses softmax:
 
 $$
 p_k
-=
-\frac{e^{z_k}}
+= \frac{e^{z_k}}
 {\sum_{j=1}^{C}e^{z_j}},
 $$
 
@@ -567,8 +561,7 @@ The predicted class is:
 
 $$
 \hat{y}
-=
-\arg\max_k p_k.
+= \arg\max_k p_k.
 $$
 
 ---
@@ -629,8 +622,7 @@ Classification accuracy is:
 
 $$
 \text{Accuracy}
-=
-\frac{
+= \frac{
 N_{\text{correct}}
 }{
 N_{\text{total}}
@@ -642,11 +634,9 @@ For example, if 92 of 100 gestures are classified correctly:
 
 $$
 \text{Accuracy}
-=
-\frac{92}{100}
+= \frac{92}{100}
 \times100\%
-=
-92\%.
+= 92\%.
 $$
 
 ---
@@ -927,8 +917,7 @@ Convert to kilobytes:
 
 $$
 S_{\text{kB}}
-=
-\frac{S_{\text{bytes}}}{1024}.
+= \frac{S_{\text{bytes}}}{1024}.
 $$
 
 Record the floating-point TFLite model size.
@@ -969,8 +958,7 @@ A quantized value can be represented approximately as:
 
 $$
 q
-=
-\operatorname{round}
+= \operatorname{round}
 \left(
 \frac{x}{s}
 \right)
@@ -1127,8 +1115,7 @@ The model-size reduction can be calculated as:
 
 $$
 R
-=
-\frac{
+= \frac{
 S_{\text{float}}
 }{
 S_{\text{quant}}
@@ -1139,24 +1126,21 @@ For example:
 
 $$
 S_{\text{float}}
-=
-100~\text{kB}
+= 100~\text{kB}
 $$
 
 and:
 
 $$
 S_{\text{quant}}
-=
-30~\text{kB}.
+= 30~\text{kB}.
 $$
 
 Then:
 
 $$
 R
-=
-\frac{100}{30}
+= \frac{100}{30}
 \approx
 3.33.
 $$
@@ -1171,8 +1155,7 @@ Define:
 
 $$
 \Delta A
-=
-A_{\text{float}}
+= A_{\text{float}}
 -
 A_{\text{quant}}.
 $$
@@ -1181,24 +1164,21 @@ For example:
 
 $$
 A_{\text{float}}
-=
-94.0\%
+= 94.0\%
 $$
 
 and:
 
 $$
 A_{\text{quant}}
-=
-93.2\%.
+= 93.2\%.
 $$
 
 Then:
 
 $$
 \Delta A
-=
-0.8\%.
+= 0.8\%.
 $$
 
 A small reduction in accuracy may be acceptable if memory and inference efficiency improve substantially.
@@ -1235,8 +1215,7 @@ Conceptually:
 
 $$
 q_{\text{input}}
-=
-\operatorname{round}
+= \operatorname{round}
 \left(
 \frac{x}{s_{\text{input}}}
 \right)
@@ -1334,10 +1313,8 @@ giving:
 
 $$
 T_w
-=
-\frac{100}{50}
-=
-2~\text{s}.
+= \frac{100}{50}
+= 2~\text{s}.
 $$
 
 ---
@@ -1387,8 +1364,7 @@ Conceptually:
 
 $$
 q
-=
-\operatorname{round}
+= \operatorname{round}
 \left(
 \frac{x}{s}
 \right)
@@ -1440,8 +1416,7 @@ Then:
 
 $$
 \hat{y}
-=
-\arg\max
+= \arg\max
 [
 0.02,
 0.85,
@@ -1465,8 +1440,7 @@ The maximum model output can be treated as a confidence-like score:
 
 $$
 C
-=
-\max_k p_k.
+= \max_k p_k.
 $$
 
 For:
@@ -1566,10 +1540,8 @@ Inference latency is:
 
 $$
 T_{\text{inf}}
-=
-t_{\text{end}}
--
-t_{\text{start}}.
+= t_{\text{end}}
+- t_{\text{start}}.
 $$
 
 Record:
@@ -1590,8 +1562,7 @@ For $N$ tests:
 
 $$
 \bar{T}_{\text{inf}}
-=
-\frac{1}{N}
+= \frac{1}{N}
 \sum_{i=1}^{N}
 T_i.
 $$
@@ -2125,23 +2096,4 @@ In this lab, the IMU gesture dataset is transformed into a complete **TinyML ges
 
 The optimized model is then deployed on the ESP32, where live MPU6050 measurements are collected, preprocessed, and classified locally. This demonstrates the core concept of **embedded intelligence**, in which sensing, machine-learning inference, decision making, and actuation are performed directly on the MCU without requiring cloud-based processing.
 
-The laboratory progression is:
 
-```text
-LAB 11
-BLE GATT Server & Sensor Notifications
-      ↓
-LAB 12
-Low-Power Operation, Deep Sleep & Wake-Up
-      ↓
-LAB 13
-IMU Gesture Data Collection & Dataset Preparation
-      ↓
-LAB 14
-TinyML Model Training, Optimization & Deployment
-      ↓
-LAB 15
-Real-Time Edge Inference & Intelligent Actuation
-```
-
-The next lab focuses on **continuous real-time TinyML inference, sliding-window sensor processing, confidence-based decisions, actuator control, latency measurement, and edge-intelligence performance evaluation**.
