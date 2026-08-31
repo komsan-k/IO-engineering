@@ -752,10 +752,8 @@ $$
 the frequency becomes:
 
 $$
-f=
-\frac{1}{0.2}
-=
-5~\text{Hz}.
+f= \frac{1}{0.2}
+= 5~\text{Hz}.
 $$
 
 ---
@@ -998,9 +996,7 @@ Measure again.
 Define heap consumption as:
 
 $$
-M_{\text{used}}
-= H_{\text{before}}
-- H_{\text{after}},
+M_{used} = H_{before} - H_{after},
 $$
 
 where:
