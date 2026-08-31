@@ -1247,10 +1247,8 @@ Remote-control latency can be defined as:
 
 $$
 T_{\text{control}}
-=
-t_{\text{actuator}}
--
-t_{\text{command}}.
+= t_{\text{actuator}}
+- t_{\text{command}}.
 $$
 
 where:
@@ -1518,8 +1516,7 @@ Calculate the message delivery ratio:
 
 $$
 \text{Delivery Ratio}
-=
-\frac{N_{\text{received}}}
+= \frac{N_{\text{received}}}
      {N_{\text{sent}}}
 \times 100\%.
 $$
