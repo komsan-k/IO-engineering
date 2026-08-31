@@ -993,8 +993,7 @@ then:
 
 $$
 D
-=
-\frac{T_a}
+= \frac{T_a}
      {T_a + T_s}
 \times 100\%.
 $$
@@ -1015,8 +1014,7 @@ Then:
 
 $$
 D
-=
-\frac{2}
+= \frac{2}
      {2+58}
 \times100\%
 $$
@@ -1037,8 +1035,7 @@ If the active-mode current is $I_a$ and the sleep current is $I_s$, the approxim
 
 $$
 I_{\text{avg}}
-=
-D I_a
+= D I_a
 +
 (1-D)I_s,
 $$
@@ -1055,8 +1052,7 @@ then:
 
 $$
 I_{\text{avg}}
-=
-0.05I_a
+= 0.05I_a
 +
 0.95I_s.
 $$
@@ -1080,8 +1076,7 @@ Calculate:
 
 $$
 D
-=
-\frac{T_a}{T_a+T_s}
+= \frac{T_a}{T_a+T_s}
 \times100\%.
 $$
 
@@ -1481,23 +1476,4 @@ In this lab, the ESP32 is developed into a **low-power connected sensor node** u
 
 This wake-work-sleep architecture significantly reduces the time that the processor and wireless interfaces remain active. Timer-based wake-up is well suited to periodic environmental monitoring, while GPIO wake-up provides event-driven operation for applications such as alarms, buttons, motion detection, and door sensors. Combining both mechanisms provides a flexible architecture for battery-powered IoT systems.
 
-The laboratory progression is:
 
-```text
-LAB 9
-Wi-Fi Networking & HTTP Clients
-      ↓
-LAB 10
-MQTT Telemetry & Remote Control
-      ↓
-LAB 11
-BLE GATT Server & Sensor Notifications
-      ↓
-LAB 12
-Low-Power Operation, Deep Sleep & Wake-Up
-      ↓
-LAB 13
-TinyML Data Collection & Edge-AI Preparation
-```
-
-The next lab focuses on **collecting IMU or sensor datasets on the ESP32, extracting features, labeling samples, and preparing data for TinyML model training**.
