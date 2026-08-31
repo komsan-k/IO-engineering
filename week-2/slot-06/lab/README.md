@@ -384,10 +384,8 @@ The expected final value is:
 
 $$
 N_{\text{expected}}
-=
-100000+100000
-=
-200000.
+= 100000+100000
+= 200000.
 $$
 
 ---
@@ -500,20 +498,16 @@ Define:
 
 $$
 E
-=
-N_{\text{expected}}
--
-N_{\text{actual}}.
+= N_{\text{expected}}
+- N_{\text{actual}}.
 $$
 
 For example:
 
 $$
 E
-=
-200000
--
-194672
+= 200000
+- 194672
 =
 5328.
 $$
@@ -522,11 +516,9 @@ The percentage error is:
 
 $$
 E_{\%}
-=
-\frac{
+= \frac{
 N_{\text{expected}}
--
-N_{\text{actual}}
+- N_{\text{actual}}
 }{
 N_{\text{expected}}
 }
@@ -1250,10 +1242,8 @@ Mathematically:
 
 $$
 T_{\text{wait}}
-=
-t_{\text{acquire}}
--
-t_{\text{request}}.
+= t_{\text{acquire}}
+- t_{\text{request}}.
 $$
 
 ---
@@ -1274,8 +1264,7 @@ Calculate:
 
 $$
 \bar{T}_{\text{wait}}
-=
-\frac{1}{N}
+= \frac{1}{N}
 \sum_{i=1}^{N}
 T_{\text{wait},i}.
 $$
@@ -1778,8 +1767,7 @@ and:
 
 $$
 E_{\%}
-=
-\frac{E}{200000}
+= \frac{E}{200000}
 \times100\%.
 $$
 
@@ -2038,8 +2026,7 @@ The core relationship can therefore be summarized as:
 $$
 \boxed{
 \text{Correct Shared Access}
-=
-\text{Critical Section}
+= \text{Critical Section}
 +
 \text{Mutual Exclusion}
 }
