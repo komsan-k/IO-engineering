@@ -212,8 +212,7 @@ we obtain:
 $$
 T_w
 = \frac{100}{50}
-=
-2~\text{s}.
+= 2~\text{s}.
 $$
 
 Therefore, each classification initially uses approximately 2 seconds of sensor data.
@@ -433,8 +432,7 @@ sample 50 occurs at approximately:
 $$
 t_{50}
 = 50\times20~\text{ms}
-=
-1000~\text{ms}.
+= 1000~\text{ms}.
 $$
 
 Consistent sampling is important because the model was trained using a specific time scale.
@@ -632,10 +630,8 @@ The quantization equation is:
 
 $$
 q
-= \operatorname{round}
-\left(
-\frac{x}{s}
-\right)
+= round(
+\frac{x}{s})
 +
 z,
 $$
