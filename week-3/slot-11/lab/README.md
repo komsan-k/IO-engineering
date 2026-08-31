@@ -1344,20 +1344,3 @@ In this lab, the ESP32 is configured as a **Bluetooth Low Energy GATT server** t
 
 The lab demonstrates how BLE provides a lightweight and energy-efficient method for local wireless communication. Unlike MQTT, which normally relies on Wi-Fi and a broker, BLE enables direct communication between the ESP32 and a nearby smartphone. This makes BLE particularly suitable for wearables, portable sensors, smart-home devices, and low-power embedded systems.
 
-The laboratory progression is:
-
-```text
-LAB 9
-Wi-Fi Networking & HTTP Clients
-      ↓
-LAB 10
-MQTT Telemetry & Remote Control
-      ↓
-LAB 11
-BLE GATT Server & Sensor Notifications
-      ↓
-LAB 12
-Low-Power Operation & Deep Sleep
-```
-
-The next lab focuses on **ESP32 deep sleep, timer/GPIO wake-up, power-aware sensing, and low-power connected embedded systems**.
