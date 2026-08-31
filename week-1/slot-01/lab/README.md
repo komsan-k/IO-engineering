@@ -378,8 +378,7 @@ Mathematically:
 
 $$
 R_{\text{new}}
-=
-R_{\text{old}}
+= R_{\text{old}}
 \;|\;
 (1\ll n)
 $$
@@ -394,8 +393,7 @@ reg |= (1UL << n);
 
 $$
 R_{\text{new}}
-=
-R_{\text{old}}
+= R_{\text{old}}
 \;\&\;
 \sim(1\ll n)
 $$
@@ -1375,10 +1373,8 @@ The system response time can be approximated as:
 
 $$
 T_{\text{response}}
-=
-t_{\text{LED}}
--
-t_{\text{button}}.
+= t_{\text{LED}}
+- t_{\text{button}}.
 $$
 
 For a continuously polling program:
@@ -2062,8 +2058,7 @@ Students also learn the fundamental relationship:
 $$
 \boxed{
 \text{MCU Peripheral Control}
-=
-\text{Memory-Mapped Registers}
+= \text{Memory-Mapped Registers}
 +
 \text{Bit Manipulation}
 }
