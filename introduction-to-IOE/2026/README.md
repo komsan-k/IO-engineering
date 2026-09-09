@@ -1,5 +1,15 @@
 # Introduction: Intelligent Object Engineering
 
+## Intelligent Object Engineering Framework
+
+<p align="center">
+  <img src="ioe_overview.png"
+       alt="Intelligent Object Engineering Framework"
+       width="90%">
+</p>
+
+**Figure** Conceptual framework of Intelligent Object Engineering, integrating sensing, embedded intelligence, communication, actuation and control, and energy management for intelligent vehicles, wearable technologies, healthcare systems, and autonomous IoT applications.
+
 **Intelligent Object Engineering (IOE)** is an interdisciplinary field concerned with designing physical objects that integrate sensors, actuators, embedded computing, communication, artificial intelligence, and energy-management systems. Unlike conventional products with fixed functions, intelligent objects can perceive their environment, process data, communicate with other devices, and respond autonomously.
 
 Modern vehicles are important examples of intelligent objects. Electric and connected vehicles integrate electronic control units, intelligent sensors, embedded software, and high-speed networks. Automotive Ethernet and Internet Protocol technologies support safety, security, Time-Sensitive Networking, service-oriented architectures, validation, and reliable communication among vehicle subsystems.
@@ -18,12 +28,4 @@ Energy efficiency is another essential requirement for intelligent objects. Ener
 
 Therefore, IOE provides a unified framework for creating intelligent vehicles, wearable devices, healthcare systems, and autonomous IoT nodes that are context-aware, connected, energy-efficient, interoperable, secure, reliable, and capable of making meaningful decisions.
 
-## Intelligent Object Engineering Framework
 
-<p align="center">
-  <img src="ioe_overview.png"
-       alt="Intelligent Object Engineering Framework"
-       width="100%">
-</p>
-
-**Figure 1.** Conceptual framework of Intelligent Object Engineering, integrating sensing, embedded intelligence, communication, actuation and control, and energy management for intelligent vehicles, wearable technologies, healthcare systems, and autonomous IoT applications.
