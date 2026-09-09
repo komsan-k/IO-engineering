@@ -108,6 +108,7 @@ The standard covers rated battery capacity, low-temperature and high-rate discha
 IEEE 360-2022 supports **Intelligent Object Engineering** because it treats a wearable as an integrated intelligent system:
 
 $$
+\boxed
 \text{Intelligent Wearable}
 = \text{Sensors}
 +
@@ -122,6 +123,7 @@ $$
 \text{Power Management}
 +
 \text{Human Interaction}
+}
 $$
 
 Developing an intelligent object therefore requires the joint consideration of physical construction, sensing, embedded intelligence, wireless connectivity, cybersecurity, energy management, reliability, comfort, safety, and standards compliance.
