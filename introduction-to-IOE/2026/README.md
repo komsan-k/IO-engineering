@@ -21,7 +21,7 @@ Therefore, IOE provides a unified framework for creating intelligent vehicles, w
 ## Intelligent Object Engineering Framework
 
 <p align="center">
-  <img src="images/intelligent-object-engineering.png"
+  <img src="ioe_overview.png"
        alt="Intelligent Object Engineering Framework"
        width="100%">
 </p>
