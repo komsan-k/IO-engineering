@@ -2,6 +2,20 @@
 
 [ESP32.net](http://esp32.net/) is an independent information portal focused on the **ESP32 family of microcontrollers** and their applications in the Internet of Things. It introduces the ESP32 as a low-cost, low-power system-on-chip incorporating Wi-Fi and Bluetooth connectivity.
 
+## ESP32 Functional Block Diagram
+
+<p align="center">
+  <img
+    src="esp32.png"
+    alt="ESP32 functional block diagram"
+    width="100%"
+  >
+</p>
+
+<p align="center">
+  <strong>Figure 1.</strong> Functional block diagram of an ESP32-based intelligent object. The ESP32 integrates a processing core, memory interface, wireless connectivity, digital and analog interfaces, timers, security, and power management. External sensors provide input data, while GPIO and communication interfaces control actuators and output devices.
+</p>
+
 ## What Is the ESP32?
 
 ESP32 is a microcontroller family developed by Espressif Systems. Depending on the specific model, an ESP32 device can integrate:
