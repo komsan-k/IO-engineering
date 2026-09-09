@@ -126,7 +126,7 @@ $$
 
 Developing an intelligent object therefore requires the joint consideration of physical construction, sensing, embedded intelligence, wireless connectivity, cybersecurity, energy management, reliability, comfort, safety, and standards compliance.
 
-## 7. Key Findings 
+## 7. Core insights 
 
 The principal contribution of IEEE 360-2022 is a unified engineering architecture for wearable consumer electronic devices. A wearable must be evaluated as a complete cyber–physical system—from its body-contacting materials and embedded sensors to its mobile application, wireless network, cloud service, and protection of user data.
 
