@@ -45,7 +45,7 @@ The part acts mainly as a directory and reference collection for the ESP32 ecosy
 - News about ESP32 hardware and software
 - Historical information about older ESP32 and ESP31B products
 
-The website also maintains a separate historical section for obsolete boards and early ESP32-related information.
+The information maintains a separate historical section for obsolete boards and early ESP32-related information.
 
 - [ESP32.net Main Website](http://esp32.net/)
 - [Historical ESP32 Information](http://esp32.net/historical/)
