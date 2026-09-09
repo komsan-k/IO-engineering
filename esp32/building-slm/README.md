@@ -255,10 +255,8 @@ For a 500,000-parameter Int8 model:
 
 $$
 M_{\mathrm{weights}}
-=
-\frac{500{,}000 \times 8}{8}
-=
-500{,}000\ \text{bytes}
+= \frac{500{,}000 \times 8}{8}
+= 500{,}000\ \text{bytes}
 \approx
 488\ \text{KiB}.
 $$
