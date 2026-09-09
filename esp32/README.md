@@ -78,15 +78,16 @@ ESP32 boards are commonly used for:
 ESP32 is an appropriate platform for **Intelligent Object Engineering** because it combines the principal components required by an intelligent object:
 
 $$
+\boxed{
 \text{Intelligent Object}
-=
-\text{Sensing}
+= \text{Sensing}
 +
 \text{Embedded Processing}
 +
 \text{Communication}
 +
 \text{Actuation}
+}
 $$
 
 For example, an ESP32 wearable device can collect movement data from an MPU6050 sensor, classify activities locally using TinyML, and transmit the results to a smartphone through Bluetooth Low Energy.
@@ -113,7 +114,7 @@ For current specifications, security advisories, software releases, and producti
 
 ## References
 
-1. ESP32.net, “The Internet of Things with ESP32.” Available: [http://esp32.net/](https://esp32.net/)
+1. ESP32.net, “The Internet of Things with ESP32.” Available: [http://esp32.net/](http://esp32.net/)
 2. ESP32.net, “Historical ESP32 Information.” Available: [http://esp32.net/historical/](https://esp32.net/historical/)
 3. ESP32.net, “USB-to-UART Bridge Chips.” Available: [http://esp32.net/usb-uart/](https://esp32.net/usb-uart/)
-4. Espressif Systems, “ESP32 Documentation.” Available: [http://docs.espressif.com/](https://docs.espressif.com/)
+4. Espressif Systems, “ESP32 Documentation.” Available: [http://docs.espressif.com/](http://docs.espressif.com/)
