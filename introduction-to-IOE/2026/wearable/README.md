@@ -1,10 +1,8 @@
-# Explanation of IEEE 360-2022
-
-The uploaded document, **IEEE 360-2022**, is an IEEE standard titled:
+# IEEE 360-2022
 
 > **IEEE Standard for Wearable Consumer Electronic Devices—Overview and Architecture**
 
-It is not a conventional research article presenting experimental results. Instead, it establishes a common framework for classifying, designing, testing, and evaluating wearable consumer electronic devices.
+It establishes a common framework for classifying, designing, testing, and evaluating wearable consumer electronic devices.
 
 ## 1. Main Purpose
 
@@ -111,8 +109,7 @@ IEEE 360-2022 supports **Intelligent Object Engineering** because it treats a we
 
 $$
 \text{Intelligent Wearable}
-=
-\text{Sensors}
+= \text{Sensors}
 +
 \text{Embedded Processing}
 +
@@ -129,7 +126,7 @@ $$
 
 Developing an intelligent object therefore requires the joint consideration of physical construction, sensing, embedded intelligence, wireless connectivity, cybersecurity, energy management, reliability, comfort, safety, and standards compliance.
 
-## 7. Key Takeaway
+## 7. Key Findings 
 
 The principal contribution of IEEE 360-2022 is a unified engineering architecture for wearable consumer electronic devices. A wearable must be evaluated as a complete cyber–physical system—from its body-contacting materials and embedded sensors to its mobile application, wireless network, cloud service, and protection of user data.
 
