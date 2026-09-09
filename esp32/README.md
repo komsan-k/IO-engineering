@@ -120,7 +120,6 @@ flowchart TD
     H --> C
 ```
 
-## Important Limitation
 
 ESP32.net should be treated as a convenient community reference and discovery portal, particularly for board identification and historical material.
 
