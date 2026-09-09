@@ -17,3 +17,13 @@ Energy efficiency is another essential requirement for intelligent objects. Ener
 - [Energy Harvesting for Wearable Technology](https://spectrum.ieee.org/energy-harvesting-wearable-tech)
 
 Therefore, IOE provides a unified framework for creating intelligent vehicles, wearable devices, healthcare systems, and autonomous IoT nodes that are context-aware, connected, energy-efficient, interoperable, secure, reliable, and capable of making meaningful decisions.
+
+## Intelligent Object Engineering Framework
+
+<p align="center">
+  <img src="images/intelligent-object-engineering.png"
+       alt="Intelligent Object Engineering Framework"
+       width="100%">
+</p>
+
+**Figure 1.** Conceptual framework of Intelligent Object Engineering, integrating sensing, embedded intelligence, communication, actuation and control, and energy management for intelligent vehicles, wearable technologies, healthcare systems, and autonomous IoT applications.
