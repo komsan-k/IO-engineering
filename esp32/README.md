@@ -18,9 +18,9 @@ ESP32 is a microcontroller family developed by Espressif Systems. Depending on t
 
 These capabilities allow an ESP32 to read sensors, process data, control actuators, and communicate with other devices or Internet services.
 
-## Information Provided by ESP32.net
+## Information 
 
-The website acts mainly as a directory and reference collection for the ESP32 ecosystem. Its resources include:
+The part acts mainly as a directory and reference collection for the ESP32 ecosystem. Its resources include:
 
 - ESP32 chips, modules, and development boards
 - Board photographs and pinout diagrams
@@ -33,9 +33,9 @@ The website acts mainly as a directory and reference collection for the ESP32 ec
 
 The website also maintains a separate historical section for obsolete boards and early ESP32-related information.
 
-- [ESP32.net Main Website](https://esp32.net/)
-- [Historical ESP32 Information](https://esp32.net/historical/)
-- [USB-to-UART Bridge Information](https://esp32.net/usb-uart/)
+- [ESP32.net Main Website](http://esp32.net/)
+- [Historical ESP32 Information](http://esp32.net/historical/)
+- [USB-to-UART Bridge Information](http://esp32.net/usb-uart/)
 
 ## ESP32 Development Workflow
 
