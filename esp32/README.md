@@ -113,7 +113,7 @@ For current specifications, security advisories, software releases, and producti
 
 ## References
 
-1. ESP32.net, “The Internet of Things with ESP32.” Available: [https://esp32.net/](https://esp32.net/)
-2. ESP32.net, “Historical ESP32 Information.” Available: [https://esp32.net/historical/](https://esp32.net/historical/)
-3. ESP32.net, “USB-to-UART Bridge Chips.” Available: [https://esp32.net/usb-uart/](https://esp32.net/usb-uart/)
-4. Espressif Systems, “ESP32 Documentation.” Available: [https://docs.espressif.com/](https://docs.espressif.com/)
+1. ESP32.net, “The Internet of Things with ESP32.” Available: [http://esp32.net/](https://esp32.net/)
+2. ESP32.net, “Historical ESP32 Information.” Available: [http://esp32.net/historical/](https://esp32.net/historical/)
+3. ESP32.net, “USB-to-UART Bridge Chips.” Available: [http://esp32.net/usb-uart/](https://esp32.net/usb-uart/)
+4. Espressif Systems, “ESP32 Documentation.” Available: [http://docs.espressif.com/](https://docs.espressif.com/)
