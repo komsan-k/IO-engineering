@@ -8,7 +8,7 @@
        width="90%">
 </p>
 
-**Figure** Conceptual framework of Intelligent Object Engineering, integrating sensing, embedded intelligence, communication, actuation and control, and energy management for intelligent vehicles, wearable technologies, healthcare systems, and autonomous IoT applications.
+**Figure:** Conceptual framework of Intelligent Object Engineering, integrating sensing, embedded intelligence, communication, actuation and control, and energy management for intelligent vehicles, wearable technologies, healthcare systems, and autonomous IoT applications.
 
 **Intelligent Object Engineering (IOE)** is an interdisciplinary field concerned with designing physical objects that integrate sensors, actuators, embedded computing, communication, artificial intelligence, and energy-management systems. Unlike conventional products with fixed functions, intelligent objects can perceive their environment, process data, communicate with other devices, and respond autonomously.
 
