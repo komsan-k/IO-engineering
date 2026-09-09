@@ -120,9 +120,6 @@ flowchart TD
     H --> C
 ```
 
-
-ESP32.net should be treated as a convenient community reference and discovery portal, particularly for board identification and historical material.
-
 For current specifications, security advisories, software releases, and production development, information should be verified using the official [Espressif Documentation](https://docs.espressif.com/).
 
 ## References
