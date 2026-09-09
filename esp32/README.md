@@ -1,4 +1,4 @@
-# Explanation of ESP32.net
+# ESP32 MCU
 
 [ESP32.net](https://esp32.net/) is an independent information portal focused on the **ESP32 family of microcontrollers** and their applications in the Internet of Things. It introduces the ESP32 as a low-cost, low-power system-on-chip incorporating Wi-Fi and Bluetooth connectivity.
 
