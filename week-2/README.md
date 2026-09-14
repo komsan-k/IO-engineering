@@ -6,7 +6,7 @@ Chapter 2 introduces **real-time operating system concepts** for developing conc
 
 **Tasks & Scheduling → Synchronization → Queues → Timers & Memory Management**
 
-## Weekly Topics
+## Topics
 
 | Slot | Topic | Key Skills |
 |------|-------|------------|
