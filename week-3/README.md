@@ -6,7 +6,7 @@ Chapter 3 introduces **wireless connectivity and IoT communication protocols** f
 
 **Wi-Fi & HTTP → MQTT → BLE → Low-Power & LPWAN**
 
-## Weekly Topics
+## Topics
 
 | Slot | Topic | Key Skills |
 |------|-------|------------|
