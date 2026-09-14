@@ -1,6 +1,6 @@
-# Week 2 Overview: Real-Time Operating Systems (RTOS)
+# Week 2: Chapter 2 - Real-Time Operating Systems (RTOS)
 
-Week 2 introduces **real-time operating system concepts** for developing concurrent and multitasking embedded applications. Students learn how FreeRTOS manages **tasks, scheduling, shared resources, inter-task communication, software timers, and memory** through practical laboratory exercises.
+Chapter 2 introduces **real-time operating system concepts** for developing concurrent and multitasking embedded applications. Students learn how FreeRTOS manages **tasks, scheduling, shared resources, inter-task communication, software timers, and memory** through practical laboratory exercises.
 
 ## Learning Flow
 
@@ -17,7 +17,7 @@ Week 2 introduces **real-time operating system concepts** for developing concurr
 
 ## Learning Outcomes
 
-By the end of Week 2, students should be able to:
+By the end of Chapter 2, students should be able to:
 
 - Create and manage multiple FreeRTOS tasks.
 - Apply task priorities and understand preemptive scheduling.
