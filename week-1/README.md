@@ -1,6 +1,6 @@
-# Week 1 Overview: Foundations & Hardware Interfacing
+# Week 1 : Chapter 1 - Foundations & Hardware Interfacing
 
-Week 1 introduces the fundamentals of **microcontroller programming and hardware interfacing**, progressing from low-level digital control to communication with external peripherals. Students develop practical skills in **GPIO, interrupts, timers, ADC, PWM, I²C, and SPI** through hands-on laboratory activities.
+Chapter 1 introduces the fundamentals of **microcontroller programming and hardware interfacing**, progressing from low-level digital control to communication with external peripherals. Students develop practical skills in **GPIO, interrupts, timers, ADC, PWM, I²C, and SPI** through hands-on laboratory activities.
 
 ## Learning Flow
 
@@ -17,7 +17,7 @@ Week 1 introduces the fundamentals of **microcontroller programming and hardware
 
 ## Learning Outcomes
 
-By the end of Week 1, students should be able to:
+By the end of Chapter 1, students should be able to:
 
 - Configure basic MCU peripherals.
 - Acquire digital and analog inputs.
