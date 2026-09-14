@@ -368,9 +368,7 @@ which corresponds to:
 Mathematically:
 
 $$
-R_new = R_{old}
-\;|\;
-(1\ll n)
+R_new = R_{old} \;|\; (1\ll n)
 $$
 
 In C/C++:
