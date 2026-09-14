@@ -1692,7 +1692,7 @@ Students should also discuss why mechanical button bounce must be filtered and w
 The timer portion demonstrates that periodic operation should not depend on arbitrary software delay loops when accurate and repeatable timing is required.
 
 ---
-
+<!
 ## 49. Submission
 
 Submit:
@@ -1712,6 +1712,7 @@ Submit:
 - Brief discussion comparing polling, interrupts, busy-wait delays, and timers.
 
 ---
+>
 
 ## 50. Conclusion
 
