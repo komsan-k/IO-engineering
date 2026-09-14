@@ -1714,7 +1714,7 @@ Submit:
 ---
 -->
 
-## 50. Conclusion
+## 49. Conclusion
 
 In this lab, a push button is converted from a continuously polled input into an **interrupt-driven event source**. The button generates a GPIO interrupt, the ISR records the event, and software debouncing prevents multiple false events caused by mechanical switch bounce.
 
