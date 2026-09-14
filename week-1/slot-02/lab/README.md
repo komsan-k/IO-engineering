@@ -4,19 +4,11 @@
 
 The objective of this lab is to:
 
-1. Understand the difference between **polling** and **interrupt-driven input handling**.
-2. Configure a push button to generate a GPIO interrupt.
-3. Write and use an Interrupt Service Routine (ISR).
-4. Understand interrupt latency and event-driven execution.
-5. Detect button events using falling-edge interrupts.
-6. Observe the effect of mechanical switch bounce.
-7. Implement software debouncing for interrupt-driven input.
-8. Use a hardware timer to generate periodic events.
-9. Blink an LED at a fixed frequency using a timer.
-10. Separate asynchronous button events from periodic timer events.
-11. Understand the restrictions that apply inside an ISR.
-12. Use `volatile` variables for data shared between ISR and main code.
-13. Build a simple event-driven embedded application using button interrupts and timer-based LED control.
+1. Understand **polling, interrupts, and event-driven execution** in embedded systems.
+2. Configure a push button to generate a **GPIO interrupt** and implement an **Interrupt Service Routine (ISR)**.
+3. Understand **mechanical switch bounce** and implement software debouncing for reliable interrupt-driven input.
+4. Configure a **hardware timer** to generate periodic events and control an LED at a fixed frequency.
+5. Develop an **event-driven embedded application** that integrates asynchronous button interrupts with periodic timer-based operations.
 
 ---
 
@@ -1572,36 +1564,16 @@ Implement both button-reading methods and discuss which is more suitable for an 
 
 ## 45. Checkpoint Questions
 
-1. What is an interrupt?
-2. What is an ISR?
-3. What is the difference between polling and interrupts?
-4. What does `FALLING` mean?
-5. Why is an active-low button suitable for a falling-edge interrupt?
-6. What is mechanical switch bounce?
-7. Why can one button press generate multiple interrupts?
-8. What is debouncing?
-9. Why should an ISR be short?
-10. Why should blocking operations be avoided in an ISR?
-11. Why is `Serial.println()` usually avoided in an ISR?
-12. What does `volatile` mean?
-13. Does `volatile` make an operation atomic?
-14. What is interrupt latency?
-15. What is the relationship between frequency and period?
-16. What is the period of a 1-Hz signal?
-17. What is the period of a 2-Hz signal?
-18. Why is the timer toggle interval half the full LED period?
-19. What is the toggle interval for a 5-Hz LED waveform?
-20. What is the advantage of a hardware timer over a busy-wait delay?
-21. What happens when a timer ISR is too long?
-22. Why is it useful to set an event flag in the ISR?
-23. How can a button interrupt be used to change the timer frequency?
-24. How can a button enable or disable blinking?
-25. Why can timer and button events operate independently?
-26. What is event-driven programming?
-27. What is asynchronous input?
-28. Why are interrupts useful for infrequent events?
-29. Why are timers useful for periodic operations?
-30. How does this lab improve on the polling and busy-wait methods used previously?
+1. What is an **interrupt**, and how does interrupt-driven execution differ from polling?
+2. What is an **Interrupt Service Routine (ISR)**, and why should it be kept short?
+3. What does a **falling-edge (`FALLING`) interrupt** mean, and why is it suitable for an active-low push button?
+4. What is **mechanical switch bounce**, and how can software debouncing reduce its effects?
+5. Why should blocking operations such as `delay()` and `Serial.println()` generally be avoided inside an ISR?
+6. Why are **`volatile` variables** used for data shared between an ISR and the main program?
+7. What is the relationship between **frequency and period**, and what is the period of a 2-Hz signal?
+8. Why is the LED toggle interval equal to **half of the full LED period**?
+9. What are the advantages of using a **hardware timer** instead of a busy-wait delay for periodic operations?
+10. How can **GPIO interrupts and hardware timers** work together to create an event-driven embedded application?
 
 ---
 
