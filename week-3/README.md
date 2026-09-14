@@ -1,6 +1,6 @@
-# Week 3 Overview: Connectivity & Messaging Protocols
+# Week 3 : Chapter 3 - Connectivity & Messaging Protocols
 
-Week 3 introduces **wireless connectivity and IoT communication protocols** for connecting embedded devices to networks, cloud services, and mobile applications. Students develop practical skills in **Wi-Fi, HTTP, MQTT, BLE, and low-power communication**.
+Chapter 3 introduces **wireless connectivity and IoT communication protocols** for connecting embedded devices to networks, cloud services, and mobile applications. Students develop practical skills in **Wi-Fi, HTTP, MQTT, BLE, and low-power communication**.
 
 ## Learning Flow
 
@@ -17,7 +17,7 @@ Week 3 introduces **wireless connectivity and IoT communication protocols** for 
 
 ## Learning Outcomes
 
-By the end of Week 3, students should be able to:
+By the end of Chapter 3, students should be able to:
 
 - Connect embedded devices to Wi-Fi networks and web services.
 - Exchange IoT data using HTTP and REST APIs.
