@@ -23,14 +23,9 @@ The driver should:
 - Breadboard
 - Jumper wires
 
-Suggested GPIO:
-
-```text
-Button → GPIO4
-LED    → GPIO2
 
 
-## 3.Header File `LED.h`
+## 3.Header File `button.h`
 
 ```cpp
 #ifndef BUTTON_DRIVER_H
@@ -70,10 +65,10 @@ public:
 
 ---
 
-## 4. Source File `LED.cpp`
+## 4. Source File `button.cpp`
 
 ```cpp
-#include "button_driver.h"
+#include "button.h"
 
 ButtonDriver::ButtonDriver(
     uint8_t buttonPin,
@@ -174,11 +169,11 @@ bool ButtonDriver::isReleased() {
 ```
 
 ---
-
+<!--
 ## 5. Application Example
 
 ```cpp
-#include "button_driver.h"
+#include "button.h"
 
 #define BUTTON_PIN 4
 #define LED_PIN    2
@@ -229,4 +224,4 @@ void loop() {
     }
 }
 ```
-
+-->
