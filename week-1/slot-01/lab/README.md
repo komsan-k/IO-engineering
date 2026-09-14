@@ -368,8 +368,8 @@ which corresponds to:
 Mathematically:
 
 $$
-R_{\text{new}}
-= R_{\text{old}}
+R_new
+= R_{old}
 \;|\;
 (1\ll n)
 $$
