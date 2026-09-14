@@ -332,7 +332,7 @@ Suppose:
 
 ```text
 GPIO2 → Bit 2
-GPIO4 → Bit 4
+GPIO4 → Bit 14
 ```
 
 A bit mask for GPIO2 is:
@@ -347,10 +347,10 @@ which corresponds conceptually to:
 00000000 00000000 00000000 00000100
 ```
 
-For GPIO4:
+For GPIO14:
 
 ```cpp
-1UL << 4
+1UL << 14
 ```
 
 which corresponds to:
@@ -743,7 +743,7 @@ Software Timers
 Define:
 
 ```cpp
-#define BUTTON_PIN 4
+#define BUTTON_PIN 14
 ```
 
 Read the GPIO input register:
@@ -755,7 +755,7 @@ uint32_t gpioState =
     );
 ```
 
-Then test the bit corresponding to GPIO4:
+Then test the bit corresponding to GPIO14:
 
 ```cpp
 bool buttonState =
@@ -774,7 +774,7 @@ Suppose:
 GPIO4 = HIGH
 ```
 
-then bit 4 of `GPIO_IN_REG` is:
+then bit 14 of `GPIO_IN_REG` is:
 
 ```text
 1
@@ -792,7 +792,7 @@ returns a nonzero value.
 If:
 
 ```text
-GPIO4 = LOW
+GPIO14 = LOW
 ```
 
 the expression evaluates to zero.
@@ -806,7 +806,7 @@ With the external pull-up resistor:
 ```text
 Released
    ↓
-GPIO4 = HIGH
+GPIO14 = HIGH
    ↓
 Logic 1
 ```
@@ -816,9 +816,9 @@ and:
 ```text
 Pressed
    ↓
-GPIO4 Connected to GND
+GPIO14 Connected to GND
    ↓
-GPIO4 = LOW
+GPIO14 = LOW
    ↓
 Logic 0
 ```
@@ -844,7 +844,7 @@ Use Serial only for debugging.
 #include "soc/gpio_reg.h"
 #include "soc/soc.h"
 
-#define BUTTON_PIN 4
+#define BUTTON_PIN 14
 
 void setup() {
 
@@ -901,8 +901,8 @@ LED OFF
 Since the button is active-low:
 
 ```text
-GPIO4 = 0 → LED ON
-GPIO4 = 1 → LED OFF
+GPIO14 = 0 → LED ON
+GPIO14 = 1 → LED OFF
 ```
 
 ### Complete Bare-Metal Button-Controlled LED Program
@@ -913,7 +913,7 @@ GPIO4 = 1 → LED OFF
 #include "soc/soc.h"
 
 #define LED_PIN     2
-#define BUTTON_PIN  4
+#define BUTTON_PIN  14
 
 void setup() {
 
@@ -965,7 +965,7 @@ GPIO4
      ↓
 GPIO_IN_REG
      ↓
-CPU Reads Bit 4
+CPU Reads Bit 14
      ↓
 Decision
      ↓
@@ -1082,7 +1082,7 @@ or a **falling edge**.
 #include "soc/soc.h"
 
 #define LED_PIN     2
-#define BUTTON_PIN  4
+#define BUTTON_PIN  14
 
 bool ledState = false;
 bool previousButton = true;
@@ -1236,7 +1236,7 @@ Accept    Ignore
 #include "soc/soc.h"
 
 #define LED_PIN     2
-#define BUTTON_PIN  4
+#define BUTTON_PIN  14
 
 bool ledState = false;
 bool previousButton = true;
@@ -1451,7 +1451,7 @@ For example:
 
 ```text
 LED 1 → GPIO2
-LED 2 → GPIO5
+LED 2 → GPI12
 ```
 
 Implement:
@@ -1531,7 +1531,7 @@ Implement the same button-controlled LED using Arduino APIs:
 
 ```cpp
 #define LED_PIN 2
-#define BUTTON_PIN 4
+#define BUTTON_PIN 14
 
 void setup() {
 
