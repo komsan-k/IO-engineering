@@ -6,7 +6,7 @@ Chapter 1 introduces the fundamentals of **microcontroller programming and hardw
 
 **GPIO & Registers → Interrupts & Timers → ADC & PWM → I²C & SPI**
 
-## Weekly Topics
+## Topics
 
 | Slot | Topic | Key Skills |
 |------|-------|------------|
