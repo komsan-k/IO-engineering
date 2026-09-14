@@ -11,7 +11,7 @@ This 5-week intensive course covers:
 * Edge AI & Embedded Security
 * Integration and Projects
 
-Each week consists of **4 time slots**, each **3 hours**.
+Course consists of **16 time slots**, each time slots **3 hours**.
 
 ---
 | Component         |   Marks |
