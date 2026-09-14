@@ -20,7 +20,7 @@ Each week consists of **4 time slots**, each **3 hours**.
 | chapter 2 Assessment |      20 |
 | chapter 3 Assessment |      20 |
 | chapter 4 Assessment |      20 |
-| chapter 5 Project    |      20 |
+| chapter 5 Assessment |      20 |
 | **Total**         | **100** |
 
 ---
