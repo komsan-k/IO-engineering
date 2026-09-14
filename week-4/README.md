@@ -6,7 +6,7 @@ Chapter 4 introduces **intelligent and secure embedded systems**, focusing on de
 
 **Data Collection → Model Optimization & TinyML → Edge Inference → Embedded Security**
 
-## Weekly Topics
+## Topics
 
 | Slot | Topic | Key Skills |
 |------|-------|------------|
