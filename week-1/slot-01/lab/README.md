@@ -4,20 +4,11 @@
 
 The objective of this lab is to:
 
-1. Set up the embedded development environment for the ESP32.
-2. Understand the basic architecture of a microcontroller-based embedded system.
-3. Identify GPIO pins, registers, input/output direction, and digital logic levels.
-4. Understand the difference between **high-level GPIO APIs** and **register-level programming**.
-5. Configure a GPIO pin as a digital output using hardware registers.
-6. Create a **bare-metal LED blinking program** without using `digitalWrite()`.
-7. Configure a GPIO pin as a digital input.
-8. Read a push button directly from a GPIO input register.
-9. Control an LED according to the button state.
-10. Understand memory-mapped I/O and bit manipulation.
-11. Use bit masks to set, clear, and test individual register bits.
-12. Observe the effect of switch bouncing.
-13. Implement a simple software debounce mechanism.
-14. Build a foundation for interrupts, timers, ADC, PWM, and RTOS programming.
+1. Set up the **ESP32 embedded development environment** and understand the basic microcontroller architecture.
+2. Configure and control **GPIO inputs and outputs** using hardware registers.
+3. Implement **bare-metal LED and push-button control** without using high-level GPIO APIs.
+4. Apply **memory-mapped I/O, bit manipulation, and bit masks** for register-level programming.
+5. Observe **switch bouncing** and implement software debouncing as a foundation for advanced embedded-system programming.
 
 ---
 
@@ -1373,8 +1364,7 @@ The system response time can be approximated as:
 
 $$
 T_{\text{response}}
-= t_{\text{LED}}
-- t_{\text{button}}.
+= t_{\text{LED}} - t_{\text{button}}.
 $$
 
 For a continuously polling program:
@@ -1853,36 +1843,16 @@ GPIO_IN_REG
 
 ## 43. Checkpoint Questions
 
-1. What does GPIO stand for?
-2. What is the difference between a GPIO input and output?
-3. What is memory-mapped I/O?
-4. What is a peripheral register?
-5. Why are registers divided into individual bits?
-6. What does `1UL << n` represent?
-7. How can a bit be set using a bit mask?
-8. How can a bit be cleared?
-9. How can a bit be tested?
-10. What does `W1TS` mean?
-11. What does `W1TC` mean?
-12. Which register is used in this lab to read GPIO input states?
-13. Why is an LED resistor required?
-14. Why does a button input need a pull-up or pull-down resistor?
-15. What is a floating input?
-16. What is an active-low button?
-17. What logic level is obtained when the button is released in this circuit?
-18. What logic level is obtained when the button is pressed?
-19. What is polling?
-20. What is a busy-wait delay?
-21. Why is busy waiting inefficient?
-22. What is switch bounce?
-23. What is software debouncing?
-24. What is falling-edge detection?
-25. Why must the previous button state be stored for toggle detection?
-26. What is the difference between `digitalWrite()` and direct register access?
-27. What is an advantage of register-level programming?
-28. What is a disadvantage of register-level programming?
-29. Why should the GPIO pinout be checked for each ESP32 board?
-30. Why are direct register examples generally MCU-specific?
+1. What does **GPIO** stand for, and what is the difference between a GPIO input and output?
+2. What is **memory-mapped I/O**, and what is a peripheral register?
+3. What does `1UL << n` represent, and how is it used as a **bit mask**?
+4. What do **W1TS** and **W1TC** mean when controlling GPIO registers?
+5. Which register is used to read **GPIO input states** in this lab?
+6. Why does a push-button input require a **pull-up or pull-down resistor**?
+7. What is an **active-low button**, and what logic levels represent the pressed and released states?
+8. What is **polling**, and why is a busy-wait delay inefficient?
+9. What is **switch bounce**, and how can software debouncing reduce its effects?
+10. What are the main advantages and disadvantages of **direct register-level programming** compared with `digitalWrite()`?
 
 ---
 
