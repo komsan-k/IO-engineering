@@ -1,6 +1,6 @@
-# Week 4 Overview: Edge AI & Embedded Security
+# Week 4 : Chapter 4 - Edge AI & Embedded Security
 
-Week 4 introduces **intelligent and secure embedded systems**, focusing on deploying machine-learning models directly on microcontrollers and protecting embedded devices. Students develop practical skills in **TinyML, model optimization, edge inference, cryptography, secure boot, and secure firmware updates**.
+Chapter 4 introduces **intelligent and secure embedded systems**, focusing on deploying machine-learning models directly on microcontrollers and protecting embedded devices. Students develop practical skills in **TinyML, model optimization, edge inference, cryptography, secure boot, and secure firmware updates**.
 
 ## Learning Flow
 
@@ -17,7 +17,7 @@ Week 4 introduces **intelligent and secure embedded systems**, focusing on deplo
 
 ## Learning Outcomes
 
-By the end of Week 4, students should be able to:
+By the end of Chapter 4, students should be able to:
 
 - Collect and prepare sensor datasets for embedded machine learning.
 - Optimize ML models using quantization and pruning.
