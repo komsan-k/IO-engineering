@@ -1,4 +1,4 @@
-# Embedded Systems – Lab Report Template
+# Lab Report Template
 
 ## 1. Achievement
 
