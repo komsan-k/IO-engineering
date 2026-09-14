@@ -386,7 +386,7 @@ $$
 R_{\text{new}}
 = R_{\text{old}}
 \;\&\;
-\sim(1\ll n)
+\sim(1 \ll n)
 $$
 
 In C/C++:
