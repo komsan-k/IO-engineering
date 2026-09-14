@@ -99,7 +99,7 @@ Recommended hardware:
 - LED
 - 220–330 $\Omega$ resistor
 - Push button
-- 10 k$\Omega$ resistor
+- 10 k $\Omega$ resistor
 - Breadboard
 - Jumper wires
 
