@@ -383,6 +383,10 @@ $$
 R_{\text{new}} = R_{\text{old}}\&\ (1\ll n)
 $$
 
+$$
+R_{\text{new}} = R_{\text{old}}\|\ (1\ll n)
+$$
+
 In C/C++:
 
 ```cpp
