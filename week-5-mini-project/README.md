@@ -1,6 +1,6 @@
-# 🛠️ Chapter 5: Smart Systems Using ESP32
+# 🛠️ Chapter 5: Project - Smart Systems Using ESP32
 
-## ESP32 MCU, IoT, TinyML, BLE, MQTT, and Embedded Security
+## Integration - ESP32 MCU, IoT, TinyML, BLE, MQTT, and Embedded Security
 
 ---
 
