@@ -347,10 +347,10 @@ which corresponds conceptually to:
 00000000 00000000 00000000 00000100
 ```
 
-For GPIO14:
+For GPIO4:
 
 ```cpp
-1UL << 14
+1UL << 4
 ```
 
 which corresponds to:
