@@ -1986,26 +1986,7 @@ Digital Hardware
 
 ---
 
-## 47. Submission
-
-Submit:
-
-- Screenshot showing the development environment.
-- Source code for register-level LED blinking.
-- LED blink-rate measurements.
-- Source code for button reading.
-- Serial Monitor screenshot showing button states.
-- Source code for button-controlled LED.
-- Source code for LED toggle operation.
-- Debounced button implementation.
-- Two-LED extension.
-- Completed experimental tables.
-- Answers to checkpoint questions.
-- Brief discussion comparing Arduino API and register-level GPIO programming.
-
----
-
-## 48. Conclusion
+## 47. Conclusion
 
 In this lab, the ESP32 development environment is configured and used to implement fundamental GPIO operations through direct register access. An LED is first configured as an output and controlled using register-level set and clear operations. A push button is then connected as a digital input and read through the GPIO input register.
 
