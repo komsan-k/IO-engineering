@@ -3,12 +3,13 @@
 
 # 🗂 Course Overview
 
-This 4-week intensive course covers:
+This 5-week intensive course covers:
 
 * Foundations & Hardware Interfacing
 * Real-Time Operating Systems (RTOS)
 * Connectivity & IoT Protocols
 * Edge AI & Embedded Security
+* Integration and Projects
 
 Each week consists of **4 time slots**, each **3 hours**.
 
@@ -33,7 +34,7 @@ A teaching textbook
 
 ---
 
-## 🗓️ Week 1: Foundations & Hardware Interfacing
+## 🗓️ Chapter 1: Foundations & Hardware Interfacing
 
 ### 🔹 Slot 1: GPIO, Registers & Bare-Metal Control
 #### Focus: Bare-metal programming, peripherals, and communication protocols.
@@ -67,7 +68,7 @@ A teaching textbook
 
 ---
 
-## 🌐 Week 2: Real-Time Operating Systems (RTOS)
+## 🌐 Chapter 2: Real-Time Operating Systems (RTOS)
 #### Focus: Concurrency, multitasking, and resource management.
 
 ### 🔹 Slot 5: Concurrency & Multitasking Basics
@@ -101,7 +102,7 @@ A teaching textbook
 
 ---
 
-## 🔗 Week 3: Connectivity & IoT Protocols
+## 🔗 Chapter 3: Connectivity & IoT Protocols
 #### Focus: Wireless networking, edge-to-cloud communication, and low-power operation.
 
 ### 🔹 Slot 9: Wi-Fi Networking & HTTP Clients
@@ -134,7 +135,7 @@ A teaching textbook
 
 ---
 
-## ⚡ Week 4: Edge AI & Embedded Security
+## ⚡ Chapter 4: Edge AI & Embedded Security
 #### Focus: Edge AI deployment and embedded system security.
 
 ### 🔹 Slot 13: Data Collection for Machine Learning
@@ -166,29 +167,7 @@ A teaching textbook
 
 ---
 
-## 🔁 Learning Flow
-
-```
-Embedded Hardware
-        ↓
-Peripheral Interfacing
-        ↓
-Real-Time Multitasking (RTOS)
-        ↓
-Wireless IoT Connectivity
-        ↓
-Low-Power Edge Devices
-        ↓
-TinyML Model Development
-        ↓
-Real-Time Edge AI Inference
-        ↓
-Secure Intelligent Embedded Systems
-```
-
----
-
-## 🎯 Mini Project
+## 🎯 Chapter 5: Building Projects
 
 **Smart System**
 
@@ -229,6 +208,27 @@ Secure Intelligent Embedded Systems
 | Report & Presentation         |      2 |
 | **Total**                     | **20** |
 
+---
+
+## 🔁 Learning Flow
+
+```
+Embedded Hardware
+        ↓
+Peripheral Interfacing
+        ↓
+Real-Time Multitasking (RTOS)
+        ↓
+Wireless IoT Connectivity
+        ↓
+Low-Power Edge Devices
+        ↓
+TinyML Model Development
+        ↓
+Real-Time Edge AI Inference
+        ↓
+Secure Intelligent Embedded Systems
+```
 ---
 
 ## 📌 Tools & Platforms
