@@ -368,7 +368,7 @@ which corresponds to:
 Mathematically:
 
 $$
-R_new = R_{old} \;|\; (1\ll n)
+R_{\text{new}} = R_{\text{old}}\;|\; (1\ll n)
 $$
 
 In C/C++:
@@ -380,10 +380,7 @@ reg |= (1UL << n);
 ### Clear a Bit
 
 $$
-R_{\text{new}}
-= R_{\text{old}}
-\;\&\;
-\sim(1 \ll n)
+R_{\text{new}} = R_{\text{old}} \;\&\; (1 \ll n)
 $$
 
 In C/C++:
