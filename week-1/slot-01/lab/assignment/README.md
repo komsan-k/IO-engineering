@@ -163,7 +163,7 @@ button btn1(14);
 button btn2(16);
 
 void setup() {
-    // Complete the initialization here
+    // Nothing here
 }
 
 void loop() {
