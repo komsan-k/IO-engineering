@@ -242,7 +242,7 @@ Button Interrupt         Timer Interrupt
        ▼
 START / STOP Timer
 ```
-
+<!---
 ---
 
 ## Checkpoint Questions
@@ -356,3 +356,4 @@ $$
 \text{START/STOP Control}
 }
 $$
+--->
