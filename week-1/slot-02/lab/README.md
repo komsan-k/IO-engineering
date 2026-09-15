@@ -886,6 +886,45 @@ Configure the timer to generate an interrupt every:
 250 ms
 ```
 
+### Complete Fixed-Frequency LED Blink Program
+```cpp
+#include <Arduino.h>
+
+#define LED_PIN 2
+
+hw_timer_t *timer = NULL;
+volatile bool ledState = false;
+
+// Timer Interrupt Service Routine
+void IRAM_ATTR onTimer() {
+    ledState = !ledState;
+    digitalWrite(LED_PIN, ledState);
+}
+
+void setup() {
+    pinMode(LED_PIN, OUTPUT);
+    digitalWrite(LED_PIN, LOW);
+
+    // Timer 0, prescaler = 80
+    // ESP32 timer clock: 80 MHz / 80 = 1 MHz
+    // Therefore, 1 timer count = 1 microsecond
+    timer = timerBegin(0, 80, true);
+
+    // Attach ISR
+    timerAttachInterrupt(timer, &onTimer, true);
+
+    // Generate interrupt every 1,000,000 us = 1 second
+    timerAlarmWrite(timer, 1000000, true);
+
+    // Enable timer
+    timerAlarmEnable(timer);
+}
+
+void loop() {
+    // Main program can perform other tasks
+}
+```
+
 ---
 
 ## 27. Expected LED Behavior
