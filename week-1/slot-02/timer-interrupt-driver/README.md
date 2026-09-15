@@ -399,18 +399,15 @@ Therefore:
 
 $$
 T_{\text{tick}}
-=
-\frac{1}{f_{\text{timer}}}
-=
-1~\mu s
+= \frac{1}{f_{\text{timer}}}
+= 1~\mu s
 $$
 
 For a 1-second timer interval:
 
 $$
 N
-=
-1,000,000~\text{ticks}
+= 1,000,000~\text{ticks}
 $$
 
 Therefore:
@@ -434,7 +431,7 @@ creates a timer with a **1-second event interval**.
 | 2.0 s | 2,000,000 | `timer1.setInterval(2000000);` |
 
 ---
-
+<!---
 # Combining the Button and Timer Drivers
 
 The previous **Button Interrupt Driver** can be combined with the `TimerDriver`.
@@ -655,3 +652,5 @@ LED Control
 ```
 
 This structure provides a foundation for developing more advanced **event-driven, multitasking, and RTOS-based embedded applications**.
+
+--->
