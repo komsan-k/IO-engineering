@@ -886,7 +886,7 @@ Configure the timer to generate an interrupt every:
 250 ms
 ```
 
-### Complete Fixed-Frequency LED Blink Program
+## Complete Timer-Controlled LED Blink Program
 ```cpp
 #include <Arduino.h>
 
