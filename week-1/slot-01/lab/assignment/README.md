@@ -169,12 +169,12 @@ void setup() {
 void loop() {
     // Button 1 toggles LED 1
     if (btn1.isPressed()) {
-        led1.toggle();
+        led1.on();
     }
 
     // Button 2 toggles LED 2
     if (btn2.isPressed()) {
-        led2.toggle();
+        led2.on();
     }
 }
 ```
