@@ -188,4 +188,4 @@ void loop() {
 
 ### Task
 
-Complete the `setup()` function by initializing the **LED** and **button** driver objects.
+Complete the function for the **LED** and **button** driver objects.
