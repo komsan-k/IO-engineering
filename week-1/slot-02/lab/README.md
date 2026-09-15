@@ -886,7 +886,7 @@ Configure the timer to generate an interrupt every:
 250 ms
 ```
 
-## 26-1 Complete Timer-Controlled LED Blink Program
+## 26.-1 Complete Timer-Controlled LED Blink Program (Arduino-ESP32 2.x)
 ```cpp
 #include <Arduino.h>
 
@@ -925,6 +925,44 @@ void loop() {
 }
 ```
 
+## 26.-2 Complete Timer-Controlled LED Blink Program (Arduino-ESP32 3.x)
+
+
+```cpp
+#include <Arduino.h>
+
+#define LED_PIN 2
+
+hw_timer_t *timer = NULL;
+volatile bool ledState = false;
+
+// Timer Interrupt Service Routine
+void ARDUINO_ISR_ATTR onTimer() {
+    ledState = !ledState;
+    digitalWrite(LED_PIN, ledState);
+}
+
+void setup() {
+    pinMode(LED_PIN, OUTPUT);
+    digitalWrite(LED_PIN, LOW);
+
+    // Create timer with 1 MHz frequency
+    // 1 timer tick = 1 microsecond
+    timer = timerBegin(1000000);
+
+    // Attach timer interrupt
+    timerAttachInterrupt(timer, &onTimer);
+
+    // Alarm every 1,000,000 ticks = 1 second
+    // true = auto reload
+    // 0 = unlimited reloads
+    timerAlarm(timer, 1000000, true, 0);
+}
+
+void loop() {
+    // Main program can perform other tasks
+}
+```
 ---
 
 ## 27. Expected LED Behavior
