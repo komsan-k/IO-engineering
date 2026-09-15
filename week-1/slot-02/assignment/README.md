@@ -51,7 +51,7 @@ Timer START
 ```
 
 ---
-<!---
+
 ## Expected Serial Monitor Output
 
 ```text
@@ -67,7 +67,7 @@ Timer = STOPPED
 Button Pressed! Count = 3
 Timer = STARTED
 ```
-
+<!---
 ---
 
 ## Starter Code — Arduino-ESP32 Core 3.x
