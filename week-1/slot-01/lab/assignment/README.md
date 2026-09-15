@@ -141,3 +141,51 @@ void loop() {
 ## 📚 References
 - [Arduino Library Tutorial](https://www.arduino.cc/en/Hacking/LibraryTutorial)
 
+---
+
+## Exercise — Complete the LED and Button Driver Program
+
+Complete the following program to control two LEDs using two push buttons.
+
+- **Button 1 (GPIO14)** toggles **LED 1 (GPIO2)**.
+- **Button 2 (GPIO16)** toggles **LED 2 (GPIO12)**.
+
+```cpp
+#include "LED.h"
+#include "button.h"
+
+// Create LED objects
+LED led1(2);
+LED led2(12);
+
+// Create Button objects
+button btn1(14);
+button btn2(16);
+
+void setup() {
+    // Complete the initialization here
+}
+
+void loop() {
+    // Button 1 toggles LED 1
+    if (btn1.isPressed()) {
+        led1.toggle();
+    }
+
+    // Button 2 toggles LED 2
+    if (btn2.isPressed()) {
+        led2.toggle();
+    }
+}
+```
+
+### Expected Operation
+
+| Input | Output |
+|---|---|
+| Press Button 1 | Toggle LED 1 |
+| Press Button 2 | Toggle LED 2 |
+
+### Task
+
+Complete the `setup()` function by initializing the **LED** and **button** driver objects.
