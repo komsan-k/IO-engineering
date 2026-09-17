@@ -1,4 +1,4 @@
-# Lab: Custom Gesture Recognition Using APDS-9960 and ESP32
+# Custom Gesture Recognition Using APDS-9960 and ESP32
 
 ## 1. Introduction
 
@@ -569,3 +569,29 @@ The key concept can be summarized as
 \]
 
 The experiment therefore extends beyond basic sensor interfacing and introduces students to **event-driven programming, temporal event processing, state-machine design, and human--machine interaction** in embedded systems.
+
+---
+
+```markdown
+## References
+
+1. **Broadcom Inc.**, “APDS-9960 Digital RGB, Ambient Light, Proximity and Gesture Sensor,” *APDS-9960 Product Documentation and Data Sheet*, 2015.  
+   [Broadcom APDS-9960 Product Page and Datasheet](https://www.broadcom.com/products/optical-sensors/integrated-ambient-light-and-proximity-sensors/apds-9960)  
+   Primary technical reference for sensor specifications, I²C communication, RGBC sensing, proximity detection, and gesture operation.
+
+2. **SparkFun Electronics**, “APDS-9960 RGB and Gesture Sensor Hookup Guide,” *SparkFun Learn*.  
+   [SparkFun APDS-9960 Hookup Guide](https://learn.sparkfun.com/tutorials/apds-9960-rgb-and-gesture-sensor-hookup-guide)  
+   Practical reference for sensor wiring, I²C communication, library installation, and gesture-detection examples.
+
+3. **SparkFun Electronics**, “SparkFun RGB and Gesture Sensor — APDS-9960,” SEN-12787.  
+   [SparkFun APDS-9960 Sensor Board](https://www.sparkfun.com/sparkfun-rgb-and-gesture-sensor-apds-9960.html)  
+   Reference for the breakout-board specifications, pin configuration, I²C address, and hardware documentation.
+
+4. **SparkFun Electronics**, “APDS-9960 Board Overview,” *APDS-9960 RGB and Gesture Sensor Hookup Guide*.  
+   [APDS-9960 Board and Pin Overview](https://learn.sparkfun.com/tutorials/apds-9960-rgb-and-gesture-sensor-hookup-guide/board-overview)  
+   Useful for understanding the `VCC`, `GND`, `SDA`, `SCL`, `INT`, and `VL` pins.
+
+5. **SparkFun Electronics**, “APDS-9960 Resources and Going Further,” *SparkFun Learn*.  
+   [APDS-9960 Example Applications and Resources](https://learn.sparkfun.com/tutorials/apds-9960-rgb-and-gesture-sensor-hookup-guide/resources-and-going-further)  
+   Additional resources for gesture sensing, proximity sensing, color sensing, and interrupt-based applications.
+```
