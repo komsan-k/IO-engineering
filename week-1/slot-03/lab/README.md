@@ -1,7 +1,21 @@
 # LAB 3 — ADC Sensor Acquisition and PWM Control of LED Brightness or Servo Position
 
 ## 1. Objective
+## Objectives
 
+The objectives of this lab are to:
+
+1. Understand the principles of the ESP32 **Analog-to-Digital Converter (ADC)** and **Pulse-Width Modulation (PWM)**, including ADC resolution, quantization, and PWM duty cycle.
+
+2. Acquire and process analog sensor data using the ESP32 ADC by converting raw readings into normalized values or approximate voltages.
+
+3. Generate PWM signals with the ESP32 to control actuators such as **LED brightness** and, optionally, **servo motor position**.
+
+4. Implement a **sensor-to-actuator control system** by mapping ADC sensor values to PWM outputs and analyzing the relationship between sensor input and actuator response.
+
+5. Design and evaluate a simple **embedded control system** that integrates analog sensing, signal processing, and PWM-based actuator control.
+
+<!---
 The objective of this lab is to:
 
 1. Understand the operation of the ESP32 **Analog-to-Digital Converter (ADC)**.
@@ -16,7 +30,7 @@ The objective of this lab is to:
 10. Optionally control a servo motor using a PWM-compatible control signal.
 11. Understand the relationship among ADC input, scaling, mapping, and actuator output.
 12. Build a simple **sensor-to-actuator embedded control system**.
-
+--->
 ---
 
 ## 2. Background
