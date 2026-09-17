@@ -200,6 +200,98 @@ $$
 \text{Display Result}
 $$
 
+#include <Wire.h>
+#include <SparkFun_APDS9960.h>
+
+// Create APDS-9960 object
+SparkFun_APDS9960 apds;
+
+// ESP32 default I2C pins
+#define SDA_PIN 21
+#define SCL_PIN 22
+
+void setup() {
+
+  // Start Serial Monitor
+  Serial.begin(115200);
+  delay(1000);
+
+  Serial.println();
+  Serial.println("================================");
+  Serial.println(" APDS-9960 Gesture Detection");
+  Serial.println("================================");
+
+  // Initialize I2C
+  Wire.begin(SDA_PIN, SCL_PIN);
+
+  // Initialize APDS-9960
+  if (apds.init()) {
+    Serial.println("APDS-9960 initialization complete.");
+  } 
+  else {
+    Serial.println("ERROR: APDS-9960 initialization failed.");
+    while (1) {
+      delay(1000);
+    }
+  }
+
+  // Enable gesture sensor
+  if (apds.enableGestureSensor(true)) {
+    Serial.println("Gesture sensor enabled.");
+  } 
+  else {
+    Serial.println("ERROR: Could not enable gesture sensor.");
+  }
+
+  Serial.println();
+  Serial.println("Move your hand over the sensor.");
+  Serial.println("Gestures: UP, DOWN, LEFT, RIGHT");
+  Serial.println();
+}
+
+void loop() {
+
+  // Check whether a gesture is available
+  if (apds.isGestureAvailable()) {
+
+    // Read gesture
+    int gesture = apds.readGesture();
+
+    switch (gesture) {
+
+      case DIR_UP:
+        Serial.println("Gesture: UP");
+        break;
+
+      case DIR_DOWN:
+        Serial.println("Gesture: DOWN");
+        break;
+
+      case DIR_LEFT:
+        Serial.println("Gesture: LEFT");
+        break;
+
+      case DIR_RIGHT:
+        Serial.println("Gesture: RIGHT");
+        break;
+
+      case DIR_NEAR:
+        Serial.println("Gesture: NEAR");
+        break;
+
+      case DIR_FAR:
+        Serial.println("Gesture: FAR");
+        break;
+
+      default:
+        Serial.println("Gesture: UNKNOWN");
+        break;
+    }
+  }
+
+  delay(50);
+}
+
 ---
 
 ## 8. Experiment 2 — Gesture-Controlled LEDs
@@ -233,6 +325,180 @@ $$
 
 Students should verify that each gesture consistently produces the intended output.
 
+#include <Wire.h>
+#include <SparkFun_APDS9960.h>
+
+// --------------------------------------------------
+// APDS-9960 object
+// --------------------------------------------------
+SparkFun_APDS9960 apds;
+
+// --------------------------------------------------
+// ESP32 I2C pins
+// --------------------------------------------------
+#define SDA_PIN 21
+#define SCL_PIN 22
+
+// --------------------------------------------------
+// LED pins
+// --------------------------------------------------
+#define LED1_PIN 2
+#define LED2_PIN 12
+
+// LED state used for toggle operation
+bool led1State = false;
+
+void setup() {
+
+  // Start Serial Monitor
+  Serial.begin(115200);
+  delay(1000);
+
+  Serial.println();
+  Serial.println("====================================");
+  Serial.println(" APDS-9960 Gesture-Controlled LEDs");
+  Serial.println("====================================");
+
+  // ------------------------------------------------
+  // Configure LEDs
+  // ------------------------------------------------
+  pinMode(LED1_PIN, OUTPUT);
+  pinMode(LED2_PIN, OUTPUT);
+
+  digitalWrite(LED1_PIN, LOW);
+  digitalWrite(LED2_PIN, LOW);
+
+  // ------------------------------------------------
+  // Initialize I2C
+  // ------------------------------------------------
+  Wire.begin(SDA_PIN, SCL_PIN);
+
+  // ------------------------------------------------
+  // Initialize APDS-9960
+  // ------------------------------------------------
+  if (apds.init()) {
+    Serial.println("APDS-9960 initialization complete.");
+  }
+  else {
+    Serial.println("ERROR: APDS-9960 initialization failed.");
+
+    while (1) {
+      delay(1000);
+    }
+  }
+
+  // ------------------------------------------------
+  // Enable gesture detection
+  // ------------------------------------------------
+  if (apds.enableGestureSensor(true)) {
+    Serial.println("Gesture sensor enabled.");
+  }
+  else {
+    Serial.println("ERROR: Could not enable gesture sensor.");
+  }
+
+  Serial.println();
+  Serial.println("Gesture Commands");
+  Serial.println("----------------------------");
+  Serial.println("RIGHT : LED1 ON");
+  Serial.println("LEFT  : LED1 OFF");
+  Serial.println("UP    : Toggle LED1");
+  Serial.println("DOWN  : All LEDs OFF");
+  Serial.println("----------------------------");
+  Serial.println();
+}
+
+
+void loop() {
+
+  // Check whether a gesture is available
+  if (apds.isGestureAvailable()) {
+
+    // Read gesture
+    int gesture = apds.readGesture();
+
+    // Process gesture
+    switch (gesture) {
+
+      // --------------------------------------------
+      // RIGHT -> LED1 ON
+      // --------------------------------------------
+      case DIR_RIGHT:
+
+        led1State = true;
+        digitalWrite(LED1_PIN, HIGH);
+
+        Serial.println("Gesture: RIGHT");
+        Serial.println("Action : LED1 ON");
+
+        break;
+
+
+      // --------------------------------------------
+      // LEFT -> LED1 OFF
+      // --------------------------------------------
+      case DIR_LEFT:
+
+        led1State = false;
+        digitalWrite(LED1_PIN, LOW);
+
+        Serial.println("Gesture: LEFT");
+        Serial.println("Action : LED1 OFF");
+
+        break;
+
+
+      // --------------------------------------------
+      // UP -> Toggle LED1
+      // --------------------------------------------
+      case DIR_UP:
+
+        led1State = !led1State;
+        digitalWrite(LED1_PIN, led1State);
+
+        Serial.println("Gesture: UP");
+
+        if (led1State) {
+          Serial.println("Action : LED1 ON");
+        }
+        else {
+          Serial.println("Action : LED1 OFF");
+        }
+
+        break;
+
+
+      // --------------------------------------------
+      // DOWN -> All LEDs OFF
+      // --------------------------------------------
+      case DIR_DOWN:
+
+        led1State = false;
+
+        digitalWrite(LED1_PIN, LOW);
+        digitalWrite(LED2_PIN, LOW);
+
+        Serial.println("Gesture: DOWN");
+        Serial.println("Action : ALL LEDs OFF");
+
+        break;
+
+
+      // --------------------------------------------
+      // Other gesture
+      // --------------------------------------------
+      default:
+
+        Serial.println("Gesture: UNKNOWN");
+
+        break;
+    }
+
+    Serial.println("----------------------------");
+  }
+
+  delay(50);
+}
 ---
 
 ## 9. Experiment 3 — Custom Gesture Sequence
