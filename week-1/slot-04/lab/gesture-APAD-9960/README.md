@@ -208,8 +208,8 @@ $$
 SparkFun_APDS9960 apds;
 
 // ESP32 default I2C pins
-#define SDA_PIN 21
-#define SCL_PIN 22
+#define SDA_PIN 4
+#define SCL_PIN 5
 
 void setup() {
 
@@ -301,6 +301,7 @@ The next experiment uses directional gestures as control commands.
 
 For example,
 
+
 $$
 \begin{aligned}
 \text{RIGHT} &\rightarrow \text{LED ON},\\
@@ -310,7 +311,7 @@ $$
 \end{aligned}
 $$
 
-This experiment demonstrates an event-driven sensing-and-control architecture:
+This experiment demonstrates an **event-driven sensing-and-control architecture**:
 
 $$
 \boxed{
@@ -323,6 +324,7 @@ $$
 \text{Actuator}
 }
 $$
+
 
 Students should verify that each gesture consistently produces the intended output.
 
