@@ -1,6 +1,6 @@
 # Assignment — LDR and LED Driver for Automatic Brightness Control
 
-## 1. Objective
+## Objective
 
 Develop reusable **LDR** and **LED** drivers for the ESP32 and use them to create an automatic LED brightness-control system.
 
@@ -22,19 +22,7 @@ $$
 
 ---
 
-## 2. Hardware
-
-- ESP32 development board
-- LDR (Light Dependent Resistor)
-- 10 kΩ resistor
-- LED
-- 220–330 Ω resistor
-- Breadboard
-- Jumper wires
-
----
-
-## 3. LDR Driver
+## LDR Driver
 
 Create an LDR driver using two files:
 
@@ -67,7 +55,7 @@ public:
 
 ---
 
-## 4. LED Driver
+## LED Driver
 
 Create an LED driver using:
 
@@ -98,7 +86,7 @@ The brightness should use the range:
 
 ---
 
-## 5. Main Program
+## Main Program
 
 Create:
 
@@ -109,7 +97,7 @@ main.ino
 The program must create LDR and LED objects:
 
 ```cpp
-LDR ldr(34);
+LDR ldr(36);
 LED led(2);
 ```
 
@@ -131,10 +119,121 @@ Normalized : 0.618
 Lux        : 320.5 lx
 LED PWM    : 97
 ```
+```cpp
+#include "LDR.h"
+#include "LED.h"
+
+// --------------------------------------------------
+// Pin Configuration
+// --------------------------------------------------
+#define LDR_PIN 34
+#define LED_PIN 2
+
+// --------------------------------------------------
+// Create Driver Objects
+// --------------------------------------------------
+LDR ldr(LDR_PIN);
+LED led(LED_PIN);
+
+// --------------------------------------------------
+// Setup
+// --------------------------------------------------
+void setup() {
+
+  Serial.begin(115200);
+  delay(1000);
+
+  Serial.println();
+  Serial.println("====================================");
+  Serial.println(" LDR Automatic LED Brightness Control");
+  Serial.println("====================================");
+  Serial.println();
+}
+
+// --------------------------------------------------
+// Main Loop
+// --------------------------------------------------
+void loop() {
+
+  // -----------------------------------------------
+  // 1. Read raw ADC value
+  // -----------------------------------------------
+  int raw = ldr.readRAW();
+
+  // -----------------------------------------------
+  // 2. Read normalized light level
+  // Range: 0.0 - 1.0
+  // -----------------------------------------------
+  float normalized = ldr.readNormalized();
+
+  // -----------------------------------------------
+  // 3. Estimate illumination in lux
+  // -----------------------------------------------
+  float lux = ldr.readLUX();
+
+  // -----------------------------------------------
+  // 4. Calculate LED brightness
+  //
+  // Dark   -> LED bright
+  // Bright -> LED dim
+  //
+  // normalized = 0.0 -> PWM = 255
+  // normalized = 1.0 -> PWM = 0
+  // -----------------------------------------------
+  int brightness = (int)(255.0 * (1.0 - normalized));
+
+  // Limit PWM value to valid range
+  brightness = constrain(brightness, 0, 255);
+
+  // -----------------------------------------------
+  // 5. Control LED using LED Driver
+  // -----------------------------------------------
+  led.setBrightness(brightness);
+
+  // -----------------------------------------------
+  // 6. Display results
+  // -----------------------------------------------
+  Serial.println("------------------------------------");
+
+  Serial.print("RAW        : ");
+  Serial.println(raw);
+
+  Serial.print("Normalized : ");
+  Serial.println(normalized, 3);
+
+  Serial.print("Lux        : ");
+  Serial.print(lux, 2);
+  Serial.println(" lx");
+
+  Serial.print("LED PWM    : ");
+  Serial.println(brightness);
+
+  // -----------------------------------------------
+  // 7. Display lighting condition
+  // -----------------------------------------------
+  Serial.print("Condition  : ");
+
+  if (normalized < 0.25) {
+    Serial.println("Very Dark");
+  }
+  else if (normalized < 0.50) {
+    Serial.println("Dark");
+  }
+  else if (normalized < 0.75) {
+    Serial.println("Bright");
+  }
+  else {
+    Serial.println("Very Bright");
+  }
+
+  // Sampling interval
+  delay(500);
+}
+```
 
 ---
 
-## 6. Automatic LED Brightness Control
+## Automatic LED Brightness Control
 
 Use the LDR reading to automatically control LED brightness.
 
@@ -172,7 +271,7 @@ led.setBrightness(brightness);
 
 ---
 
-## 7. Program Structure
+## Program Structure
 
 Your final project should have the following structure:
 
@@ -190,7 +289,7 @@ The main program should not directly perform ADC or PWM operations. These hardwa
 
 ---
 
-## 8. Expected System Operation
+## Expected System Operation
 
 ```text
 Read LDR
@@ -214,7 +313,7 @@ LED PWM Output
 
 ---
 
-## 9. Assignment Tasks
+## Assignment Tasks
 
 1. Build the LDR voltage-divider circuit and LED circuit.
 2. Implement the `LDR` driver.
