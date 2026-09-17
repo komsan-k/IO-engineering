@@ -157,8 +157,7 @@ Therefore, the LED brightness can be determined from:
 
 $$
 B_{\text{LED}}
-=
-255(1-L_{\text{norm}})
+= 255(1-L_{\text{norm}})
 $$
 
 where $L_{\text{norm}}$ is between 0 and 1.
