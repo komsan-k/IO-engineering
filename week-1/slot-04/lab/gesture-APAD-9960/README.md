@@ -1,4 +1,4 @@
-````markdown
+
 # Custom Gesture Recognition Using APDS-9960 and ESP32
 
 ## 1. Introduction
@@ -596,4 +596,4 @@ The experiment therefore extends beyond basic sensor interfacing and introduces 
 
 5. **SparkFun Electronics**, “APDS-9960 Resources and Going Further,” *SparkFun Learn*.  
    [APDS-9960 Example Applications and Resources](https://learn.sparkfun.com/tutorials/apds-9960-rgb-and-gesture-sensor-hookup-guide/resources-and-going-further)
-````
+
