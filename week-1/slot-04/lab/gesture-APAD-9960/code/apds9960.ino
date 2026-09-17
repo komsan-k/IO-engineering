@@ -1,4 +1,4 @@
-```cpp
+
 #include <Wire.h>
 #include <SparkFun_APDS9960.h>
 
@@ -193,4 +193,4 @@ void loop() {
 
   delay(50);
 }
-```
+
