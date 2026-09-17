@@ -1,5 +1,5 @@
 
-# Custom Gesture Recognition Using APDS-9960 and ESP32
+# Gesture Recognition Using APDS-9960 and ESP32
 
 ## 1. Introduction
 
