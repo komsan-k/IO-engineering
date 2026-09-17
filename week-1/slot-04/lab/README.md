@@ -1436,38 +1436,29 @@ Disconnect the sensor during operation and describe how the system behaves.
 
 ---
 
+
 ## 36. Checkpoint Questions
 
-1. What does I²C stand for?
-2. What are the two main I²C signal lines?
-3. What is the purpose of SDA?
-4. What is the purpose of SCL?
-5. Which device normally generates the I²C clock?
-6. What is an I²C device address?
-7. Why can several sensors use the same I²C bus?
-8. What is the difference between an I²C device address and a register address?
-9. Why is an I²C scanner useful?
-10. What is a sensor register?
-11. What is the purpose of `Wire.beginTransmission()`?
-12. What is the purpose of `Wire.write()` when reading a register?
-13. What does `Wire.requestFrom()` do?
-14. Why may `endTransmission(false)` be used before a register read?
-15. What do MSB and LSB mean?
-16. How are two 8-bit values combined into a 16-bit value?
-17. Why must byte order be checked?
-18. What is the difference between signed and unsigned data?
-19. Why is a sensor scaling factor required?
-20. Where should the correct sensor conversion equation be obtained?
-21. What does UART stand for?
-22. Why is UART useful in this lab?
-23. What does a baud rate of 115200 represent?
-24. What is an 8N1 UART configuration?
-25. Why should sensor results be formatted before transmission?
-26. Why are I²C pull-up resistors required?
-27. What happens if the I²C device address is incorrect?
-28. Why should I²C transaction errors be checked?
-29. What is the advantage of non-blocking periodic sensor acquisition?
-30. How do I²C and UART work together in this experiment?
+1. What are the two main signal lines used in **I²C communication**, and what is the function of each line?
+
+2. What is an **I²C device address**, and how does it allow multiple sensors to share the same I²C bus?
+
+3. What is the difference between an **I²C device address** and a **sensor register address**?
+
+4. Why is an **I²C scanner** useful when connecting a new sensor to a microcontroller?
+
+5. What are the purposes of `Wire.beginTransmission()`, `Wire.write()`, and `Wire.requestFrom()` in an I²C register-reading operation?
+
+6. What do **MSB** and **LSB** mean, and how can two 8-bit sensor values be combined into a 16-bit value?
+
+7. Why must the **byte order, signed/unsigned format, and scaling factor** be considered when converting raw sensor data into a physical value?
+
+8. Why are **pull-up resistors** required on the I²C SDA and SCL lines?
+
+9. What is **UART**, and why is a baud rate such as **115200** required when transmitting sensor data to the Serial Monitor?
+
+10. How do **I²C and UART work together** in this experiment to acquire sensor data and display the measurement results?
+
 
 ---
 
