@@ -1,4 +1,4 @@
-# Assignment — APDS-9960 Gesture-Controlled Traffic LEDs
+# Assignment — APDS-9960 Gesture-Controlled EDs
 
 ## Objective
 
