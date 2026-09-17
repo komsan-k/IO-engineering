@@ -1489,7 +1489,7 @@ Estimate analog input voltage.
 
 ### Experiment 3 — Normalization
 
-Convert ADC readings to $0$–$1$.
+Convert ADC readings to $0$ – $1$.
 
 ### Experiment 4 — PWM Generation
 
@@ -1853,7 +1853,7 @@ $$
 Students should also discuss ADC resolution, measurement noise, filtering, PWM resolution, actuator response, and the trade-off between smoothness and responsiveness.
 
 ---
-
+<!---
 ## 50. Submission
 
 Submit:
@@ -1872,8 +1872,9 @@ Submit:
 - Brief discussion of ADC resolution, PWM duty cycle, noise, filtering, and sensor-to-actuator mapping.
 
 ---
+--->
 
-## 51. Conclusion
+## 50. Conclusion
 
 In this lab, an analog sensor is connected to the ESP32 ADC and converted into a digital measurement. The ADC data is then scaled and used to control an actuator through PWM.
 
