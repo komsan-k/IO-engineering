@@ -128,11 +128,11 @@ Use:
 Suggested GPIO assignments:
 
 ```text
-Analog Sensor → GPIO34
-LED PWM       → GPIO25
-Servo Signal  → GPIO26
+Analog Sensor → GPIO36 (LM73) 
+LED PWM       → GPIO2
+Servo Signal  → GPIO15
 ```
-
+ 
 The exact pins may differ depending on the ESP32 board.
 
 ---
@@ -235,7 +235,7 @@ Connect:
   ↓
 Potentiometer
   │
-  ├────────→ GPIO34
+  ├────────→ GPIO36
   │
   ↓
  GND
@@ -252,7 +252,7 @@ Rotating the potentiometer changes the voltage applied to GPIO34.
 Define:
 
 ```cpp
-#define SENSOR_PIN 34
+#define SENSOR_PIN 36
 ```
 
 Read the ADC:
@@ -391,7 +391,7 @@ Serial.println(
 ```cpp
 #include <Arduino.h>
 
-#define SENSOR_PIN 34
+#define SENSOR_PIN 36
 
 void setup() {
 
@@ -560,7 +560,7 @@ The ESP32 provides hardware PWM peripherals, commonly exposed through the **LEDC
 Connect:
 
 ```text
-GPIO25
+GPIO2
   │
   ↓
 220–330 Ω
@@ -761,8 +761,8 @@ $$
 ```cpp
 #include <Arduino.h>
 
-#define SENSOR_PIN 34
-#define LED_PIN    25
+#define SENSOR_PIN 36
+#define LED_PIN    2
 
 const int pwmFrequency = 5000;
 const int pwmResolution = 8;
@@ -1177,8 +1177,8 @@ Using a compatible servo library:
 ```cpp
 #include <ESP32Servo.h>
 
-#define SENSOR_PIN 34
-#define SERVO_PIN  26
+#define SENSOR_PIN 36
+#define SERVO_PIN  15
 
 Servo myServo;
 
@@ -1362,9 +1362,7 @@ This equation is fundamental for sensor-to-actuator mapping.
 The approximate sensor-to-output response time is:
 
 $$
-T_{\mathrm{response}}
-= t_{\mathrm{output}}
-- t_{\mathrm{input}}.
+T_{\mathrm{response}} = t_{\mathrm{output} - t_{\mathrm{input}}.
 $$
 
 The total response can include:
