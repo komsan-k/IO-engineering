@@ -64,14 +64,6 @@ public:
 | `readNormalized()` | Convert ADC reading to normalized light level | 0.0–1.0 |
 | `readLUX()` | Estimate illumination level | lux |
 
-The normalized value can be calculated as:
-
-$$
-L_{\text{norm}} =
-\frac{\text{ADC}_{\text{raw}}}{4095}
-$$
-
-> **Note:** `readLUX()` should use a suitable calibration or LDR resistance-to-lux model. The calculated lux value is an estimate unless the LDR has been calibrated against a reference lux meter.
 
 ---
 
