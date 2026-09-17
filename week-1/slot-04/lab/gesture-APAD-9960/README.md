@@ -292,7 +292,7 @@ void loop() {
 
   delay(50);
 }
-
+```
 ---
 
 ## 8. Experiment 2 — Gesture-Controlled LEDs
