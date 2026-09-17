@@ -1642,7 +1642,29 @@ Test sensor update intervals of:
 and discuss the effect on system response.
 
 ---
+## 46. Checkpoint Questions
 
+1. What is an **ADC**, and why is it required for reading analog sensors?
+
+2. What is **ADC resolution**, and how many ideal quantization levels are available with a **12-bit ADC**?
+
+3. What is **quantization**, and how does it affect the conversion of an analog signal into a digital value?
+
+4. What is **PWM**, and how is the **duty cycle** used to control an output?
+
+5. What do **0%, 50%, and 100% duty cycles** represent in a PWM signal?
+
+6. How many output levels are available with an **8-bit PWM resolution**?
+
+7. How can a **12-bit ADC value** be mapped to an **8-bit PWM value** for controlling LED brightness?
+
+8. Why may ADC measurements fluctuate, and how can a **moving-average filter** reduce these fluctuations?
+
+9. How can an ADC sensor input be mapped to control an actuator such as an **LED or servo motor**?
+
+10. How does the **sampling interval** affect the responsiveness of a sensor-to-actuator embedded control system?
+
+<!---
 ## 46. Checkpoint Questions
 
 1. What does ADC stand for?
@@ -1675,7 +1697,7 @@ and discuss the effect on system response.
 28. Why must the ESP32 and external servo supply share a common ground?
 29. What is sensor-to-actuator mapping?
 30. How does sampling interval affect control-system responsiveness?
-
+--->
 ---
 
 ## 47. Expected Results
