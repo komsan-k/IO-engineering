@@ -1,4 +1,4 @@
-# ESP32 FreeRTOS Lab Series
+# ESP32 FreeRTOS Series
 
 ## Task, Queue, Mutex, Semaphore, Interrupt, and Smart Lighting
 
@@ -270,7 +270,7 @@ void sensorTask(void *parameter) {
     LDRData data;
     data.sample = ++sample;
     data.raw = analogRead(LDR_PIN);
-    data.normalized = data.raw / 4095.0f;
+    data.normalized = 1 - (data.raw / 4095.0f);
     data.timestampMs = millis();
 
     if (xQueueSend(ldrQueue, &data, pdMS_TO_TICKS(100)) != pdPASS) {
@@ -876,24 +876,4 @@ Extend the program with the following features:
 | Condition variable | Semaphore, notification, or event group |
 | Circular buffer | Queue |
 
-# Submission Requirements
 
-For each lab, submit:
-
-1. Arduino source code.
-2. Circuit photograph or wiring diagram.
-3. Serial Monitor output.
-4. Short explanation of the task structure.
-5. Answers to the checkpoint questions.
-6. A brief discussion of problems encountered and how they were corrected.
-
-# Safety and Good Practice
-
-- Disconnect power before changing wiring.
-- Keep ESP32 GPIO voltages within the board specification.
-- Always use a current-limiting resistor with an LED.
-- Check every task, queue, mutex, and semaphore creation result.
-- Avoid long processing, serial output, and delays inside an ISR.
-- Keep critical sections short.
-- Give every continuously running task a blocking or yielding point.
-- Calibrate thresholds using measurements from the actual circuit.
