@@ -24,7 +24,7 @@ Course consists of **16 time slots**, each time slots **3 hours**.
 | **Total**         | **100** |
 
 ---
-## IOE Class — Wi-Fi Connection
+### IOE Class — Wi-Fi Connection
 
 Please connect to the following Wi-Fi network for the IoT laboratory exercises:
 
