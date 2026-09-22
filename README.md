@@ -24,14 +24,12 @@ Course consists of **16 time slots**, each time slots **3 hours**.
 | **Total**         | **100** |
 
 ---
-```markdown
 ## IOE Class — Wi-Fi Connection
 
 Please connect to the following Wi-Fi network for the IoT laboratory exercises:
 
 - **SSID:** `coc-iot-lab`
 - **Password:** `computing`
-```
 ---
 ## 📚 Teaching Book
 A teaching textbook
