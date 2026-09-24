@@ -372,6 +372,9 @@ A **Mutex (Mutual Exclusion)** protects a shared resource from being accessed by
                   /        \
              Task 1       Task 2
 
+
+```
+
 ```cpp
 #include <Arduino.h>
 
