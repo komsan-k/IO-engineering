@@ -1,1019 +1,36 @@
-
-# Practical Series: ESP32 FreeRTOS Programming with an LDR Sensor
+# Practical Series: pthread Programming with an LDR Sensor
 
 ## Overview
 
-This 5-lab series introduces **concurrent embedded programming on the ESP32 using Arduino and FreeRTOS**, with an **LDR (Light Dependent Resistor)** as the common sensor theme. The series progresses from a basic FreeRTOS task to multiple tasks, shared-data race conditions, mutex synchronization, and a producer-consumer sensor-control system.
+This 5-lab series introduces **POSIX Threads (`pthread`)** using an **LDR (Light Dependent Resistor)** as the common sensor theme. The labs progress from basic thread creation to multiple threads, shared-data race conditions, mutex synchronization, and a producer-consumer sensor-control system.
 
-All example programs are designed for the **Arduino IDE with an ESP32 board**.
+Because a normal Linux computer does not have a directly accessible LDR/ADC input, the LDR measurements are **simulated in software**. The same concurrent-programming concepts can later be transferred to an ESP32 using FreeRTOS.
 
-### Suggested Hardware
-
-- ESP32 development board
-- LDR sensor
-- 10 kΩ resistor for the LDR voltage divider
-- LED
-- 220–330 Ω LED resistor
-- Breadboard and jumper wires
-
-### Pin Configuration
-
-```cpp
-const int LDR_PIN = 36;   // ADC input
-const int LED_PIN = 2;    // LED output
-```
-
-> **Note:** GPIO 34 is input-only and is suitable for the LDR ADC input. If your ESP32 board uses different available pins, modify the definitions accordingly.
-
-### Learning Path
-
-```text
-Lab 1: Basic FreeRTOS Task
-        ↓
-Lab 2: Multiple Tasks
-        ↓
-Lab 3: Shared Data and Race Condition
-        ↓
-Lab 4: Mutex Synchronization
-        ↓
-Lab 5: Producer–Consumer with FreeRTOS Queue
-```
-
-### Target Architecture
-
-```text
-              LDR Sensor
-                  │
-                  ▼
-          ┌───────────────┐
-          │  Sensor Task  │
-          │   Producer    │
-          └───────┬───────┘
-                  │
-            LDR measurement
-                  │
-                  ▼
-          Shared Data / Queue
-                  │
-                  ▼
-          ┌───────────────┐
-          │ Control Task  │
-          │   Consumer    │
-          └───────┬───────┘
-                  │
-               Decision
-                  │
-                  ▼
-                 LED
-```
-
----
-
-# Lab 1 — Basic FreeRTOS Task: LDR Sensor
-
-## Objective
-
-Understand how to create and execute a **FreeRTOS task** on the ESP32 using the Arduino framework.
-
-Unlike the original PC-based pthread example, the ESP32 can read the LDR directly through its ADC.
-
-## Example Program
-
-```cpp
-#include <Arduino.h>
-
-const int LDR_PIN = 34;
-
-void ldrTask(void *parameter)
-{
-    for (int i = 0; i < 10; i++)
-    {
-        int ldrRaw = analogRead(LDR_PIN);
-
-        Serial.print("LDR RAW = ");
-        Serial.println(ldrRaw);
-
-        vTaskDelay(pdMS_TO_TICKS(1000));
-    }
-
-    Serial.println("LDR task completed.");
-
-    vTaskDelete(NULL);
-}
-
-void setup()
-{
-    Serial.begin(115200);
-    pinMode(LDR_PIN, INPUT);
-
-    xTaskCreate(
-        ldrTask,          // Task function
-        "LDR Task",       // Task name
-        2048,             // Stack size
-        NULL,             // Parameter
-        1,                // Priority
-        NULL              // Task handle
-    );
-}
-
-void loop()
-{
-    // FreeRTOS task performs the work.
-    vTaskDelay(pdMS_TO_TICKS(1000));
-}
-```
-
-## Upload and Run
-
-1. Connect the ESP32 to the computer.
-2. Open the program in the Arduino IDE.
-3. Select the correct ESP32 board and serial port.
-4. Upload the program.
-5. Open **Serial Monitor** at **115200 baud**.
-
-Example output:
-
-```text
-LDR RAW = 3250
-LDR RAW = 2780
-LDR RAW = 1420
-LDR RAW = 850
-...
-LDR task completed.
-```
-
-## Assignment
-
-Modify the program so that the LDR task reports both the raw ADC value and normalized value:
-
-$$
-LDR_{\mathrm{norm}} =
-\frac{LDR_{\mathrm{raw}}}{4095}
-$$
-
-Example:
-
-```cpp
-float normalized = ldrRaw / 4095.0;
-
-Serial.print("RAW = ");
-Serial.print(ldrRaw);
-Serial.print(" | Normalized = ");
-Serial.println(normalized, 3);
-```
-
----
-
-# Lab 2 — Multiple FreeRTOS Tasks: LDR + LED
-
-## Objective
-
-Understand concurrent execution using multiple FreeRTOS tasks on the ESP32.
-
-Create two tasks:
-
-```text
-Task 1 → Read LDR
-Task 2 → Control LED
-```
-
-## Example Program
-
-```cpp
-#include <Arduino.h>
-
-const int LDR_PIN = 34;
-const int LED_PIN = 2;
-
-volatile int ldrValue = 0;
-
-void ldrTask(void *parameter)
-{
-    while (true)
-    {
-        ldrValue = analogRead(LDR_PIN);
-
-        Serial.print("LDR: ");
-        Serial.println(ldrValue);
-
-        vTaskDelay(pdMS_TO_TICKS(1000));
-    }
-}
-
-void ledTask(void *parameter)
-{
-    while (true)
-    {
-        if (ldrValue < 1500)
-        {
-            digitalWrite(LED_PIN, HIGH);
-            Serial.println("LED: ON");
-        }
-        else
-        {
-            digitalWrite(LED_PIN, LOW);
-            Serial.println("LED: OFF");
-        }
-
-        vTaskDelay(pdMS_TO_TICKS(1000));
-    }
-}
-
-void setup()
-{
-    Serial.begin(115200);
-
-    pinMode(LDR_PIN, INPUT);
-    pinMode(LED_PIN, OUTPUT);
-
-    xTaskCreate(
-        ldrTask,
-        "LDR Task",
-        2048,
-        NULL,
-        1,
-        NULL
-    );
-
-    xTaskCreate(
-        ledTask,
-        "LED Task",
-        2048,
-        NULL,
-        1,
-        NULL
-    );
-}
-
-void loop()
-{
-    vTaskDelay(pdMS_TO_TICKS(1000));
-}
-```
-
-## Control Logic
-
-$$
-LED =
-\begin{cases}
-ON, & LDR < LDR_{\mathrm{threshold}} \\
-OFF, & LDR \geq LDR_{\mathrm{threshold}}
-\end{cases}
-$$
-
-## Assignment
-
-Add three illumination levels:
-
-```text
-LDR < 1000          → DARK
-1000 ≤ LDR < 3000   → NORMAL
-LDR ≥ 3000          → BRIGHT
-```
-
-Display both the sensor value and environmental state.
-
----
-
-# Lab 3 — Shared Data and Race Conditions
-
-## Objective
-
-Understand problems caused by **unsynchronized shared data** between ESP32 FreeRTOS tasks.
-
-Instead of sharing only one variable, define:
-
-```cpp
-typedef struct {
-    int raw;
-    float normalized;
-    int sampleNumber;
-} LDRData;
-```
-
-Both tasks access the same structure:
-
-```text
-                 Shared LDRData
-                ┌──────────────┐
-Sensor Task  →  │ raw          │  ← Control Task
-                │ normalized   │
-                │ sampleNumber │
-                └──────────────┘
-```
-
-## Example Program
-
-```cpp
-#include <Arduino.h>
-
-const int LDR_PIN = 34;
-
-typedef struct {
-    int raw;
-    float normalized;
-    int sampleNumber;
-} LDRData;
-
-LDRData data = {0, 0.0, 0};
-
-void sensorTask(void *parameter)
-{
-    while (true)
-    {
-        // Intentionally not protected by a mutex.
-        data.raw = analogRead(LDR_PIN);
-
-        // Small delays make inconsistent reads easier to observe.
-        vTaskDelay(pdMS_TO_TICKS(1));
-
-        data.normalized = data.raw / 4095.0;
-
-        vTaskDelay(pdMS_TO_TICKS(1));
-
-        data.sampleNumber++;
-
-        vTaskDelay(pdMS_TO_TICKS(20));
-    }
-}
-
-void controlTask(void *parameter)
-{
-    while (true)
-    {
-        // The task may read while sensorTask is updating data.
-        Serial.print("Sample ");
-        Serial.print(data.sampleNumber);
-        Serial.print(": RAW=");
-        Serial.print(data.raw);
-        Serial.print(", Normalized=");
-        Serial.println(data.normalized, 3);
-
-        vTaskDelay(pdMS_TO_TICKS(10));
-    }
-}
-
-void setup()
-{
-    Serial.begin(115200);
-    pinMode(LDR_PIN, INPUT);
-
-    xTaskCreate(
-        sensorTask,
-        "Sensor Task",
-        2048,
-        NULL,
-        1,
-        NULL
-    );
-
-    xTaskCreate(
-        controlTask,
-        "Control Task",
-        2048,
-        NULL,
-        1,
-        NULL
-    );
-}
-
-void loop()
-{
-    vTaskDelay(pdMS_TO_TICKS(1000));
-}
-```
-
-At this stage, **do not use a mutex**.
-
-The consumer may access the structure while the producer is updating it:
-
-```text
-Sensor Task                  Control Task
-
-Write raw
-    ↓
-Write normalized  ←--------- Read raw
-    ↓
-Write sampleNumber ---------- Read normalized
-```
-
-This can produce inconsistent measurements and demonstrates a **race condition**.
-
-## Assignment
-
-1. Increase the sampling rate.
-2. Observe the Serial Monitor output.
-3. Explain the term **race condition**.
-4. Identify the program's **critical section**.
-5. Explain why shared sensor data should be protected.
-
----
-
-# Lab 4 — LDR Shared Data with FreeRTOS Mutex
-
-## Objective
-
-Protect shared LDR sensor data using a **FreeRTOS mutex**.
-
-A mutex on the ESP32 can be created using:
-
-```cpp
-SemaphoreHandle_t ldrMutex;
-
-ldrMutex = xSemaphoreCreateMutex();
-```
-
-The shared data should only be accessed after the task successfully takes the mutex.
-
-## Complete Example Program
-
-```cpp
-#include <Arduino.h>
-
-const int LDR_PIN = 34;
-
-typedef struct {
-    int raw;
-    float normalized;
-    int sampleNumber;
-    String ldrState;
-} LDRData;
-
-LDRData data = {0, 0.0, 0, "UNKNOWN"};
-
-SemaphoreHandle_t ldrMutex;
-
-void sensorTask(void *parameter)
-{
-    while (true)
-    {
-        int raw = analogRead(LDR_PIN);
-        float normalized = raw / 4095.0;
-
-        String state;
-
-        if (raw < 1000)
-            state = "DARK";
-        else if (raw < 3000)
-            state = "NORMAL";
-        else
-            state = "BRIGHT";
-
-        if (xSemaphoreTake(ldrMutex, portMAX_DELAY) == pdTRUE)
-        {
-            data.raw = raw;
-            data.normalized = normalized;
-            data.sampleNumber++;
-            data.ldrState = state;
-
-            xSemaphoreGive(ldrMutex);
-        }
-
-        vTaskDelay(pdMS_TO_TICKS(500));
-    }
-}
-
-void controlTask(void *parameter)
-{
-    while (true)
-    {
-        int raw;
-        float normalized;
-        int sample;
-        String state;
-
-        if (xSemaphoreTake(ldrMutex, portMAX_DELAY) == pdTRUE)
-        {
-            raw = data.raw;
-            normalized = data.normalized;
-            sample = data.sampleNumber;
-            state = data.ldrState;
-
-            xSemaphoreGive(ldrMutex);
-        }
-
-        Serial.print("Sample ");
-        Serial.print(sample);
-        Serial.print(": RAW=");
-        Serial.print(raw);
-        Serial.print(", Normalized=");
-        Serial.print(normalized, 3);
-        Serial.print(", State=");
-        Serial.println(state);
-
-        vTaskDelay(pdMS_TO_TICKS(500));
-    }
-}
-
-void setup()
-{
-    Serial.begin(115200);
-    pinMode(LDR_PIN, INPUT);
-
-    ldrMutex = xSemaphoreCreateMutex();
-
-    if (ldrMutex == NULL)
-    {
-        Serial.println("Failed to create mutex.");
-        while (true) {
-            delay(1000);
-        }
-    }
-
-    xTaskCreate(
-        sensorTask,
-        "Sensor Task",
-        2048,
-        NULL,
-        1,
-        NULL
-    );
-
-    xTaskCreate(
-        controlTask,
-        "Control Task",
-        3072,
-        NULL,
-        1,
-        NULL
-    );
-}
-
-void loop()
-{
-    vTaskDelay(pdMS_TO_TICKS(1000));
-}
-```
-
-## Architecture
-
-```text
-Sensor Task
-    │
-    ▼
-   TAKE
-    │
-    ▼
-┌──────────────┐
-│ Shared LDR   │
-│    Data      │
-└──────────────┘
-    ▲
-    │
-   TAKE
-    ▲
-    │
-Control Task
-
- FreeRTOS Mutex
-```
-
-## Assignment
-
-Implement a complete thread-safe LDR monitoring program.
-
-Use an `ldrState` value representing:
-
-```text
-DARK
-NORMAL
-BRIGHT
-```
-
-Compare the behavior and architecture:
-
-- Without mutex
-- With mutex
-
-Explain how the mutex protects the **critical section**.
-
----
-
-# Lab 5 — Producer–Consumer LDR Monitoring System
-
-## Objective
-
-Build a realistic concurrent embedded sensor-control architecture using an **ESP32 FreeRTOS Queue**.
-
-Instead of sharing a single measurement, the Sensor Task creates measurements and sends them to a queue. The Control Task receives measurements from the queue and controls the LED.
-
-```text
-                    ┌─────────────┐
-LDR Sensor ────────►│ Sensor Task │
-                    │  Producer   │
-                    └──────┬──────┘
-                           │
-                           ▼
-                    ┌─────────────┐
-                    │FreeRTOS Queue│
-                    │ [ ][ ][ ][ ]│
-                    └──────┬──────┘
-                           │
-                           ▼
-                    ┌─────────────┐
-                    │Control Task │
-                    │  Consumer   │
-                    └──────┬──────┘
-                           │
-                           ▼
-                          LED
-```
-
-## Sensor Data Structure
-
-```cpp
-typedef struct {
-    int sample;
-    int raw;
-    float normalized;
-} LDRData;
-```
-
-## Create the Queue
-
-```cpp
-QueueHandle_t ldrQueue;
-
-ldrQueue = xQueueCreate(10, sizeof(LDRData));
-```
-
-The FreeRTOS queue already provides safe synchronization between producer and consumer tasks, so a separate mutex is not required for the queue itself.
-
-## Producer Operation
-
-```text
-Read LDR
-   ↓
-Normalize
-   ↓
-Create LDRData
-   ↓
-Send to Queue
-```
-
-Example:
-
-```cpp
-LDRData measurement;
-
-measurement.sample = sampleNumber++;
-measurement.raw = analogRead(LDR_PIN);
-measurement.normalized = measurement.raw / 4095.0;
-
-xQueueSend(ldrQueue, &measurement, portMAX_DELAY);
-```
-
-## Consumer Operation
-
-```text
-Receive from Queue
-       ↓
-Analyze illumination
-       ↓
-Control LED
-```
-
-Example:
-
-```cpp
-LDRData measurement;
-
-if (xQueueReceive(ldrQueue, &measurement, portMAX_DELAY) == pdTRUE)
-{
-    // Process measurement.
-}
-```
-
----
-
-# Final Lab 5 Assignment — ESP32 LDR-Based Smart Lighting System
-
-Develop an **ESP32 LDR-Based Smart Lighting System** consisting of three FreeRTOS tasks:
-
-```text
-              ┌──────────────┐
-              │ Sensor Task  │
-              │   Read LDR   │
-              └──────┬───────┘
-                     │
-                     ▼
-                   Queue
-                     │
-              ┌──────▼───────┐
-              │ Control Task │
-              │   Decision   │
-              └──────┬───────┘
-                     │
-                     ▼
-                    LED
-
-              ┌──────────────┐
-              │ Logger Task  │
-              │ Display Data │
-              └──────────────┘
-```
-
-## Required Behavior
-
-```text
-LDR < 1000
-→ DARK
-→ LED ON
-
-1000 ≤ LDR < 3000
-→ NORMAL
-→ LED DIM
-
-LDR ≥ 3000
-→ BRIGHT
-→ LED OFF
-```
-
-## Complete Arduino ESP32 Example
-
-```cpp
-#include <Arduino.h>
-
-const int LDR_PIN = 34;
-const int LED_PIN = 2;
-
-// PWM settings
-const int PWM_FREQ = 5000;
-const int PWM_RESOLUTION = 8;
-
-typedef struct {
-    int sample;
-    int raw;
-    float normalized;
-} LDRData;
-
-typedef struct {
-    LDRData sensor;
-    int ledDuty;
-    char state[10];
-} LogData;
-
-QueueHandle_t sensorQueue;
-QueueHandle_t logQueue;
-
-void sensorTask(void *parameter)
-{
-    int sampleNumber = 1;
-
-    while (true)
-    {
-        LDRData measurement;
-
-        measurement.sample = sampleNumber++;
-        measurement.raw = analogRead(LDR_PIN);
-        measurement.normalized = measurement.raw / 4095.0;
-
-        xQueueSend(sensorQueue, &measurement, portMAX_DELAY);
-
-        vTaskDelay(pdMS_TO_TICKS(500));
-    }
-}
-
-void controlTask(void *parameter)
-{
-    LDRData measurement;
-
-    while (true)
-    {
-        if (xQueueReceive(sensorQueue, &measurement, portMAX_DELAY) == pdTRUE)
-        {
-            LogData logData;
-            logData.sensor = measurement;
-
-            if (measurement.raw < 1000)
-            {
-                strcpy(logData.state, "DARK");
-                logData.ledDuty = 255;
-            }
-            else if (measurement.raw < 3000)
-            {
-                strcpy(logData.state, "NORMAL");
-                logData.ledDuty = 128;
-            }
-            else
-            {
-                strcpy(logData.state, "BRIGHT");
-                logData.ledDuty = 0;
-            }
-
-            // Arduino-ESP32 LEDC API
-            ledcWrite(LED_PIN, logData.ledDuty);
-
-            xQueueSend(logQueue, &logData, portMAX_DELAY);
-        }
-    }
-}
-
-void loggerTask(void *parameter)
-{
-    LogData logData;
-
-    while (true)
-    {
-        if (xQueueReceive(logQueue, &logData, portMAX_DELAY) == pdTRUE)
-        {
-            Serial.printf(
-                "[%03d] LDR=%d  Norm=%.2f  State=%-6s  PWM=%d\n",
-                logData.sensor.sample,
-                logData.sensor.raw,
-                logData.sensor.normalized,
-                logData.state,
-                logData.ledDuty
-            );
-        }
-    }
-}
-
-void setup()
-{
-    Serial.begin(115200);
-
-    pinMode(LDR_PIN, INPUT);
-
-    // Configure LED PWM using the current Arduino-ESP32 LEDC API.
-    if (!ledcAttach(LED_PIN, PWM_FREQ, PWM_RESOLUTION))
-    {
-        Serial.println("Failed to configure LED PWM.");
-        while (true) {
-            delay(1000);
-        }
-    }
-
-    sensorQueue = xQueueCreate(10, sizeof(LDRData));
-    logQueue = xQueueCreate(10, sizeof(LogData));
-
-    if (sensorQueue == NULL || logQueue == NULL)
-    {
-        Serial.println("Failed to create queue.");
-        while (true) {
-            delay(1000);
-        }
-    }
-
-    xTaskCreate(
-        sensorTask,
-        "Sensor Task",
-        2048,
-        NULL,
-        2,
-        NULL
-    );
-
-    xTaskCreate(
-        controlTask,
-        "Control Task",
-        3072,
-        NULL,
-        2,
-        NULL
-    );
-
-    xTaskCreate(
-        loggerTask,
-        "Logger Task",
-        3072,
-        NULL,
-        1,
-        NULL
-    );
-}
-
-void loop()
-{
-    vTaskDelay(pdMS_TO_TICKS(1000));
-}
-```
-
-## Example Serial Output
-
-```text
-[001] LDR=823   Norm=0.20  State=DARK    PWM=255
-[002] LDR=1562  Norm=0.38  State=NORMAL  PWM=128
-[003] LDR=3468  Norm=0.85  State=BRIGHT  PWM=0
-```
-
-> Depending on how the LDR voltage divider is wired, the ADC value may increase or decrease with light intensity. If your readings behave in the opposite direction, reverse the threshold logic.
-
----
-
-# ESP32 FreeRTOS Concepts Used in This Lab Series
-
-| Concept | Arduino ESP32 / FreeRTOS |
-|---|---|
-| Create a concurrent task | `xTaskCreate()` |
-| Delete current task | `vTaskDelete(NULL)` |
-| Task delay | `vTaskDelay()` |
-| Convert milliseconds to ticks | `pdMS_TO_TICKS()` |
-| Shared-data mutex | `xSemaphoreCreateMutex()` |
-| Lock mutex | `xSemaphoreTake()` |
-| Unlock mutex | `xSemaphoreGive()` |
-| Create queue | `xQueueCreate()` |
-| Send queue item | `xQueueSend()` |
-| Receive queue item | `xQueueReceive()` |
-| Read ESP32 ADC | `analogRead()` |
-| PWM output | `ledcAttach()` / `ledcWrite()` |
-| Debug/monitor | `Serial.print()` / `Serial.printf()` |
-
-## Learning Progression
-
-```text
-ESP32 Embedded Programming
-            ↓
-       FreeRTOS Task
-            ↓
-      Multiple Tasks
-            ↓
-      Shared Resources
-            ↓
-       Race Condition
-            ↓
-           Mutex
-            ↓
-    Producer–Consumer
-            ↓
-     FreeRTOS Queue
-            ↓
- LDR Smart Lighting System
-```
-
----
-
-# Suggested Extension — ESP32 FreeRTOS LDR Smart Lighting System
-
-Extend the final lab using:
-
-- LDR sensor
-- ESP32 ADC
-- LED
-- PWM brightness control
-- Multiple FreeRTOS tasks
-- Mutex/Semaphore
-- FreeRTOS Queue
-- Serial monitoring
-
-Possible extensions include:
-
-1. Replace threshold-based LED control with continuous ADC-to-PWM mapping.
-2. Add a push button to enable or disable automatic lighting.
-3. Add a second sensor task.
-4. Add Wi-Fi and MQTT for remote monitoring.
-5. Publish LDR readings and LED state to an IoT dashboard.
-
-
-<!---
-# Pratical Series: pthread Programming with an LDR Sensor
-
-## Overview
-
-This 5-lab series introduces **POSIX Threads (`pthread`)** using an **LDR (Light Dependent Resistor)** as the common sensor theme. The series progresses from basic thread creation to synchronization and a producer-consumer sensor-control system.
-
-### Learning Path
+## Learning Path
 
 ```text
 Lab 1: Basic pthread
         ↓
 Lab 2: Multiple Threads
         ↓
-Lab 3: Race Condition
+Lab 3: Shared Data and Race Condition
         ↓
 Lab 4: Mutex Synchronization
         ↓
 Lab 5: Producer–Consumer System
-        ↓
-ESP32 + FreeRTOS
 ```
 
-### Target Architecture
+## Requirements
 
-```text
-              LDR Sensor
-                  │
-                  ▼
-          ┌───────────────┐
-          │ Sensor Thread │
-          │   Producer    │
-          └───────┬───────┘
-                  │
-           LDR measurement
-                  │
-                  ▼
-          Shared Data / Queue
-                  │
-                  ▼
-          ┌───────────────┐
-          │ Control Thread│
-          │   Consumer    │
-          └───────┬───────┘
-                  │
-             Decision
-                  │
-                  ▼
-                LED
+- Linux or Linux-compatible environment
+- GCC compiler
+- POSIX Threads library (`pthread`)
+- Terminal
+
+Compile a pthread program using:
+
+```bash
+gcc program.c -o program -pthread
 ```
 
 ---
@@ -1022,9 +39,14 @@ ESP32 + FreeRTOS
 
 ## Objective
 
-Understand how to create, execute, and terminate a pthread.
+Understand how to create, execute, wait for, and terminate a POSIX thread.
 
-Since a normal Linux PC does not have an ADC connected directly, the LDR ADC reading is initially simulated.
+## Key Functions
+
+```c
+pthread_create()
+pthread_join()
+```
 
 ## Example Program
 
@@ -1033,6 +55,7 @@ Since a normal Linux PC does not have an ADC connected directly, the LDR ADC rea
 #include <stdlib.h>
 #include <pthread.h>
 #include <unistd.h>
+#include <time.h>
 
 void *ldrTask(void *arg)
 {
@@ -1048,11 +71,17 @@ void *ldrTask(void *arg)
     return NULL;
 }
 
-int main()
+int main(void)
 {
     pthread_t ldrThread;
 
-    pthread_create(&ldrThread, NULL, ldrTask, NULL);
+    srand(time(NULL));
+
+    if (pthread_create(&ldrThread, NULL, ldrTask, NULL) != 0)
+    {
+        perror("pthread_create");
+        return 1;
+    }
 
     pthread_join(ldrThread, NULL);
 
@@ -1077,6 +106,7 @@ LDR RAW = 2780
 LDR RAW = 1420
 LDR RAW = 850
 ...
+LDR task completed.
 ```
 
 ## Assignment
@@ -1088,13 +118,22 @@ LDR_{\mathrm{norm}} =
 \frac{LDR_{\mathrm{raw}}}{4095}
 $$
 
+Example:
+
+```c
+float normalized = ldrRaw / 4095.0f;
+
+printf("RAW = %d | Normalized = %.3f\n",
+       ldrRaw, normalized);
+```
+
 ---
 
-# Lab 2 — Multiple Threads: LDR + LED
+# Lab 2 — Multiple pthreads: LDR + LED
 
 ## Objective
 
-Understand concurrent execution using multiple threads.
+Understand concurrent execution using multiple POSIX threads.
 
 Create two threads:
 
@@ -1103,6 +142,8 @@ Thread 1 → Read LDR
 Thread 2 → Control LED
 ```
 
+The LED is simulated using terminal output.
+
 ## Example Program
 
 ```c
@@ -1110,8 +151,9 @@ Thread 2 → Control LED
 #include <stdlib.h>
 #include <pthread.h>
 #include <unistd.h>
+#include <time.h>
 
-int ldrValue = 0;
+volatile int ldrValue = 0;
 
 void *ldrTask(void *arg)
 {
@@ -1142,10 +184,12 @@ void *ledTask(void *arg)
     return NULL;
 }
 
-int main()
+int main(void)
 {
     pthread_t sensorThread;
     pthread_t ledThread;
+
+    srand(time(NULL));
 
     pthread_create(&sensorThread, NULL, ldrTask, NULL);
     pthread_create(&ledThread, NULL, ledTask, NULL);
@@ -1169,15 +213,15 @@ $$
 
 ## Assignment
 
-Add three illumination levels:
+Modify the program to classify three illumination levels:
 
 ```text
-LDR < 1000        → DARK
-1000–2999         → NORMAL
-LDR ≥ 3000        → BRIGHT
+LDR < 1000          → DARK
+1000 ≤ LDR < 3000   → NORMAL
+LDR ≥ 3000          → BRIGHT
 ```
 
-Display both the sensor value and environmental state.
+Display both the simulated LDR value and environmental state.
 
 ---
 
@@ -1185,9 +229,9 @@ Display both the sensor value and environmental state.
 
 ## Objective
 
-Understand problems caused by unsynchronized shared data.
+Understand problems caused by **unsynchronized shared data** between pthreads.
 
-Instead of sharing only one variable, define:
+Define a structure containing several related sensor values:
 
 ```c
 typedef struct {
@@ -1208,89 +252,230 @@ Sensor Thread → │ raw          │ ← Control Thread
                 └──────────────┘
 ```
 
-## Sensor Thread Operation
+## Example Program
 
 ```c
-data.raw = rand() % 4096;
-data.normalized = data.raw / 4095.0;
-data.sampleNumber++;
-```
+#include <stdio.h>
+#include <stdlib.h>
+#include <pthread.h>
+#include <unistd.h>
+#include <time.h>
 
-## Control Thread Operation
+typedef struct {
+    int raw;
+    float normalized;
+    int sampleNumber;
+} LDRData;
 
-```c
-printf("Sample %d: RAW=%d, Normalized=%.2f\n",
-       data.sampleNumber,
-       data.raw,
-       data.normalized);
+LDRData data = {0, 0.0f, 0};
+
+void *sensorTask(void *arg)
+{
+    while (1)
+    {
+        /*
+         * Intentionally not protected.
+         * The delays make inconsistent reads easier to observe.
+         */
+        data.raw = rand() % 4096;
+
+        usleep(1000);
+
+        data.normalized = data.raw / 4095.0f;
+
+        usleep(1000);
+
+        data.sampleNumber++;
+
+        usleep(20000);
+    }
+
+    return NULL;
+}
+
+void *controlTask(void *arg)
+{
+    while (1)
+    {
+        printf("Sample %d: RAW=%d, Normalized=%.3f\n",
+               data.sampleNumber,
+               data.raw,
+               data.normalized);
+
+        usleep(10000);
+    }
+
+    return NULL;
+}
+
+int main(void)
+{
+    pthread_t sensorThread;
+    pthread_t controlThread;
+
+    srand(time(NULL));
+
+    pthread_create(&sensorThread, NULL, sensorTask, NULL);
+    pthread_create(&controlThread, NULL, controlTask, NULL);
+
+    pthread_join(sensorThread, NULL);
+    pthread_join(controlThread, NULL);
+
+    return 0;
+}
 ```
 
 At this stage, **do not use a mutex**.
 
-The consumer may read the shared structure while the producer is updating it:
+The consumer may read the structure while the producer is updating it:
 
 ```text
-Sensor Thread             Control Thread
+Sensor Thread                  Control Thread
 
 Write raw
-      ↓
-Write normalized  ←------- Read raw
-      ↓
-Write sampleNumber ------- Read normalized
+    ↓
+Write normalized  ←----------- Read raw
+    ↓
+Write sampleNumber ------------ Read normalized
 ```
 
-This can result in inconsistent sensor measurements and demonstrates a **race condition**.
+This can produce an inconsistent set of sensor values and demonstrates a **race condition**.
 
 ## Assignment
 
 1. Increase the sampling rate.
-2. Observe the behavior of the program.
+2. Observe the program output.
 3. Explain the term **race condition**.
 4. Identify the program's **critical section**.
 5. Explain why shared sensor data should be protected.
 
 ---
 
-# Lab 4 — LDR Shared Data with Mutex
+# Lab 4 — LDR Shared Data with pthread Mutex
 
 ## Objective
 
 Protect shared sensor data using `pthread_mutex_t`.
 
-Declare the mutex:
+## Mutex Declaration
 
 ```c
 pthread_mutex_t ldrMutex;
 ```
 
-Initialize it:
+Initialize the mutex:
 
 ```c
 pthread_mutex_init(&ldrMutex, NULL);
 ```
 
-## Sensor Thread
+Lock and unlock it using:
 
 ```c
 pthread_mutex_lock(&ldrMutex);
 
-data.raw = rand() % 4096;
-data.normalized = data.raw / 4095.0;
-data.sampleNumber++;
+/* Critical section */
 
 pthread_mutex_unlock(&ldrMutex);
 ```
 
-## Control Thread
+## Complete Example Program
 
 ```c
-pthread_mutex_lock(&ldrMutex);
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+#include <pthread.h>
+#include <unistd.h>
+#include <time.h>
 
-int raw = data.raw;
-float normalized = data.normalized;
-int sample = data.sampleNumber;
+typedef struct {
+    int raw;
+    float normalized;
+    int sampleNumber;
+    char ldrState[10];
+} LDRData;
 
-pthread_mutex_unlock(&ldrMutex);
+LDRData data = {0, 0.0f, 0, "UNKNOWN"};
+
+pthread_mutex_t ldrMutex;
+
+void *sensorTask(void *arg)
+{
+    while (1)
+    {
+        int raw = rand() % 4096;
+        float normalized = raw / 4095.0f;
+        char state[10];
+
+        if (raw < 1000)
+            strcpy(state, "DARK");
+        else if (raw < 3000)
+            strcpy(state, "NORMAL");
+        else
+            strcpy(state, "BRIGHT");
+
+        pthread_mutex_lock(&ldrMutex);
+
+        data.raw = raw;
+        data.normalized = normalized;
+        data.sampleNumber++;
+        strcpy(data.ldrState, state);
+
+        pthread_mutex_unlock(&ldrMutex);
+
+        usleep(500000);
+    }
+
+    return NULL;
+}
+
+void *controlTask(void *arg)
+{
+    while (1)
+    {
+        int raw;
+        float normalized;
+        int sample;
+        char state[10];
+
+        pthread_mutex_lock(&ldrMutex);
+
+        raw = data.raw;
+        normalized = data.normalized;
+        sample = data.sampleNumber;
+        strcpy(state, data.ldrState);
+
+        pthread_mutex_unlock(&ldrMutex);
+
+        printf("Sample %d: RAW=%d, Normalized=%.3f, State=%s\n",
+               sample, raw, normalized, state);
+
+        usleep(500000);
+    }
+
+    return NULL;
+}
+
+int main(void)
+{
+    pthread_t sensorThread;
+    pthread_t controlThread;
+
+    srand(time(NULL));
+
+    pthread_mutex_init(&ldrMutex, NULL);
+
+    pthread_create(&sensorThread, NULL, sensorTask, NULL);
+    pthread_create(&controlThread, NULL, controlTask, NULL);
+
+    pthread_join(sensorThread, NULL);
+    pthread_join(controlThread, NULL);
+
+    pthread_mutex_destroy(&ldrMutex);
+
+    return 0;
+}
 ```
 
 ## Architecture
@@ -1299,7 +484,7 @@ pthread_mutex_unlock(&ldrMutex);
 Sensor Thread
      │
      ▼
-   LOCK
+    LOCK
      │
      ▼
 ┌──────────────┐
@@ -1308,19 +493,19 @@ Sensor Thread
 └──────────────┘
      ▲
      │
-   LOCK
+    LOCK
      ▲
      │
 Control Thread
 
-      Mutex
+ pthread Mutex
 ```
 
 ## Assignment
 
 Implement a complete thread-safe LDR monitoring program.
 
-Add an `ldrState` field representing:
+Use an `ldrState` field representing:
 
 ```text
 DARK
@@ -1328,7 +513,7 @@ NORMAL
 BRIGHT
 ```
 
-Compare the behavior and architecture of the program:
+Compare:
 
 - Without mutex
 - With mutex
@@ -1341,30 +526,30 @@ Explain how the mutex protects the **critical section**.
 
 ## Objective
 
-Build a realistic concurrent embedded sensor-control architecture.
+Build a realistic concurrent sensor-control architecture using **pthread mutexes and condition variables**.
 
-Instead of sharing only one measurement, the sensor thread produces measurements and places them into a buffer.
+The Sensor Thread acts as a producer and places measurements into a circular buffer. The Control Thread acts as a consumer.
 
 ```text
                     ┌─────────────┐
-LDR Sensor ────────►│ Sensor Task │
+Simulated LDR ─────►│Sensor Thread│
                     │  Producer   │
                     └──────┬──────┘
                            │
                            ▼
                     ┌─────────────┐
-                    │ LDR Queue   │
+                    │ LDR Buffer  │
                     │ [ ][ ][ ][ ]│
                     └──────┬──────┘
                            │
                            ▼
                     ┌─────────────┐
-                    │Control Task │
+                    │Control Thread│
                     │  Consumer   │
                     └──────┬──────┘
                            │
                            ▼
-                          LED
+                    Simulated LED
 ```
 
 ## Sensor Data Structure
@@ -1389,19 +574,33 @@ int tail = 0;
 int count = 0;
 ```
 
+## Synchronization Objects
+
+```c
+pthread_mutex_t mutex;
+pthread_cond_t notEmpty;
+pthread_cond_t notFull;
+```
+
+Condition variables allow a thread to sleep efficiently while the queue is empty or full.
+
 ## Producer Operation
 
 ```text
-Read LDR
-   ↓
+Generate LDR value
+       ↓
 Normalize
-   ↓
+       ↓
 Create LDRData
-   ↓
+       ↓
 LOCK
-   ↓
-Insert into Queue
-   ↓
+       ↓
+Wait if Buffer Full
+       ↓
+Insert into Buffer
+       ↓
+Signal notEmpty
+       ↓
 UNLOCK
 ```
 
@@ -1410,59 +609,196 @@ UNLOCK
 ```text
 LOCK
   ↓
-Get measurement
+Wait if Buffer Empty
+  ↓
+Get Measurement
+  ↓
+Signal notFull
   ↓
 UNLOCK
   ↓
-Analyze illumination
+Analyze Illumination
   ↓
-Control LED
+Control Simulated LED
 ```
 
-For a proper producer-consumer implementation, use a mutex and condition variables:
+## Complete pthread Example
 
 ```c
+#include <stdio.h>
+#include <stdlib.h>
+#include <pthread.h>
+#include <unistd.h>
+#include <time.h>
+
+#define BUFFER_SIZE 10
+
+typedef struct {
+    int sample;
+    int raw;
+    float normalized;
+} LDRData;
+
+LDRData buffer[BUFFER_SIZE];
+
+int head = 0;
+int tail = 0;
+int count = 0;
+
 pthread_mutex_t mutex;
 pthread_cond_t notEmpty;
 pthread_cond_t notFull;
+
+void *sensorTask(void *arg)
+{
+    int sampleNumber = 1;
+
+    while (1)
+    {
+        LDRData measurement;
+
+        measurement.sample = sampleNumber++;
+        measurement.raw = rand() % 4096;
+        measurement.normalized = measurement.raw / 4095.0f;
+
+        pthread_mutex_lock(&mutex);
+
+        while (count == BUFFER_SIZE)
+        {
+            pthread_cond_wait(&notFull, &mutex);
+        }
+
+        buffer[head] = measurement;
+        head = (head + 1) % BUFFER_SIZE;
+        count++;
+
+        pthread_cond_signal(&notEmpty);
+
+        pthread_mutex_unlock(&mutex);
+
+        usleep(500000);
+    }
+
+    return NULL;
+}
+
+void *controlTask(void *arg)
+{
+    while (1)
+    {
+        LDRData measurement;
+        const char *state;
+        const char *led;
+
+        pthread_mutex_lock(&mutex);
+
+        while (count == 0)
+        {
+            pthread_cond_wait(&notEmpty, &mutex);
+        }
+
+        measurement = buffer[tail];
+        tail = (tail + 1) % BUFFER_SIZE;
+        count--;
+
+        pthread_cond_signal(&notFull);
+
+        pthread_mutex_unlock(&mutex);
+
+        if (measurement.raw < 1000)
+        {
+            state = "DARK";
+            led = "ON";
+        }
+        else if (measurement.raw < 3000)
+        {
+            state = "NORMAL";
+            led = "DIM";
+        }
+        else
+        {
+            state = "BRIGHT";
+            led = "OFF";
+        }
+
+        printf("[%03d] LDR=%d  Norm=%.2f  State=%-6s  LED=%s\n",
+               measurement.sample,
+               measurement.raw,
+               measurement.normalized,
+               state,
+               led);
+    }
+
+    return NULL;
+}
+
+int main(void)
+{
+    pthread_t sensorThread;
+    pthread_t controlThread;
+
+    srand(time(NULL));
+
+    pthread_mutex_init(&mutex, NULL);
+    pthread_cond_init(&notEmpty, NULL);
+    pthread_cond_init(&notFull, NULL);
+
+    pthread_create(&sensorThread, NULL, sensorTask, NULL);
+    pthread_create(&controlThread, NULL, controlTask, NULL);
+
+    pthread_join(sensorThread, NULL);
+    pthread_join(controlThread, NULL);
+
+    pthread_mutex_destroy(&mutex);
+    pthread_cond_destroy(&notEmpty);
+    pthread_cond_destroy(&notFull);
+
+    return 0;
+}
 ```
 
-Important functions include:
+## Compile and Run
 
-```c
-pthread_cond_wait();
-pthread_cond_signal();
+```bash
+gcc lab5.c -o lab5 -pthread
+./lab5
 ```
 
-Condition variables allow threads to wait efficiently instead of continuously polling the queue.
+Example output:
+
+```text
+[001] LDR=823   Norm=0.20  State=DARK    LED=ON
+[002] LDR=1562  Norm=0.38  State=NORMAL  LED=DIM
+[003] LDR=3468  Norm=0.85  State=BRIGHT  LED=OFF
+```
 
 ---
 
-# Final Lab 5 Assignment — LDR-Based Smart Lighting System
+# Final Lab Assignment — pthread LDR Smart Lighting System
 
-Develop an **LDR-Based Smart Lighting System** consisting of three threads:
+Develop an **LDR-Based Smart Lighting System** consisting of three pthreads:
 
 ```text
-              ┌──────────────┐
-              │ Sensor Thread│
-              │ Read LDR     │
-              └──────┬───────┘
-                     │
-                     ▼
-                  Queue
-                     │
-              ┌──────▼───────┐
-              │Control Thread│
-              │Decision      │
-              └──────┬───────┘
-                     │
-                     ▼
-                    LED
+              ┌───────────────┐
+              │ Sensor Thread │
+              │ Generate LDR  │
+              └───────┬───────┘
+                      │
+                      ▼
+              Circular Buffer
+                      │
+              ┌───────▼───────┐
+              │Control Thread │
+              │   Decision    │
+              └───────┬───────┘
+                      │
+                      ▼
+                 LED State
 
-              ┌──────────────┐
-              │Logger Thread │
-              │Display Data  │
-              └──────────────┘
+              ┌───────────────┐
+              │ Logger Thread │
+              │ Display Data  │
+              └───────────────┘
 ```
 
 ## Required Behavior
@@ -1489,58 +825,80 @@ The logger should produce output similar to:
 [003] LDR=3468  Norm=0.85  State=BRIGHT  LED=OFF
 ```
 
+## Assignment Requirements
+
+The final program should demonstrate:
+
+1. At least **three pthreads**.
+2. A producer-consumer architecture.
+3. A circular buffer.
+4. `pthread_mutex_t` for synchronization.
+5. `pthread_cond_t` for producer-consumer signaling.
+6. Correct protection of critical sections.
+7. Sensor-state classification.
+8. LED-state decision logic.
+9. Clear terminal logging.
+10. Proper thread and synchronization-object cleanup.
+
 ---
 
-# Connection to ESP32 + FreeRTOS
+# pthread Functions Used in This Lab Series
 
-After completing Lab 5, the same architecture can be transferred to an ESP32.
-
-| Linux pthread | ESP32 FreeRTOS |
+| Purpose | pthread / POSIX Function |
 |---|---|
-| `pthread_create()` | `xTaskCreate()` |
-| `pthread_mutex_t` | `SemaphoreHandle_t` |
-| `pthread_mutex_lock()` | `xSemaphoreTake()` |
-| `pthread_mutex_unlock()` | `xSemaphoreGive()` |
-| Circular buffer | `xQueueCreate()` |
-| Producer | Sensor Task |
-| Consumer | Control Task |
-| `sleep()` | `vTaskDelay()` |
+| Create thread | `pthread_create()` |
+| Wait for thread | `pthread_join()` |
+| Exit current thread | `pthread_exit()` / `return NULL` |
+| Create mutex | `pthread_mutex_init()` |
+| Lock mutex | `pthread_mutex_lock()` |
+| Unlock mutex | `pthread_mutex_unlock()` |
+| Destroy mutex | `pthread_mutex_destroy()` |
+| Create condition variable | `pthread_cond_init()` |
+| Wait on condition | `pthread_cond_wait()` |
+| Signal condition | `pthread_cond_signal()` |
+| Destroy condition variable | `pthread_cond_destroy()` |
+| Delay in seconds | `sleep()` |
+| Delay in microseconds | `usleep()` |
 
-The learning progression is therefore:
+## Learning Progression
 
 ```text
 Linux Concurrent Programming
             ↓
-         pthread
+          pthread
             ↓
-     Multiple Threads
+      Multiple Threads
             ↓
       Shared Resources
             ↓
-      Race Conditions
+       Race Condition
             ↓
            Mutex
             ↓
     Producer–Consumer
             ↓
-           Queue
+   Condition Variables
             ↓
-     ESP32 + FreeRTOS
+   Smart Lighting System
 ```
 
-## Suggested Next Lab
+---
 
-**Lab 6 — ESP32 FreeRTOS LDR Smart Lighting System**
+# Connection to ESP32 + FreeRTOS
 
-Transfer the Lab 5 architecture to physical ESP32 hardware using:
+After completing the pthread labs, the same concurrent-programming concepts can be transferred to the ESP32.
 
-- LDR sensor
-- ESP32 ADC
-- LED
-- PWM brightness control
-- FreeRTOS tasks
-- Mutex/Semaphore
-- FreeRTOS Queue
-- Serial monitoring
+| Linux pthread | ESP32 FreeRTOS |
+|---|---|
+| `pthread_create()` | `xTaskCreate()` |
+| `pthread_join()` | Task lifecycle / synchronization |
+| `pthread_mutex_t` | `SemaphoreHandle_t` |
+| `pthread_mutex_lock()` | `xSemaphoreTake()` |
+| `pthread_mutex_unlock()` | `xSemaphoreGive()` |
+| Circular buffer | `xQueueCreate()` |
+| `pthread_cond_wait()` | Queue/semaphore blocking |
+| Producer thread | Sensor task |
+| Consumer thread | Control task |
+| `sleep()` / `usleep()` | `vTaskDelay()` |
 
---->
+This progression allows students to first understand the fundamental concepts of **threads, shared resources, race conditions, mutexes, and producer-consumer synchronization** before implementing similar architectures on an ESP32.
