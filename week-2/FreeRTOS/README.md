@@ -1,3 +1,4 @@
+<!---
 # Practical Series: ESP32 FreeRTOS Programming with an LDR Sensor
 
 ## Overview
@@ -962,3 +963,5 @@ Possible extensions include:
 3. Add a second sensor task.
 4. Add Wi-Fi and MQTT for remote monitoring.
 5. Publish LDR readings and LED state to an IoT dashboard.
+
+--->
