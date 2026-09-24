@@ -28,7 +28,7 @@ The following figure illustrates the hardware interfaces and GPIO assignments of
 <p align="center">
   <b>Figure 1.</b> KidBright Advanced User Board V1.6 interface and GPIO diagram.
 </p>
-------------------------------------------------------------------------
+
 
 ## 2. Main Interface Summary
 
