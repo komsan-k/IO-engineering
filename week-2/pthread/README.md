@@ -146,8 +146,7 @@ Modify the thread so that it reports both the raw ADC value and normalized value
 
 $$
 LDR_{\mathrm{norm}}
-=
-\frac{LDR_{\mathrm{raw}}}{4095}
+= \frac{LDR_{\mathrm{raw}}}{4095}
 $$
 
 Example:
