@@ -1,3 +1,4 @@
+<!---
 # Pratical Series: pthread Programming with an LDR Sensor
 
 ## Overview
@@ -574,3 +575,5 @@ Transfer the Lab 5 architecture to physical ESP32 hardware using:
 - Mutex/Semaphore
 - FreeRTOS Queue
 - Serial monitoring
+
+--->
