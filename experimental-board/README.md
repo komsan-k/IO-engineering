@@ -15,6 +15,19 @@ laboratory work and Arduino/ESP32 programming.
 > board diagram. Always verify the board revision before connecting
 > external hardware.
 
+## KidBright Advanced User Board V1.6
+
+The following figure illustrates the hardware interfaces and GPIO assignments of the **KidBright Advanced User Board V1.6**.
+
+<p align="center">
+  <img src="Diagram_KB_1.6-01.jpg"
+       alt="KidBright Advanced User Board V1.6 Interface Diagram"
+       width="900">
+</p>
+
+<p align="center">
+  <b>Figure 1.</b> KidBright Advanced User Board V1.6 interface and GPIO diagram.
+</p>
 ------------------------------------------------------------------------
 
 ## 2. Main Interface Summary
