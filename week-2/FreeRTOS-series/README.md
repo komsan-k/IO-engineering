@@ -353,7 +353,85 @@ Read value → Add one → Write value
 
 If two tasks execute this sequence concurrently, one update may be lost. A mutex permits only one task at a time to enter the protected critical section.
 
-## Complete Program
+## Complete Program 
+
+### Code-1
+
+```cpp
+#include <Arduino.h>
+
+SemaphoreHandle_t mutex;
+
+int counter = 0;
+
+void task1(void *parameter)
+{
+  while (1)
+  {
+    xSemaphoreTake(mutex, portMAX_DELAY);
+
+    // Critical Section
+    counter++;
+
+    Serial.print("Task 1 : ");
+    Serial.println(counter);
+
+    xSemaphoreGive(mutex);
+
+    vTaskDelay(pdMS_TO_TICKS(500));
+  }
+}
+
+void task2(void *parameter)
+{
+  while (1)
+  {
+    xSemaphoreTake(mutex, portMAX_DELAY);
+
+    // Critical Section
+    counter++;
+
+    Serial.print("Task 2 : ");
+    Serial.println(counter);
+
+    xSemaphoreGive(mutex);
+
+    vTaskDelay(pdMS_TO_TICKS(700));
+  }
+}
+
+void setup()
+{
+  Serial.begin(115200);
+
+  // Create Mutex
+  mutex = xSemaphoreCreateMutex();
+
+  xTaskCreate(
+    task1,
+    "Task 1",
+    2048,
+    NULL,
+    1,
+    NULL
+  );
+
+  xTaskCreate(
+    task2,
+    "Task 2",
+    2048,
+    NULL,
+    1,
+    NULL
+  );
+}
+
+void loop()
+{
+}
+```
+
+### Code-2
 
 ```cpp
 #include <Arduino.h>
