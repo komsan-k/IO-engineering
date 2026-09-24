@@ -361,7 +361,7 @@ If two tasks execute this sequence concurrently, one update may be lost. A mutex
 
 A **Mutex (Mutual Exclusion)** protects a shared resource from being accessed by multiple tasks at the same time.
 
-```text
+
                  Shared Resource
                 +--------------+
                 |   counter    |
@@ -373,7 +373,6 @@ A **Mutex (Mutual Exclusion)** protects a shared resource from being accessed by
              Task 1       Task 2
 
 
-```
 
 ```cpp
 #include <Arduino.h>
