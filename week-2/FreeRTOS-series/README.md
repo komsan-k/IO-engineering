@@ -648,7 +648,7 @@ void loop() {
 ## Activity
 
 1. Test the button and count accepted presses.
-2. Change the debounce interval to 50 ms and then 500 ms.
+2. Change the debounce interval to 100 ms and then 500 ms.
 3. Modify the task so one press starts blinking and the next press stops it.
 4. Explain why `Serial.print()` is not called inside the ISR.
 
