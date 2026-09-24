@@ -19,7 +19,7 @@ All example programs are designed for the **Arduino IDE with an ESP32 board**.
 ### Pin Configuration
 
 ```cpp
-const int LDR_PIN = 34;   // ADC input
+const int LDR_PIN = 36;   // ADC input
 const int LED_PIN = 2;    // LED output
 ```
 
