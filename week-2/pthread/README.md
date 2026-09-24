@@ -35,7 +35,7 @@ Lab 5: Producer–Consumer with pthread
 ## Pin Configuration
 
 ```cpp
-#define LDR_PIN 34
+#define LDR_PIN 36
 #define LED_PIN 2
 ```
 
@@ -78,7 +78,7 @@ pthread_join()
 #include <Arduino.h>
 #include <pthread.h>
 
-#define LDR_PIN 34
+#define LDR_PIN 36
 
 void *ldrThread(void *arg)
 {
