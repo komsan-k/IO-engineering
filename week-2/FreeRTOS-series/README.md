@@ -40,10 +40,10 @@ Lab 6: Complete LDR Smart Lighting System
 
 | Device | ESP32 pin | Notes |
 |---|---:|---|
-| LDR ADC input | GPIO 34 | Input-only ADC pin |
-| PWM LED | GPIO 25 | External LED through resistor |
+| LDR ADC input | GPIO 36 | Input-only ADC pin |
+| PWM LED | GPIO 12 | External LED through resistor |
 | Status LED | GPIO 2 | Built-in LED on many boards |
-| Push button | GPIO 27 | Uses internal pull-up |
+| Push button | GPIO 16 | Uses internal pull-up |
 
 > Check the pinout of the specific ESP32 board before connecting hardware. Never apply more than 3.3 V to an ESP32 GPIO.
 
@@ -230,7 +230,7 @@ void loop() {
 ## LDR Connection
 
 ```text
-3.3 V ── LDR ──┬── GPIO 34
+3.3 V ── LDR ──┬── GPIO 36
                 │
               10 kΩ
                 │
@@ -250,7 +250,7 @@ LDR → Sensor Task → Queue → Display Task → Serial Monitor
 ```cpp
 #include <Arduino.h>
 
-constexpr uint8_t LDR_PIN = 34;
+constexpr uint8_t LDR_PIN = 36;
 
 struct LDRData {
   uint32_t sample;
@@ -470,7 +470,7 @@ $$
 ## Button Connection
 
 ```text
-GPIO 27 ── Push button ── GND
+GPIO 16 ── Push button ── GND
 ```
 
 The program uses `INPUT_PULLUP`, so the released state is HIGH and the pressed state is LOW.
@@ -486,7 +486,7 @@ Button press → ISR → Binary Semaphore → Button Task → Toggle LED
 ```cpp
 #include <Arduino.h>
 
-constexpr uint8_t BUTTON_PIN = 27;
+constexpr uint8_t BUTTON_PIN = 16;
 constexpr uint8_t LED_PIN = 2;
 constexpr uint32_t DEBOUNCE_MS = 200;
 
@@ -579,7 +579,7 @@ void loop() {
 ## LED Connection
 
 ```text
-GPIO 25 ── 220–330 Ω ── LED anode
+GPIO 12 ── 220–330 Ω ── LED anode
                            LED cathode ── GND
 ```
 
@@ -608,8 +608,8 @@ This program uses the pin-based LEDC API provided by Arduino-ESP32 3.x.
 ```cpp
 #include <Arduino.h>
 
-constexpr uint8_t LDR_PIN = 34;
-constexpr uint8_t LED_PIN = 25;
+constexpr uint8_t LDR_PIN = 36;
+constexpr uint8_t LED_PIN = 12;
 
 constexpr uint32_t PWM_FREQUENCY = 5000;
 constexpr uint8_t PWM_RESOLUTION = 8;
