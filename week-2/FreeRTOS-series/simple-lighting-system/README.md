@@ -19,11 +19,11 @@ The system uses three tasks:
   LED           GPIO 12
 
 ``` cpp
-#define LIGHT_THRESHOLD 2000
+#define LIGHT_THRESHOLD ???
 ```
 
--   `LDR < 2000` → **DARK** → LED ON
--   `LDR >= 2000` → **BRIGHT** → LED OFF
+-   `LDR <  ???` → **DARK** → LED ON
+-   `LDR >=  ???` → **BRIGHT** → LED OFF
 
 ## Program Architecture
 
@@ -62,7 +62,7 @@ Serial Monitor
 
 #define LDR_PIN 36
 #define LED_PIN 12
-#define LIGHT_THRESHOLD 2000
+#define LIGHT_THRESHOLD ???
 
 struct LightingData
 {
