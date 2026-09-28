@@ -1010,10 +1010,8 @@ The latency can be defined as:
 
 $$
 T_{\text{HTTP}}
-=
-t_{\text{response}}
--
-t_{\text{request}}
+= t_{\text{response}}
+- t_{\text{request}}
 $$
 
 where:
@@ -1283,8 +1281,7 @@ Calculate the HTTP request success rate:
 
 $$
 \text{Success Rate}
-=
-\frac{N_{\text{successful}}}
+= \frac{N_{\text{successful}}}
      {N_{\text{total}}}
 \times 100\%
 $$
