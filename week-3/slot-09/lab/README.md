@@ -847,7 +847,7 @@ Example:
 #include <WiFi.h>
 #include <HTTPClient.h>
 
-#define SENSOR_PIN 34
+#define SENSOR_PIN 36
 
 QueueHandle_t sensorQueue;
 
