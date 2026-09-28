@@ -1,6 +1,10 @@
 import requests
 import json
+import time
+import os
+import random
 from datetime import datetime
+
 
 # --------------------------------
 # HTTP Server
@@ -10,14 +14,10 @@ serverURL = "https://httpbin.org/post"
 
 
 # --------------------------------
-# Sensor Data
-# Same data as ESP32
+# Refresh Interval
 # --------------------------------
 
-sensorData = {
-    "temperature": 25.5,
-    "humidity": 60.2
-}
+REFRESH_TIME = 5
 
 
 # --------------------------------
@@ -30,134 +30,236 @@ headers = {
 
 
 # --------------------------------
-# Display Request
+# Clear Terminal
 # --------------------------------
 
-print("=" * 50)
-print(" HTTP POST MONITOR")
-print("=" * 50)
+def clear_screen():
 
-print("\nTime:")
-print(datetime.now())
+    if os.name == "nt":
+        os.system("cls")
 
-print("\nURL:")
-print(serverURL)
-
-print("\nHTTP Method:")
-print("POST")
-
-print("\nHeaders:")
-print(headers)
-
-print("\nJSON Data:")
-print(
-    json.dumps(
-        sensorData,
-        indent=4
-    )
-)
+    else:
+        os.system("clear")
 
 
-# --------------------------------
-# Send HTTP POST
-# --------------------------------
+# ========================================
+# HTTP POST Live Monitor
+# ========================================
 
 try:
 
-    response = requests.post(
-        serverURL,
-        json=sensorData,
-        headers=headers,
-        timeout=10
-    )
+    while True:
 
+        # --------------------------------
+        # Generate Random Sensor Data
+        # --------------------------------
 
-    # --------------------------------
-    # Monitor HTTP Response
-    # --------------------------------
-
-    print("\n" + "=" * 50)
-    print(" HTTP RESPONSE")
-    print("=" * 50)
-
-    print(
-        "\nHTTP Response Code:",
-        response.status_code
-    )
-
-    print(
-        "\nContent-Type:",
-        response.headers.get(
-            "Content-Type"
-        )
-    )
-
-
-    # --------------------------------
-    # Decode Server Response
-    # --------------------------------
-
-    data = response.json()
-
-
-    print("\nServer Response:")
-
-    print(
-        json.dumps(
-            data,
-            indent=4
-        )
-    )
-
-
-    # --------------------------------
-    # Show JSON Received by httpbin
-    # --------------------------------
-
-    print("\n" + "=" * 50)
-    print(" DATA RECEIVED BY HTTPBIN")
-    print("=" * 50)
-
-    receivedData = data.get(
-        "json"
-    )
-
-    print(
-        json.dumps(
-            receivedData,
-            indent=4
-        )
-    )
-
-
-    # --------------------------------
-    # Display Sensor Values
-    # --------------------------------
-
-    if receivedData:
-
-        print(
-            "\nTemperature:",
-            receivedData.get(
-                "temperature"
-            ),
-            "C"
+        temperature = round(
+            random.uniform(25.0, 35.0),
+            1
         )
 
-        print(
-            "Humidity:",
-            receivedData.get(
-                "humidity"
-            ),
-            "%"
+        humidity = round(
+            random.uniform(50.0, 90.0),
+            1
         )
 
 
-except requests.exceptions.RequestException as error:
+        # --------------------------------
+        # Create JSON Data
+        # --------------------------------
 
-    print("\nHTTP POST failed")
+        sensorData = {
+            "temperature": temperature,
+            "humidity": humidity
+        }
+
+
+        # --------------------------------
+        # Send HTTP POST
+        # --------------------------------
+
+        try:
+
+            response = requests.post(
+                serverURL,
+                json=sensorData,
+                headers=headers,
+                timeout=10
+            )
+
+
+            # --------------------------------
+            # Decode Response
+            # --------------------------------
+
+            data = response.json()
+
+            receivedData = data.get(
+                "json"
+            )
+
+
+            # --------------------------------
+            # Refresh Terminal
+            # --------------------------------
+
+            clear_screen()
+
+
+            # --------------------------------
+            # Display Monitor
+            # --------------------------------
+
+            print("=" * 50)
+            print("       HTTP POST LIVE MONITOR")
+            print("=" * 50)
+
+
+            print(
+                "\nTime:",
+                datetime.now().strftime(
+                    "%Y-%m-%d %H:%M:%S"
+                )
+            )
+
+
+            print("\nHTTP Method:")
+            print("POST")
+
+
+            print("\nServer:")
+            print(serverURL)
+
+
+            print("\nHTTP Response Code:")
+            print(response.status_code)
+
+
+            # --------------------------------
+            # Display Data Sent
+            # --------------------------------
+
+            print("\n" + "-" * 50)
+            print("DATA SENT")
+            print("-" * 50)
+
+            print(
+                json.dumps(
+                    sensorData,
+                    indent=4
+                )
+            )
+
+
+            # --------------------------------
+            # Display Data Received
+            # --------------------------------
+
+            print("\n" + "-" * 50)
+            print("DATA RECEIVED BY HTTPBIN")
+            print("-" * 50)
+
+            print(
+                json.dumps(
+                    receivedData,
+                    indent=4
+                )
+            )
+
+
+            # --------------------------------
+            # Sensor Monitor
+            # --------------------------------
+
+            if receivedData:
+
+                print("\n" + "-" * 50)
+                print("SENSOR MONITOR")
+                print("-" * 50)
+
+                print(
+                    "Temperature :",
+                    receivedData.get(
+                        "temperature"
+                    ),
+                    "C"
+                )
+
+                print(
+                    "Humidity    :",
+                    receivedData.get(
+                        "humidity"
+                    ),
+                    "%"
+                )
+
+
+            # --------------------------------
+            # Refresh Information
+            # --------------------------------
+
+            print("\n" + "=" * 50)
+
+            print(
+                "Refresh every",
+                REFRESH_TIME,
+                "seconds"
+            )
+
+            print(
+                "Press Ctrl+C to stop"
+            )
+
+            print("=" * 50)
+
+
+        # --------------------------------
+        # HTTP Error
+        # --------------------------------
+
+        except requests.exceptions.RequestException as error:
+
+            clear_screen()
+
+            print("HTTP POST failed")
+
+            print(
+                "Error:",
+                error
+            )
+
+
+        # --------------------------------
+        # JSON Error
+        # --------------------------------
+
+        except json.JSONDecodeError:
+
+            clear_screen()
+
+            print(
+                "Invalid JSON response"
+            )
+
+
+        # --------------------------------
+        # Wait Before Next POST
+        # --------------------------------
+
+        time.sleep(
+            REFRESH_TIME
+        )
+
+
+# ========================================
+# Stop Program
+# ========================================
+
+except KeyboardInterrupt:
+
+    print()
 
     print(
-        "Error:",
-        error
+        "HTTP POST Monitor stopped."
     )
