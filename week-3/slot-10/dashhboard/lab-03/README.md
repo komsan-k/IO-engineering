@@ -16,15 +16,76 @@ JSON payload.
 
 For example:
 
-`json id="a7k1m2" {   "temperature": 28.5,   "humidity": 72,   "light": 640 }`
+```json
+{
+  "temperature": 28.5,
+  "humidity": 72,
+  "light": 640
+}
+```
 
-This approach is widely used in practical IoT systems because JSON
-provides a flexible and human-readable method for representing
-structured data.
+This approach is widely used in practical IoT applications because **JSON provides a flexible, lightweight, and human-readable format for representing structured sensor data**. Multiple sensor measurements can be combined into a single payload and transmitted efficiently through MQTT.
 
-The system architecture becomes:
+The system architecture can therefore be represented as:
 
-`text id="b6pl2r" Multiple Sensors       ↓     ESP32       ↓  JSON Payload       ↓      MQTT       ↓  MQTT Broker       ↓ MQTT over WSS       ↓   GitHub.io       ↓ Structured Dashboard`
+```text
++----------------------+
+|   Multiple Sensors   |
+|                      |
+| Temperature          |
+| Humidity             |
+| Light                |
++----------+-----------+
+           |
+           v
++----------------------+
+|        ESP32         |
+|                      |
+| Read Sensor Values   |
++----------+-----------+
+           |
+           v
++----------------------+
+|     JSON Payload     |
+|                      |
+| {                    |
+|  "temperature":28.5, |
+|  "humidity":72,      |
+|  "light":640         |
+| }                    |
++----------+-----------+
+           |
+           v
++----------------------+
+|        MQTT          |
+|      Publish         |
++----------+-----------+
+           |
+           v
++----------------------+
+|     MQTT Broker      |
++----------+-----------+
+           |
+           | MQTT over WSS
+           v
++----------------------+
+|     GitHub Pages     |
+|                      |
+| HTML + JavaScript    |
+| MQTT.js              |
++----------+-----------+
+           |
+           v
++----------------------+
+| Structured Dashboard |
+|                      |
+| Temperature: 28.5 °C |
+| Humidity: 72 %       |
+| Light: 640           |
++----------------------+
+```
+
+This architecture allows a single ESP32 to collect data from multiple sensors, package the measurements into one JSON message, publish the message through MQTT, and display the decoded values on a web-based dashboard.
 
 ------------------------------------------------------------------------
 
