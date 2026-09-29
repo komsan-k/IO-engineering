@@ -97,7 +97,7 @@ Connecting...
 <script>
 
 const broker =
-    "wss://YOUR_BROKER_WEBSOCKET_ADDRESS";
+    "wss://broker.hivemq.com:8884/mqtt";
 
 const client =
     mqtt.connect(broker);
@@ -117,11 +117,11 @@ client.on(
             "MQTT Connected";
 
         client.subscribe(
-            "iot/lab/temperature"
+            "KK_iot/lab/temperature"
         );
 
         client.subscribe(
-            "iot/lab/led/status"
+            "KK_iot/lab/led/status"
         );
     }
 );
@@ -140,7 +140,7 @@ client.on(
 
         if (
             topic ==
-            "iot/lab/temperature"
+            "KK_iot/lab/temperature"
         )
         {
             document.getElementById(
@@ -151,7 +151,7 @@ client.on(
 
         if (
             topic ==
-            "iot/lab/led/status"
+            "KK_iot/lab/led/status"
         )
         {
             document.getElementById(
@@ -170,7 +170,7 @@ client.on(
 function ledOn()
 {
     client.publish(
-        "iot/lab/led/set",
+        "KK_iot/lab/led/set",
         "ON"
     );
 }
@@ -183,7 +183,7 @@ function ledOn()
 function ledOff()
 {
     client.publish(
-        "iot/lab/led/set",
+        "KK_iot/lab/led/set",
         "OFF"
     );
 }
