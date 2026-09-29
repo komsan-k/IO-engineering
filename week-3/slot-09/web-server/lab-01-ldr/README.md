@@ -1,4 +1,4 @@
-# Lab — Simple ESP32 Web Server for Displaying LDR Data
+# Lab 2 — Simple ESP32 Web Server for Displaying LDR Data
 
 ## Objective
 
