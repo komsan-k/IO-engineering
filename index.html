@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+
+<title>IoT Control Dashboard</title>
+
+<script src=
+"https://unpkg.com/mqtt/dist/mqtt.min.js">
+</script>
+
+<style>
+
+body {
+    font-family: Arial;
+    text-align: center;
+    margin-top: 40px;
+}
+
+.dashboard {
+    width: 400px;
+    margin: auto;
+    padding: 30px;
+    border: 1px solid #ccc;
+    border-radius: 12px;
+}
+
+.temperature {
+    font-size: 48px;
+    margin: 20px;
+}
+
+button {
+    font-size: 20px;
+    padding: 12px 25px;
+    margin: 10px;
+}
+
+.status {
+    margin-top: 20px;
+}
+
+</style>
+
+</head>
+
+
+<body>
+
+<div class="dashboard">
+
+<h1>IoT Dashboard</h1>
+
+
+<h2>Temperature</h2>
+
+<div
+    id="temperature"
+    class="temperature">
+
+    -- °C
+
+</div>
+
+
+<h2>LED Control</h2>
+
+<button onclick="ledOn()">
+ON
+</button>
+
+<button onclick="ledOff()">
+OFF
+</button>
+
+
+<h3>
+LED Status:
+<span id="ledStatus">
+Unknown
+</span>
+</h3>
+
+
+<p
+    id="mqttStatus"
+    class="status">
+
+Connecting...
+
+</p>
+
+</div>
+
+
+<script>
+
+const broker =
+    "wss://YOUR_BROKER_WEBSOCKET_ADDRESS";
+
+const client =
+    mqtt.connect(broker);
+
+
+// --------------------------------------
+// MQTT Connected
+// --------------------------------------
+
+client.on(
+    "connect",
+    function()
+    {
+        document.getElementById(
+            "mqttStatus"
+        ).innerText =
+            "MQTT Connected";
+
+        client.subscribe(
+            "iot/lab/temperature"
+        );
+
+        client.subscribe(
+            "iot/lab/led/status"
+        );
+    }
+);
+
+
+// --------------------------------------
+// Receive MQTT Messages
+// --------------------------------------
+
+client.on(
+    "message",
+    function(topic, message)
+    {
+        const value =
+            message.toString();
+
+        if (
+            topic ==
+            "iot/lab/temperature"
+        )
+        {
+            document.getElementById(
+                "temperature"
+            ).innerText =
+                value + " °C";
+        }
+
+        if (
+            topic ==
+            "iot/lab/led/status"
+        )
+        {
+            document.getElementById(
+                "ledStatus"
+            ).innerText =
+                value;
+        }
+    }
+);
+
+
+// --------------------------------------
+// LED ON
+// --------------------------------------
+
+function ledOn()
+{
+    client.publish(
+        "iot/lab/led/set",
+        "ON"
+    );
+}
+
+
+// --------------------------------------
+// LED OFF
+// --------------------------------------
+
+function ledOff()
+{
+    client.publish(
+        "iot/lab/led/set",
+        "OFF"
+    );
+}
+
+
+// --------------------------------------
+// MQTT Error
+// --------------------------------------
+
+client.on(
+    "error",
+    function(error)
+    {
+        document.getElementById(
+            "mqttStatus"
+        ).innerText =
+            "MQTT Error";
+
+        console.log(error);
+    }
+);
+
+</script>
+
+</body>
+
+</html>
