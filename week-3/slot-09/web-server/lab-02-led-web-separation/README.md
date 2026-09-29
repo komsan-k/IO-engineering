@@ -1,4 +1,4 @@
-# Lab — ESP32 Web Server for LED Control Using a Separate Webpage File
+# Lab — ESP32 Web Server for LED Control Using a Webpage File
 
 ## Objective
 
