@@ -1,44 +1,27 @@
-# Lab — Simple ESP32-to-ESP32 BLE Control for 3 LEDs
+# Lab — Simple ESP32 BLE Control for 3 LEDs
 
 ## Objective
 
-Use two ESP32 boards to control **three LEDs** over **Bluetooth Low Energy (BLE)**.
+Create a simple ESP32 BLE application that controls **three LEDs** by receiving text commands over Bluetooth Low Energy (BLE).
 
-- **ESP32 #1:** BLE Client / Controller
-- **ESP32 #2:** BLE Server / LED Controller
+The ESP32 acts as a **BLE Server**.
 
-ESP32 #1 sends text commands such as:
-
-```text
-LED1_ON
-LED1_OFF
-LED2_ON
-LED2_OFF
-LED3_ON
-LED3_OFF
-```
-
-ESP32 #2 receives the command and controls the corresponding LED.
+A BLE client, such as another ESP32 or a BLE mobile app, can send commands to control the LEDs.
 
 ---
 
-## System Architecture
+## System Concept
 
 ```text
+BLE Client
+   |
+   | BLE Write Command
+   v
 +----------------------+
-|      ESP32 #1        |
-|      BLE Client      |
-|                      |
-| Send LED Commands    |
-+----------+-----------+
-           |
-           | BLE Write
-           v
-+----------------------+
-|      ESP32 #2        |
+|        ESP32         |
 |      BLE Server      |
 |                      |
-| Receive Commands     |
+| Receive Command      |
 +----------+-----------+
            |
      +-----+-----+
@@ -51,7 +34,7 @@ ESP32 #2 receives the command and controls the corresponding LED.
 
 ## LED GPIOs
 
-| LED | ESP32 #2 GPIO |
+| LED | GPIO |
 |---|---:|
 | LED 1 | GPIO 2 |
 | LED 2 | GPIO 12 |
@@ -59,21 +42,24 @@ ESP32 #2 receives the command and controls the corresponding LED.
 
 ---
 
-## BLE UUIDs
+## BLE Commands
 
-Both ESP32 boards must use the same UUIDs.
+The ESP32 accepts these commands:
 
-```cpp
-#define SERVICE_UUID   "12345678-1234-1234-1234-1234567890ab"
-
-#define CHARACTERISTIC_UUID   "abcdefab-1234-1234-1234-abcdefabcdef"
+```text
+LED1_ON
+LED1_OFF
+LED2_ON
+LED2_OFF
+LED3_ON
+LED3_OFF
+ALL_ON
+ALL_OFF
 ```
 
 ---
 
-# Part A — ESP32 #2 BLE Server
-
-Upload this code to **ESP32 #2**.
+## Arduino Code
 
 ```cpp
 #include <BLEDevice.h>
@@ -104,30 +90,35 @@ class LEDCallbacks :
     Serial.println(command);
 
     if (command == "LED1_ON")
+    {
       digitalWrite(LED1, HIGH);
-
+    }
     else if (command == "LED1_OFF")
+    {
       digitalWrite(LED1, LOW);
-
+    }
     else if (command == "LED2_ON")
+    {
       digitalWrite(LED2, HIGH);
-
+    }
     else if (command == "LED2_OFF")
+    {
       digitalWrite(LED2, LOW);
-
+    }
     else if (command == "LED3_ON")
+    {
       digitalWrite(LED3, HIGH);
-
+    }
     else if (command == "LED3_OFF")
+    {
       digitalWrite(LED3, LOW);
-
+    }
     else if (command == "ALL_ON")
     {
       digitalWrite(LED1, HIGH);
       digitalWrite(LED2, HIGH);
       digitalWrite(LED3, HIGH);
     }
-
     else if (command == "ALL_OFF")
     {
       digitalWrite(LED1, LOW);
@@ -150,7 +141,7 @@ void setup()
   digitalWrite(LED3, LOW);
 
   BLEDevice::init(
-    "ESP32-LED-Server"
+    "ESP32-3LED"
   );
 
   BLEServer* server =
@@ -183,11 +174,11 @@ void setup()
   BLEDevice::startAdvertising();
 
   Serial.println(
-    "BLE LED Server started"
+    "ESP32 BLE Server started"
   );
 
   Serial.println(
-    "Waiting for Client..."
+    "Waiting for BLE commands..."
   );
 }
 
@@ -197,243 +188,19 @@ void loop()
 }
 ```
 
-### Expected Serial Monitor
+---
+
+## Expected Serial Monitor
 
 ```text
-BLE LED Server started
-Waiting for Client...
+ESP32 BLE Server started
+Waiting for BLE commands...
 
 Received: LED1_ON
 Received: LED1_OFF
 Received: LED2_ON
 Received: LED3_ON
-```
-
----
-
-# Part B — ESP32 #1 BLE Client
-
-Upload this code to **ESP32 #1**.
-
-```cpp
-#include <BLEDevice.h>
-#include <BLEUtils.h>
-#include <BLEClient.h>
-#include <BLEScan.h>
-
-#define SERVICE_UUID   "12345678-1234-1234-1234-1234567890ab"
-
-#define CHARACTERISTIC_UUID   "abcdefab-1234-1234-1234-abcdefabcdef"
-
-BLEAdvertisedDevice* targetDevice = nullptr;
-
-BLERemoteCharacteristic*
-  remoteCharacteristic = nullptr;
-
-BLEClient* client = nullptr;
-
-bool deviceFound = false;
-bool connected = false;
-
-class ScanCallbacks :
-  public BLEAdvertisedDeviceCallbacks
-{
-  void onResult(
-    BLEAdvertisedDevice device
-  )
-  {
-    if (
-      device.haveServiceUUID()
-      &&
-      device.isAdvertisingService(
-        BLEUUID(
-          SERVICE_UUID
-        )
-      )
-    )
-    {
-      Serial.println(
-        "BLE LED Server found"
-      );
-
-      BLEDevice::getScan()->stop();
-
-      targetDevice =
-        new BLEAdvertisedDevice(
-          device
-        );
-
-      deviceFound = true;
-    }
-  }
-};
-
-void connectToServer()
-{
-  client =
-    BLEDevice::createClient();
-
-  Serial.println(
-    "Connecting..."
-  );
-
-  if (
-    !client->connect(
-      targetDevice
-    )
-  )
-  {
-    Serial.println(
-      "Connection failed"
-    );
-
-    return;
-  }
-
-  BLERemoteService* service =
-    client->getService(
-      SERVICE_UUID
-    );
-
-  if (service == nullptr)
-  {
-    Serial.println(
-      "Service not found"
-    );
-
-    return;
-  }
-
-  remoteCharacteristic =
-    service->getCharacteristic(
-      CHARACTERISTIC_UUID
-    );
-
-  if (
-    remoteCharacteristic
-      == nullptr
-  )
-  {
-    Serial.println(
-      "Characteristic not found"
-    );
-
-    return;
-  }
-
-  connected = true;
-
-  Serial.println(
-    "Connected"
-  );
-}
-
-void sendCommand(
-  const char* command
-)
-{
-  if (
-    connected
-    &&
-    remoteCharacteristic
-      != nullptr
-  )
-  {
-    remoteCharacteristic->writeValue(
-      (uint8_t*)command,
-      strlen(command),
-      false
-    );
-
-    Serial.print(
-      "Sent: "
-    );
-
-    Serial.println(
-      command
-    );
-  }
-}
-
-void setup()
-{
-  Serial.begin(115200);
-
-  BLEDevice::init(
-    "ESP32-LED-Client"
-  );
-
-  BLEScan* scan =
-    BLEDevice::getScan();
-
-  scan->setAdvertisedDeviceCallbacks(
-    new ScanCallbacks()
-  );
-
-  scan->setActiveScan(
-    true
-  );
-
-  Serial.println(
-    "Scanning for BLE Server..."
-  );
-
-  scan->start(
-    10,
-    false
-  );
-}
-
-void loop()
-{
-  if (
-    deviceFound
-    &&
-    !connected
-  )
-  {
-    deviceFound = false;
-
-    connectToServer();
-  }
-
-  if (connected)
-  {
-    sendCommand("LED1_ON");
-    delay(2000);
-
-    sendCommand("LED1_OFF");
-    delay(1000);
-
-    sendCommand("LED2_ON");
-    delay(2000);
-
-    sendCommand("LED2_OFF");
-    delay(1000);
-
-    sendCommand("LED3_ON");
-    delay(2000);
-
-    sendCommand("LED3_OFF");
-    delay(2000);
-  }
-}
-```
-
-### Expected Serial Monitor
-
-```text
-Scanning for BLE Server...
-BLE LED Server found
-Connecting...
-Connected
-
-Sent: LED1_ON
-Sent: LED1_OFF
-Sent: LED2_ON
-Sent: LED2_OFF
-Sent: LED3_ON
-Sent: LED3_OFF
+Received: ALL_OFF
 ```
 
 ---
@@ -441,148 +208,130 @@ Sent: LED3_OFF
 ## Communication Flow
 
 ```text
-ESP32 #1
 BLE Client
    |
-   | Scan
+   | LED1_ON
    v
-Find ESP32 #2
+ESP32 BLE Server
    |
-   | Connect
    v
-BLE Characteristic
-   |
-   | Write Command
-   v
-ESP32 #2
-BLE Server
-   |
-   +---- LED1_ON  -> LED 1 ON
-   +---- LED1_OFF -> LED 1 OFF
-   +---- LED2_ON  -> LED 2 ON
-   +---- LED2_OFF -> LED 2 OFF
-   +---- LED3_ON  -> LED 3 ON
-   +---- LED3_OFF -> LED 3 OFF
-```
-
----
-
-# Experiment 1 — Sequential LED Control
-
-1. Upload the server program to ESP32 #2.
-2. Open Serial Monitor.
-3. Upload the client program to ESP32 #1.
-4. Open Serial Monitor.
-5. Observe the LEDs.
-
-Expected sequence:
-
-```text
 LED 1 ON
-LED 1 OFF
-LED 2 ON
-LED 2 OFF
-LED 3 ON
-LED 3 OFF
+```
+
+Another example:
+
+```text
+BLE Client
+   |
+   | ALL_ON
+   v
+ESP32 BLE Server
+   |
+   +---- LED 1 ON
+   +---- LED 2 ON
+   +---- LED 3 ON
 ```
 
 ---
 
-# Experiment 2 — All LEDs ON/OFF
+## Important BLE Commands
 
-The server also accepts:
+### Create BLE Device
+
+```cpp
+BLEDevice::init(
+  "ESP32-3LED"
+);
+```
+
+### Create BLE Server
+
+```cpp
+BLEServer* server =
+  BLEDevice::createServer();
+```
+
+### Create BLE Service
+
+```cpp
+BLEService* service =
+  server->createService(
+    SERVICE_UUID
+  );
+```
+
+### Create Writable Characteristic
+
+```cpp
+BLECharacteristic* characteristic =
+  service->createCharacteristic(
+    CHARACTERISTIC_UUID,
+    BLECharacteristic::PROPERTY_WRITE
+  );
+```
+
+### Receive Data
+
+```cpp
+void onWrite(
+  BLECharacteristic* characteristic
+)
+```
+
+This callback executes whenever the BLE client writes a new command.
+
+---
+
+## Simple Test
+
+Send the following commands one by one:
 
 ```text
+LED1_ON
+LED1_OFF
+LED2_ON
+LED2_OFF
+LED3_ON
+LED3_OFF
 ALL_ON
 ALL_OFF
 ```
 
-The client can send:
-
-```cpp
-sendCommand(
-  "ALL_ON"
-);
-
-delay(3000);
-
-sendCommand(
-  "ALL_OFF"
-);
-```
-
----
-
-# Experiment 3 — Control LEDs Using Push Buttons
-
-Connect three buttons to ESP32 #1.
-
-| Button | ESP32 #1 GPIO | Function |
-|---|---:|---|
-| Button 1 | GPIO 18 | Toggle LED 1 |
-| Button 2 | GPIO 19 | Toggle LED 2 |
-| Button 3 | GPIO 21 | Toggle LED 3 |
-
-Target system:
-
-```text
-Button 1
-Button 2
-Button 3
-   |
-   v
-ESP32 #1
-BLE Client
-   |
-   | BLE Commands
-   v
-ESP32 #2
-BLE Server
-   |
-   +---- LED 1
-   +---- LED 2
-   +---- LED 3
-```
+Observe the LED states.
 
 ---
 
 ## Checkpoint Questions
 
-1. Which ESP32 is the BLE Server?
-2. Which ESP32 is the BLE Client?
-3. What is the purpose of the Service UUID?
-4. What is the purpose of the Characteristic UUID?
-5. What BLE property is used for sending commands?
-6. What command turns LED 1 on?
-7. What command turns LED 3 off?
-8. Which callback receives commands on the server?
-9. Which function sends commands from the client?
-10. How can push buttons replace the automatic command sequence?
+1. What is the role of the ESP32 in this example?
+2. What BLE property is required for receiving control commands?
+3. What does `onWrite()` do?
+4. What command turns LED 1 on?
+5. What command turns all LEDs off?
+6. Why must the BLE client use the correct Service UUID?
+7. Why must the BLE client use the correct Characteristic UUID?
 
 ---
 
 ## Simple Assignment
 
-Modify ESP32 #1 so that three push buttons control the three LEDs on ESP32 #2.
+Modify the program to add a new command:
 
 ```text
-+----------------------+
-|      ESP32 #1        |
-|      BLE Client      |
-|                      |
-| Button 1             |
-| Button 2             |
-| Button 3             |
-+----------+-----------+
-           |
-           | BLE
-           v
-+----------------------+
-|      ESP32 #2        |
-|      BLE Server      |
-|                      |
-| LED 1                |
-| LED 2                |
-| LED 3                |
-+----------------------+
+LED_SEQUENCE
+```
+
+The expected behavior is:
+
+```text
+LED 1 ON
+   |
+   v
+LED 2 ON
+   |
+   v
+LED 3 ON
+   |
+   v
+ALL OFF
 ```
