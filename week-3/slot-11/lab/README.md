@@ -549,7 +549,7 @@ A complete notification example is:
 #include <BLEUtils.h>
 #include <BLE2902.h>
 
-#define SENSOR_PIN 34
+#define SENSOR_PIN 36
 
 #define SERVICE_UUID \
 "12345678-1234-1234-1234-1234567890ab"
