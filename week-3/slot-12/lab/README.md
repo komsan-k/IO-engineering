@@ -580,7 +580,7 @@ Example:
 #include <PubSubClient.h>
 #include <ArduinoJson.h>
 
-#define SENSOR_PIN 34
+#define SENSOR_PIN 36
 #define SLEEP_TIME_SEC 30
 
 const char* ssid =
