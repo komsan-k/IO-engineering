@@ -477,7 +477,7 @@ GATT Characteristic
       ↓
 Mobile App Read
 ```
-In cases of simulate=ing an ADC-like sensor value
+To simulate an ADC-like sensor value
 ```cpp
 void loop() {
 
