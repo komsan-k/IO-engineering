@@ -434,7 +434,7 @@ Expected value:
 Connect a potentiometer or analog sensor.
 
 ```cpp
-#define SENSOR_PIN 34
+#define SENSOR_PIN 36
 ```
 
 Update the characteristic:
@@ -477,7 +477,31 @@ GATT Characteristic
       ↓
 Mobile App Read
 ```
+In cases of simulate=ing an ADC-like sensor value
+```cpp
+void loop() {
 
+  int sensorValue =
+      random(0, 4096);
+
+  char buffer[20];
+
+  snprintf(
+    buffer,
+    sizeof(buffer),
+    "%d",
+    sensorValue
+  );
+
+  sensorCharacteristic->setValue(
+    buffer
+  );
+
+  Serial.println(buffer);
+
+  delay(1000);
+}
+```
 ---
 
 ## 12. Experiment 6 — Enabling BLE Notifications
