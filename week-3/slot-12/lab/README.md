@@ -408,7 +408,7 @@ Wake count: 4
 Connect an analog sensor to:
 
 ```cpp
-#define SENSOR_PIN 34
+#define SENSOR_PIN 36
 ```
 
 Example:
@@ -416,7 +416,7 @@ Example:
 ```cpp
 #include <Arduino.h>
 
-#define SENSOR_PIN 34
+#define SENSOR_PIN 36
 #define SLEEP_TIME_SEC 10
 
 void setup() {
