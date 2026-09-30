@@ -38,7 +38,7 @@ BLE Client
 |---|---:|
 | LED 1 | GPIO 2 |
 | LED 2 | GPIO 12 |
-| LED 3 | GPIO 14 |
+| LED 3 | GPIO 13 |
 
 ---
 
@@ -72,7 +72,7 @@ ALL_OFF
 
 const int LED1 = 2;
 const int LED2 = 12;
-const int LED3 = 14;
+const int LED3 = 13;
 
 class LEDCallbacks :
   public BLECharacteristicCallbacks
