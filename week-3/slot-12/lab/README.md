@@ -344,7 +344,89 @@ void setup() {
 
 void loop() {}
 ```
+For wake-up using GPIO 14
 
+```cpp
+#include <Arduino.h>
+#include <esp_sleep.h>
+
+#define WAKEUP_PIN GPIO_NUM_14
+
+void printWakeupReason()
+{
+  esp_sleep_wakeup_cause_t reason =
+      esp_sleep_get_wakeup_cause();
+
+  switch (reason)
+  {
+    case ESP_SLEEP_WAKEUP_EXT0:
+
+      Serial.println(
+        "Wake-up caused by GPIO 14"
+      );
+
+      break;
+
+    default:
+
+      Serial.println(
+        "Normal startup"
+      );
+
+      break;
+  }
+}
+
+void setup()
+{
+  Serial.begin(115200);
+
+  delay(1000);
+
+  printWakeupReason();
+
+
+  // GPIO 14 input
+  pinMode(
+    14,
+    INPUT_PULLUP
+  );
+
+
+  // Wait until button is released
+  while (
+    digitalRead(14) == LOW
+  )
+  {
+    delay(10);
+  }
+
+
+  // Wake up when GPIO 14 becomes LOW
+  esp_sleep_enable_ext0_wakeup(
+    WAKEUP_PIN,
+    0
+  );
+
+
+  Serial.println(
+    "ESP32 will enter Deep Sleep"
+  );
+
+  Serial.println(
+    "Press button on GPIO 14 to wake up"
+  );
+
+  delay(1000);
+
+
+  // Enter Deep Sleep
+  esp_deep_sleep_start();
+}
+
+void loop() { }
+
+```
 ---
 
 ## 10. Experiment 4 — Counting Wake Cycles
