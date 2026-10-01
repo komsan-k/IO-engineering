@@ -1,99 +1,75 @@
-# Lab — Simple ESP32 BLE Mesh Light Control
-## One Provisioner and Two Light Nodes
+# Lab — Simple ESP32 BLE Mesh with 4 Devices
+## One Provisioner and Three Light Nodes
 
 ## Objective
 
-In this lab, three ESP32 boards form a small **Bluetooth Low Energy Mesh** network:
+In this lab, four ESP32 boards form a simple **Bluetooth Low Energy Mesh** network.
+
+The devices are:
 
 - **ESP32 #1** — BLE Mesh Provisioner / Generic OnOff Client
 - **ESP32 #2** — Light Node 1 / Generic OnOff Server
 - **ESP32 #3** — Light Node 2 / Generic OnOff Server
+- **ESP32 #4** — Light Node 3 / Generic OnOff Server
 
-The provisioner discovers and provisions the two light nodes, then sends **ON/OFF** commands through the BLE Mesh network.
+The provisioner adds the three light nodes to the BLE Mesh network and sends **ON/OFF** commands to individual lights or to all lights as a group.
 
 > This lab uses **ESP-IDF ESP-BLE-MESH**, not the simple Arduino BLE client/server API.
+
+---
+
+## Learning Outcomes
+
+After completing this lab, students should be able to:
+
+- explain the roles of a BLE Mesh provisioner and mesh node;
+- provision multiple BLE Mesh devices;
+- identify unicast addresses;
+- control individual mesh nodes;
+- use group addressing;
+- understand basic relay and multi-hop concepts.
 
 ---
 
 ## System Architecture
 
 ```text
-                 BLE Mesh
-        +-----------------------+
-        |                       |
-        v                       v
-+---------------+       +---------------+
-| ESP32 #2      |       | ESP32 #3      |
-| Light Node 1  |       | Light Node 2  |
-| OnOff Server  |       | OnOff Server  |
-| LED           |       | LED           |
-+-------^-------+       +-------^-------+
-        |                       |
-        +-----------+-----------+
-                    |
-                    v
-             +-------------+
-             | ESP32 #1    |
-             | Provisioner |
-             | OnOff Client|
-             +-------------+
+                 BLE Mesh Network
+
+                    ESP32 #1
+                  Provisioner
+                Generic OnOff
+                    Client
+                       |
+          +------------+------------+
+          |            |            |
+          v            v            v
+     ESP32 #2      ESP32 #3      ESP32 #4
+     Light Node 1  Light Node 2  Light Node 3
+     OnOff Server  OnOff Server  OnOff Server
+        LED            LED            LED
 ```
-
----
-
-## BLE Mesh Concepts
-
-### Provisioner
-
-The provisioner adds unprovisioned devices into the mesh network.
-
-```text
-Unprovisioned Device
-        |
-        v
-Provisioner
-        |
-        v
-Provisioned Mesh Node
-```
-
-### Generic OnOff Client
-
-The client sends:
-
-```text
-ON
-OFF
-```
-
-commands.
-
-### Generic OnOff Server
-
-The server receives the command and changes the LED state.
 
 ---
 
 ## Hardware
 
-You need:
+Required:
 
 ```text
-3 × ESP32 development boards
-3 × USB cables
-2 × LEDs
-2 × 220 Ω resistors
+4 × ESP32 development boards
+4 × USB cables
+3 × LEDs
+3 × 220 Ω resistors
 ```
 
-Example LED connections:
+Example LED wiring:
 
 ```text
-ESP32 #2 GPIO 2 ---- 220 Ω ---- LED ---- GND
-
-ESP32 #3 GPIO 2 ---- 220 Ω ---- LED ---- GND
+GPIO 2 ---- 220 Ω ---- LED ---- GND
 ```
 
-> If your ESP32 board already has an onboard LED, you may use the onboard LED GPIO instead.
+Use one LED on each light-node ESP32.
 
 ---
 
@@ -106,32 +82,73 @@ ESP-IDF
 ESP-BLE-MESH
 ```
 
-This lab is based on the official ESP-BLE-MESH examples:
+Recommended BLE Mesh examples:
 
 ```text
-bluetooth/esp_ble_mesh/provisioner
-bluetooth/esp_ble_mesh/onoff_models/onoff_server
-```
+Provisioner:
+examples/bluetooth/esp_ble_mesh/provisioner
 
----
-
-# Part 1 — Prepare the Light Nodes
-
-Use the official:
-
-```text
+Light Nodes:
 examples/bluetooth/esp_ble_mesh/onoff_models/onoff_server
 ```
 
-for both Light Node 1 and Light Node 2.
+---
 
-The same server application can be flashed to both ESP32 boards.
+# Part 1 — Prepare the Three Light Nodes
+
+Use the same **Generic OnOff Server** application on:
+
+```text
+ESP32 #2
+ESP32 #3
+ESP32 #4
+```
+
+Each device starts as an unprovisioned BLE Mesh node.
 
 ---
 
-## Build the OnOff Server Example
+## Light Node Concept
 
-Open an ESP-IDF terminal and go to:
+```text
+ESP32 Light Node
+      |
+      v
+Generic OnOff Server
+      |
+      v
+LED
+```
+
+A received state of:
+
+```text
+0
+```
+
+means:
+
+```text
+LED OFF
+```
+
+A received state of:
+
+```text
+1
+```
+
+means:
+
+```text
+LED ON
+```
+
+---
+
+## Build the Light-Node Example
+
+Open an ESP-IDF terminal:
 
 ```bash
 cd $IDF_PATH/examples/bluetooth/esp_ble_mesh/onoff_models/onoff_server
@@ -143,68 +160,67 @@ Set the target:
 idf.py set-target esp32
 ```
 
-Configure the example:
+Configure:
 
 ```bash
 idf.py menuconfig
 ```
 
-Then build:
+Build:
 
 ```bash
 idf.py build
 ```
 
-Flash Light Node 1:
+Flash the first light node:
 
 ```bash
 idf.py -p COM5 flash monitor
 ```
 
-Flash Light Node 2 using the same binary:
+Flash the second light node:
 
 ```bash
 idf.py -p COM6 flash monitor
 ```
 
-Replace `COM5` and `COM6` with the ports used by your boards.
+Flash the third light node:
 
----
-
-## Light Node Behavior
-
-At startup, each light node is:
-
-```text
-Unprovisioned
+```bash
+idf.py -p COM7 flash monitor
 ```
 
-After provisioning, each node contains a:
-
-```text
-Generic OnOff Server
-```
-
-which can receive:
-
-```text
-ON
-OFF
-```
-
-commands.
+Replace the COM ports with the ports used by your ESP32 boards.
 
 ---
 
 # Part 2 — Prepare the Provisioner
 
-Use the official example:
+ESP32 #1 acts as the provisioner.
+
+The provisioner performs:
 
 ```text
-examples/bluetooth/esp_ble_mesh/provisioner
+Device Discovery
+      |
+      v
+Provisioning
+      |
+      v
+Address Assignment
+      |
+      v
+AppKey Configuration
+      |
+      v
+Generic OnOff Control
 ```
 
-Open the example:
+---
+
+## Build the Provisioner
+
+Open:
 
 ```bash
 cd $IDF_PATH/examples/bluetooth/esp_ble_mesh/provisioner
@@ -228,86 +244,97 @@ Build:
 idf.py build
 ```
 
-Flash the provisioner:
+Flash:
 
 ```bash
 idf.py -p COM4 flash monitor
 ```
 
-Replace `COM4` with the provisioner ESP32 port.
-
 ---
 
-# Part 3 — Provision the Two Light Nodes
+# Part 3 — Start the BLE Mesh Network
 
-Power all three ESP32 boards.
+Power all four ESP32 boards.
 
-Expected startup:
+The network initially looks like:
 
 ```text
-ESP32 #1
 Provisioner
-   |
-   | scans
-   v
-Finds unprovisioned devices
-   |
-   +---- ESP32 #2
-   |
-   +---- ESP32 #3
+    |
+    | scans for unprovisioned devices
+    |
+    +---- Light Node 1
+    |
+    +---- Light Node 2
+    |
+    +---- Light Node 3
 ```
 
-The provisioner adds both nodes to the mesh.
+The provisioner adds each device to the mesh.
 
-Conceptually:
+---
+
+## Provisioning Flow
 
 ```text
-Light Node 1
-Unprovisioned
-     |
-     v
+Unprovisioned Node
+       |
+       v
+Provisioner Detects Node
+       |
+       v
 Provisioning
-     |
-     v
-Assigned Mesh Address
-
-
-Light Node 2
-Unprovisioned
-     |
-     v
-Provisioning
-     |
-     v
-Assigned Mesh Address
+       |
+       v
+Network Key Added
+       |
+       v
+Unicast Address Assigned
+       |
+       v
+Provisioned Mesh Node
 ```
 
 ---
 
-## Typical Address Example
+# Part 4 — Record Node Addresses
 
-The exact addresses depend on the example configuration.
+Each light node receives a unique unicast address.
 
-A simple example is:
+Example:
 
 ```text
-Provisioner   -> 0x0001
-Light Node 1  -> 0x0005
-Light Node 2  -> 0x0006
+Provisioner  -> 0x0001
+Light Node 1 -> 0x0005
+Light Node 2 -> 0x0006
+Light Node 3 -> 0x0007
 ```
 
-Record the addresses shown by the provisioner monitor.
+> Actual addresses depend on the configuration and provisioning sequence.
+
+Record the addresses shown on the provisioner Serial Monitor.
 
 ---
 
-# Part 4 — Bind the Application Key
+## Address Table
 
-After provisioning, the Generic OnOff model must use an application key.
+| Device | Role | Example Address |
+|---|---|---|
+| ESP32 #1 | Provisioner | 0x0001 |
+| ESP32 #2 | Light Node 1 | 0x0005 |
+| ESP32 #3 | Light Node 2 | 0x0006 |
+| ESP32 #4 | Light Node 3 | 0x0007 |
+
+---
+
+# Part 5 — Configure the Application Key
+
+After provisioning, the Generic OnOff models need an **AppKey**.
 
 Conceptually:
 
 ```text
-Provision Node
+Provisioned Node
       |
       v
 Add AppKey
@@ -319,220 +346,348 @@ Bind AppKey
 Generic OnOff Server Ready
 ```
 
-The official provisioner example performs configuration through the BLE Mesh Configuration Client model.
+The Configuration Client in the provisioner performs this configuration.
 
 ---
 
-# Part 5 — Control Light Node 1
+# Part 6 — Individual Light Control
 
-The provisioner sends a Generic OnOff SET message.
-
-Conceptually:
-
-```text
-Provisioner
-     |
-     | Generic OnOff SET
-     | value = 1
-     v
-Light Node 1
-     |
-     v
-LED ON
-```
-
-For OFF:
-
-```text
-Provisioner
-     |
-     | Generic OnOff SET
-     | value = 0
-     v
-Light Node 1
-     |
-     v
-LED OFF
-```
+The provisioner sends Generic OnOff messages to each node.
 
 ---
 
-# Part 6 — Control Light Node 2
-
-The same operation is repeated using the address of Light Node 2.
+## Control Light Node 1
 
 ```text
-Provisioner
-     |
-     | destination = Light Node 2
-     v
-Generic OnOff Server
-     |
-     v
-LED ON / OFF
+Destination = 0x0005
+Value = 1
 ```
 
----
-
-# Expected Operation
-
-Example:
+Result:
 
 ```text
-Provisioner Monitor
-
-Node 1 provisioned
-Address: 0x0005
-
-Node 2 provisioned
-Address: 0x0006
-
-Sending ON to 0x0005
 Light Node 1 -> ON
-
-Sending OFF to 0x0005
-Light Node 1 -> OFF
-
-Sending ON to 0x0006
-Light Node 2 -> ON
-
-Sending OFF to 0x0006
-Light Node 2 -> OFF
-```
-
----
-
-# BLE Mesh Message Flow
-
-```text
-ESP32 Provisioner
-       |
-       | Generic OnOff SET
-       v
-BLE Mesh Network
-       |
-       +------> Light Node 1
-       |
-       +------> Light Node 2
-```
-
----
-
-# Experiment 1 — Individual Light Control
-
-Control each node separately.
-
-```text
-Node 1 -> ON
-Node 2 -> OFF
 ```
 
 Then:
 
 ```text
-Node 1 -> OFF
-Node 2 -> ON
+Destination = 0x0005
+Value = 0
+```
+
+Result:
+
+```text
+Light Node 1 -> OFF
 ```
 
 ---
 
-# Experiment 2 — Group Control
+## Control Light Node 2
 
-Create a group address such as:
+```text
+Destination = 0x0006
+Value = 1
+```
+
+Result:
+
+```text
+Light Node 2 -> ON
+```
+
+---
+
+## Control Light Node 3
+
+```text
+Destination = 0x0007
+Value = 1
+```
+
+Result:
+
+```text
+Light Node 3 -> ON
+```
+
+---
+
+# Part 7 — Group Control
+
+Create a BLE Mesh group address.
+
+Example:
 
 ```text
 0xC001
 ```
 
-Bind both light nodes to the same group.
+Subscribe all three Generic OnOff Servers to this group.
+
+```text
+Group 0xC001
+    |
+    +---- Light Node 1
+    |
+    +---- Light Node 2
+    |
+    +---- Light Node 3
+```
+
+Send:
+
+```text
+Destination = 0xC001
+Generic OnOff = ON
+```
+
+Expected result:
+
+```text
+Light Node 1 -> ON
+Light Node 2 -> ON
+Light Node 3 -> ON
+```
 
 Then send:
 
 ```text
-Generic OnOff SET
 Destination = 0xC001
-Value = ON
+Generic OnOff = OFF
 ```
 
-Both nodes should turn ON.
+Expected result:
 
 ```text
-Provisioner
-     |
-     | Group Address 0xC001
-     v
-+------------+------------+
-|                         |
-v                         v
-Light Node 1          Light Node 2
-LED ON                LED ON
+Light Node 1 -> OFF
+Light Node 2 -> OFF
+Light Node 3 -> OFF
 ```
 
 ---
 
-# Experiment 3 — Relay Concept
+# Part 8 — Relay / Multi-Hop Concept
 
-Move Light Node 2 farther away.
+BLE Mesh can relay messages through intermediate nodes.
 
-If relay functionality is enabled on an intermediate mesh node, a message may be relayed:
+Conceptually:
 
 ```text
 Provisioner
-     |
-     v
+    |
+    v
 Light Node 1
    Relay
-     |
-     v
+    |
+    v
+Light Node 2
+   Relay
+    |
+    v
+Light Node 3
+```
+
+This allows a destination to receive a message even when it is outside the direct radio range of the provisioner.
+
+---
+
+## TTL Concept
+
+BLE Mesh messages use a TTL value.
+
+```text
+TTL = 5
+   |
+   v
+Relay
+   |
+   v
+TTL = 4
+   |
+   v
+Relay
+   |
+   v
+TTL = 3
+```
+
+TTL prevents indefinite forwarding.
+
+---
+
+# Expected Serial Output
+
+Example provisioner output:
+
+```text
+Provisioner started
+
+Found unprovisioned device
+Provisioning Light Node 1
+Assigned address: 0x0005
+
+Found unprovisioned device
+Provisioning Light Node 2
+Assigned address: 0x0006
+
+Found unprovisioned device
+Provisioning Light Node 3
+Assigned address: 0x0007
+
+All light nodes configured
+```
+
+Example control output:
+
+```text
+Send ON -> 0x0005
+Send OFF -> 0x0005
+
+Send ON -> 0x0006
+Send OFF -> 0x0006
+
+Send ON -> 0x0007
+Send OFF -> 0x0007
+```
+
+Group control:
+
+```text
+Send ON -> Group 0xC001
+All lights ON
+
+Send OFF -> Group 0xC001
+All lights OFF
+```
+
+---
+
+# Experiment 1 — Sequential Light Control
+
+Control the lights in sequence:
+
+```text
+Light 1 ON
+   |
+   v
+Light 1 OFF
+
+Light 2 ON
+   |
+   v
+Light 2 OFF
+
+Light 3 ON
+   |
+   v
+Light 3 OFF
+```
+
+---
+
+# Experiment 2 — All Lights ON/OFF
+
+Use group address:
+
+```text
+0xC001
+```
+
+Test:
+
+```text
+ALL ON
+```
+
+then:
+
+```text
+ALL OFF
+```
+
+---
+
+# Experiment 3 — Different Group
+
+Create another group:
+
+```text
+0xC002
+```
+
+Subscribe only:
+
+```text
+Light Node 1
 Light Node 2
 ```
 
-This demonstrates the multi-hop concept of BLE Mesh.
+Then:
+
+```text
+Destination = 0xC002
+Value = ON
+```
+
+Expected:
+
+```text
+Light Node 1 -> ON
+Light Node 2 -> ON
+Light Node 3 -> unchanged
+```
+
+---
+
+# Experiment 4 — Node Removal
+
+1. Start all four ESP32 boards.
+2. Control all three lights.
+3. Power off Light Node 3.
+4. Send a group command.
+5. Observe Light Nodes 1 and 2.
+6. Power Light Node 3 back on.
+
+Discuss how the mesh behaves when a node disappears.
 
 ---
 
 # Important BLE Mesh Models
 
-| Model | Role |
+| Model | Function |
 |---|---|
-| Configuration Client | Configures mesh nodes |
+| Configuration Client | Configures nodes |
 | Configuration Server | Receives configuration |
 | Generic OnOff Client | Sends ON/OFF commands |
-| Generic OnOff Server | Controls light state |
+| Generic OnOff Server | Controls LED state |
 
 ---
 
-# BLE Mesh vs Normal BLE
+# BLE Mesh Addressing
+
+BLE Mesh supports:
 
 ```text
-Normal BLE
-----------
-Central
-   |
-Peripheral
+Unicast Address
+-> one node
 
-Usually direct connection
+Group Address
+-> several nodes
+
+Virtual Address
+-> logical application group
 ```
 
-```text
-BLE Mesh
---------
-Node <--> Node <--> Node
-          |
-          v
-       Relay
-```
-
-BLE Mesh adds:
+For this lab:
 
 ```text
-Provisioning
-Addressing
-Models
-Application Keys
-Relay
-Group Messaging
-Multi-hop Communication
+0x0005 -> Light Node 1
+0x0006 -> Light Node 2
+0x0007 -> Light Node 3
+
+0xC001 -> All Lights
 ```
 
 ---
@@ -540,66 +695,71 @@ Multi-hop Communication
 # Checkpoint Questions
 
 1. What is the role of the provisioner?
-2. What is an unprovisioned device?
-3. What model controls the LEDs?
-4. What is the difference between Generic OnOff Client and Server?
-5. Why does each mesh node need an address?
-6. What is an AppKey?
-7. What is a group address?
-8. Why is group addressing useful for lighting?
-9. What is the purpose of a relay node?
-10. How is BLE Mesh different from normal BLE client/server communication?
+2. How many light nodes are used in this lab?
+3. What model receives the ON/OFF command?
+4. What is a unicast address?
+5. What is a group address?
+6. Why is an AppKey required?
+7. What is the purpose of the Configuration Client?
+8. What is the purpose of a relay node?
+9. What does TTL mean?
+10. What advantage does group addressing provide?
 
 ---
 
 # Simple Assignment
 
-Extend the system to three light nodes:
+Modify the system so the four devices behave as:
 
 ```text
-                  Provisioner
-                      |
-          +-----------+-----------+
-          |           |           |
-          v           v           v
-       Light 1     Light 2     Light 3
+ESP32 #1 -> Provisioner
+
+ESP32 #2 -> Room A Light
+ESP32 #3 -> Room B Light
+ESP32 #4 -> Room C Light
 ```
 
-Requirements:
+Create:
 
 ```text
-1. Provision all three nodes.
-2. Record each unicast address.
-3. Control each light individually.
-4. Create one group address.
-5. Add all three lights to the group.
-6. Send one group ON command.
-7. Send one group OFF command.
+Group 0xC001 -> All Rooms
+Group 0xC002 -> Room A + Room B
+```
+
+Test:
+
+```text
+1. Turn Room A ON individually.
+2. Turn Room B ON individually.
+3. Turn Room C ON individually.
+4. Turn all rooms OFF using Group 0xC001.
+5. Turn Room A and Room B ON using Group 0xC002.
 ```
 
 ---
 
 # Key Takeaway
 
-A BLE Mesh lighting system can be summarized as:
+A four-device BLE Mesh lighting system can be represented as:
 
 ```text
 Provisioner
-    |
-    v
-Provision Devices
-    |
-    v
-Configure Models
-    |
-    v
-Bind AppKey
-    |
-    v
-Send Generic OnOff Commands
-    |
-    v
-Control Multiple Lights
+     |
+     v
+Provision 3 Nodes
+     |
+     v
+Configure AppKeys
+     |
+     v
+Assign Addresses
+     |
+     v
+Individual Control
+     +
+Group Control
+     +
+Relay / Multi-Hop
 ```
 
-This provides a standardized way to build large-scale Bluetooth-based lighting and sensor networks.
+BLE Mesh is useful for scalable lighting, building automation, sensor networks, and distributed control systems.
