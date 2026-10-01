@@ -1,4 +1,4 @@
-# Lab — ESP-NOW One-to-Many Communication
+# Lab 2 — ESP-NOW One-to-Many Communication
 
 ## Objective
 
