@@ -1,4 +1,4 @@
-# Lab — Simple ESP-NOW One-to-One Communication
+# Lab 1 — Simple ESP-NOW One-to-One Communication
 
 ## Objective
 
