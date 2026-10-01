@@ -1,4 +1,4 @@
-# Lab — ESP32 Task Watchdog Timer (WDT)
+# ESP32 Task Watchdog Timer (WDT)
 
 ## Objective
 
