@@ -919,10 +919,8 @@ $$
 Therefore:
 
 $$
-N_{\text{examples}}
-= 5\times50
-=
-250.
+N_{\text{examples}} = 5\times50
+= 250.
 $$
 
 If each example contains 100 samples:
@@ -1483,6 +1481,18 @@ Prepare the data for the next machine-learning lab.
 
 ## 38. Checkpoint Questions
 
+1. What is an IMU, and what sensors are integrated into the MPU6050?
+2. What do $a_x$, $a_y$, and $a_z$ represent?
+3. What do $g_x$, $g_y$, and $g_z$ represent?
+4. Why are both accelerometer and gyroscope data useful for gesture recognition?
+5. What sampling frequency corresponds to a 20 ms sampling interval?
+6. Why should IMU data be sampled at a consistent rate?
+7. What is a gesture window, and how many samples are collected during 2 seconds at 50 Hz?
+8. Why should multiple labeled examples of each gesture be collected?
+9. What are the purposes of the training, validation, and test datasets?
+10. What is data leakage, and why should it be avoided?
+
+<!--
 1. What is an IMU?
 2. What sensors are integrated into the MPU6050?
 3. What do $a_x$, $a_y$, and $a_z$ represent?
@@ -1503,7 +1513,7 @@ Prepare the data for the next machine-learning lab.
 18. Why is normalization useful for machine learning?
 19. What is the difference between training, validation, and test data?
 20. What is data leakage, and why should it be avoided?
-
+--->
 ---
 
 ## 39. Expected Results
