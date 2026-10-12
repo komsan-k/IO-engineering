@@ -274,8 +274,7 @@ Use the sigmoid activation:
 
 \[
 \sigma(z)
-=
-\frac{1}{1+e^{-z}}
+= \frac{1}{1+e^{-z}}
 \]
 
 Thus:
@@ -296,8 +295,7 @@ The predicted class is the output neuron with the largest score:
 
 \[
 \hat{y}
-=
-\arg\max_k(o_k)
+= \arg\max_k(o_k)
 \]
 
 For this simple lab, the output layer uses raw scores rather than a full softmax during ESP32 inference.
@@ -1394,8 +1392,7 @@ Accuracy is:
 
 \[
 \text{Accuracy}
-=
-\frac{
+= \frac{
 N_{\text{correct}}
 }{
 N_{\text{total}}
