@@ -1060,8 +1060,7 @@ $$
 ### Minimum
 
 $$
-x_{\min}
-= \min(x_1,x_2,\ldots,x_N).
+x_{\min} = \min(x_1,x_2,\ldots,x_N).
 $$
 
 These features can later be used with lightweight classifiers.
