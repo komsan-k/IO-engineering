@@ -267,7 +267,7 @@ For each 20-sample window, calculate five features:
 
 The feature vector is:
 
-\[
+$$
 \mathbf{f}
 = [
 \mu,
@@ -276,7 +276,7 @@ x_{\min},
 x_{\max},
 R
 ]
-\]
+$$
 
 where:
 
