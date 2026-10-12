@@ -280,9 +280,9 @@ $$
 
 where:
 
-\[
+$$
 R=x_{\max}-x_{\min}.
-\]
+$$
 
 Therefore, each ANN example contains:
 
@@ -298,11 +298,11 @@ instead of one raw ADC value.
 
 The mean describes the average light level:
 
-\[
+$$
 \mu
 = \frac{1}{N}
 \sum_{i=1}^{N}x_i.
-\]
+$$
 
 Example:
 
@@ -322,14 +322,14 @@ Mean is usually the most important feature for separating Dark, Normal, and Brig
 
 The standard deviation describes signal variability:
 
-\[
+$$
 \sigma
 = \sqrt{
 \frac{1}{N}
 \sum_{i=1}^{N}
 (x_i-\mu)^2
 }.
-\]
+$$
 
 A stable light source may produce:
 
@@ -347,10 +347,10 @@ Large standard deviation
 
 ## 11. Feature 3 — Minimum
 
-\[
+$$
 x_{\min}
 = \min(x_1,x_2,\ldots,x_N)
-\]
+$$
 
 This indicates the lowest light reading in the window.
 
@@ -358,10 +358,10 @@ This indicates the lowest light reading in the window.
 
 ## 12. Feature 4 — Maximum
 
-\[
+$$
 x_{\max}
 = \max(x_1,x_2,\ldots,x_N)
-\]
+$$
 
 This indicates the highest light reading in the window.
 
@@ -369,10 +369,10 @@ This indicates the highest light reading in the window.
 
 ## 13. Feature 5 — Range
 
-\[
+$$
 R = x_{\max}
 - x_{\min}
-\]
+$$
 
 Range gives a simple measure of variation.
 
@@ -429,10 +429,10 @@ Because ESP32 ADC measurements are approximately:
 
 normalize each feature using 4095:
 
-\[
+$$
 f_n
 = \frac{f}{4095}.
-\]
+$$
 
 For example:
 
@@ -515,38 +515,38 @@ Architecture:
 
 For hidden neuron \(j\):
 
-\[
+$$
 z_j
 = \sum_{i=1}^{5}
 x_iW_{ij}
 +
 b_j.
-\]
+$$
 
 Sigmoid activation:
 
-\[
+$$
 h_j
 = \frac{1}
 {1+e^{-z_j}}.
-\]
+$$
 
 For output neuron \(k\):
 
-\[
+$$
 o_k
 = \sum_{j=1}^{4}
 h_jW_{jk}
 +
 b_k.
-\]
+$$
 
 The predicted class is:
 
-\[
+$$
 \hat{y}
 = \arg\max_k(o_k).
-\]
+$$
 
 ---
 
@@ -1165,10 +1165,10 @@ b2 shape = 3
 
 Parameter count:
 
-\[
+$$
 5\times4 + 4 + 4\times3 + 3
 = 39.
-\]
+$$
 
 Thus:
 
