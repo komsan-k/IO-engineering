@@ -1,4 +1,4 @@
-# LAB 14 — ANN Light Classification with LDR Feature Extraction
+# Assignment — ANN Light Classification with LDR Feature Extraction
 ## Dark, Normal, and Bright Using ESP32 + Plain ANN Code
 
 ## 1. Objective
