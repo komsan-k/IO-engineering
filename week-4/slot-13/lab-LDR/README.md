@@ -744,21 +744,17 @@ and identify the best separation.
 
 ## 23. Checkpoint Questions
 
-1. What is an LDR?
-2. Why is a resistor used with the LDR?
-3. What does the ESP32 ADC measure?
-4. What is the typical 12-bit ADC range?
-5. Why should the ADC response be checked experimentally?
-6. What are the three classes in this lab?
-7. What is a classification threshold?
-8. Why should the dataset be balanced?
-9. Why is a fixed sampling interval useful?
-10. What is the purpose of timestamping?
-11. Why should training and testing data be separated?
-12. What is data leakage?
-13. Why can a moving average improve stability?
-14. What is the difference between rule-based and ML classification?
-15. How could this work be extended with other sensors?
+1.  Why should the ADC response be checked experimentally?
+2. What are the three classes in this lab?
+3. What is a classification threshold?
+4. Why should the dataset be balanced?
+5. Why is a fixed sampling interval useful?
+6. What is the purpose of timestamping?
+7. Why should training and testing data be separated?
+8. What is data leakage?
+9. Why can a moving average improve stability?
+10. What is the difference between rule-based and ML classification?
+11 How could this work be extended with other sensors?
 
 ---
 
