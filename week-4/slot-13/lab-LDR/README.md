@@ -754,7 +754,7 @@ and identify the best separation.
 8. What is data leakage?
 9. Why can a moving average improve stability?
 10. What is the difference between rule-based and ML classification?
-11 How could this work be extended with other sensors?
+11. How could this work be extended with other sensors?
 
 ---
 
