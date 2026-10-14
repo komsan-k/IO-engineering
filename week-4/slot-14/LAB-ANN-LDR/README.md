@@ -68,6 +68,17 @@ This lab intentionally uses **plain code** so students can see how a neural netw
 
 ## 3. System Architecture
 
+<p align="center">
+  <img src="LDR ANN.png"
+       alt="LDR Light Classification and 1–4–3 ANN"
+       width="800">
+</p>
+
+<p align="center">
+  <b>Figure 1.</b> LDR Light Classification and 1–4–3 ANN Architecture.
+</p>
+
+
 ### Training Phase
 
 ```text
