@@ -20,6 +20,16 @@ The objective of this lab is to:
 10. Perform real-time ANN inference using plain Arduino C++.
 11. Compare **raw-value classification**, **feature-based ANN classification**, and the previous **threshold method**.
 
+
+<p align="center">
+  <img src="ANN 4–4–3.png"
+       alt="LDR Feature Extraction and 4–4–3 ANN"
+       width="900">
+</p>
+
+<p align="center">
+  <b>Figure 1.</b> LDR Feature Extraction and 4–4–3 ANN Classification Architecture.
+</p>
 ---
 
 ## 2. Background
