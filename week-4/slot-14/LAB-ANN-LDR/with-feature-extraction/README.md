@@ -37,7 +37,7 @@ ANN
    ↓
 Dark / Normal / Bright
 
-
+```
 <p align="center">
   <img src="ANN 4–4–3.png"
        alt="LDR Feature Extraction and 4–4–3 ANN"
@@ -47,7 +47,6 @@ Dark / Normal / Bright
 <p align="center">
   <b>Figure 1.</b> LDR Feature Extraction and 4–4–3 ANN Classification Architecture.
 </p>
-```
 
 A single reading is simple, but it may be affected by:
 
