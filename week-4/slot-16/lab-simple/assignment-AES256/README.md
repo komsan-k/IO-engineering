@@ -1,4 +1,4 @@
-# LAB — Encrypted IoT Sensor Communication using ESP32, AES-256, and MQTT
+# Assignment — Encrypted IoT Sensor Communication using ESP32, AES-256, and MQTT
 
 ## 1. Objective
 
