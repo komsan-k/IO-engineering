@@ -812,7 +812,7 @@ The exact includes may need minor adjustment for the installed EloquentTinyML/ru
 #include "ldr_model.h"
 
 #include <tflm_esp32.h>
-#include <eloquent_tinyML.h>
+#include <eloquent_tinyml.h>
 
 
 #define LDR_PIN 36
