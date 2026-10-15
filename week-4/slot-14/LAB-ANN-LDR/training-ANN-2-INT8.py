@@ -1104,3 +1104,484 @@ print(
 print(
     "5. Run INT8 inference."
 )
+
+
+# ============================================================
+# 28. Export Manual INT8 ANN Parameters for Arduino
+# ============================================================
+#
+# This section exports the trained Keras weights into the same
+# parameter format used by the manual INT8 Arduino ANN:
+#
+#   W1_INT8  : int8_t  [4]
+#   B1_INT32 : int32_t [4]
+#   W2_INT8  : int8_t  [4][3]
+#   B2_INT32 : int32_t [3]
+#
+# Quantization scheme used for the manual Arduino ANN:
+#
+#   Input normalized range: 0.0 ... 1.0
+#   INPUT_SCALE_MANUAL  = 1 / 127
+#   INPUT_ZERO_POINT    = 0
+#
+#   Sigmoid hidden range: 0.0 ... 1.0
+#   HIDDEN_SCALE_MANUAL = 1 / 127
+#   HIDDEN_ZERO_POINT   = 0
+#
+# Weight quantization is symmetric per layer:
+#
+#   q_w = round(w / weight_scale)
+#
+#   weight_scale = max(abs(weights)) / 127
+#
+# Biases are INT32:
+#
+#   B1_INT32 = round(b1 / (INPUT_SCALE_MANUAL * W1_SCALE_MANUAL))
+#
+#   B2_INT32 = round(b2 / (HIDDEN_SCALE_MANUAL * W2_SCALE_MANUAL))
+#
+# IMPORTANT:
+# These parameters are for the MANUAL INT8 ANN Arduino code.
+# They are not guaranteed to be byte-for-byte identical to
+# internal tensor quantization chosen by the TFLite converter.
+# ============================================================
+
+weights_float = model.get_weights()
+
+W1_FLOAT = weights_float[0]       # shape (1,4)
+B1_FLOAT = weights_float[1]       # shape (4,)
+W2_FLOAT = weights_float[2]       # shape (4,3)
+B2_FLOAT = weights_float[3]       # shape (3,)
+
+
+# ------------------------------------------------------------
+# Manual activation scales
+# ------------------------------------------------------------
+
+INPUT_SCALE_MANUAL = 1.0 / 127.0
+INPUT_ZERO_POINT_MANUAL = 0
+
+HIDDEN_SCALE_MANUAL = 1.0 / 127.0
+HIDDEN_ZERO_POINT_MANUAL = 0
+
+
+# ------------------------------------------------------------
+# Symmetric weight quantization helper
+# ------------------------------------------------------------
+
+def symmetric_int8_quantize(
+    values
+):
+    values = np.asarray(
+        values,
+        dtype=np.float32
+    )
+
+    max_abs = float(
+        np.max(
+            np.abs(
+                values
+            )
+        )
+    )
+
+    if max_abs == 0.0:
+        scale = 1.0 / 127.0
+    else:
+        scale = (
+            max_abs
+            /
+            127.0
+        )
+
+    q = np.round(
+        values
+        /
+        scale
+    )
+
+    q = np.clip(
+        q,
+        -127,
+        127
+    ).astype(
+        np.int8
+    )
+
+    return (
+        q,
+        scale
+    )
+
+
+# ------------------------------------------------------------
+# Quantize layer weights
+# ------------------------------------------------------------
+
+W1_INT8_FULL, W1_SCALE_MANUAL = (
+    symmetric_int8_quantize(
+        W1_FLOAT
+    )
+)
+
+W2_INT8, W2_SCALE_MANUAL = (
+    symmetric_int8_quantize(
+        W2_FLOAT
+    )
+)
+
+# W1 is stored as [4] in the Arduino 1-input network.
+W1_INT8 = W1_INT8_FULL[0]
+
+
+# ------------------------------------------------------------
+# Quantize biases to INT32
+# ------------------------------------------------------------
+
+B1_SCALE_MANUAL = (
+    INPUT_SCALE_MANUAL
+    *
+    W1_SCALE_MANUAL
+)
+
+B2_SCALE_MANUAL = (
+    HIDDEN_SCALE_MANUAL
+    *
+    W2_SCALE_MANUAL
+)
+
+B1_INT32 = np.round(
+    B1_FLOAT
+    /
+    B1_SCALE_MANUAL
+).astype(
+    np.int32
+)
+
+B2_INT32 = np.round(
+    B2_FLOAT
+    /
+    B2_SCALE_MANUAL
+).astype(
+    np.int32
+)
+
+
+# ------------------------------------------------------------
+# C-format helper functions
+# ------------------------------------------------------------
+
+def c_array_int8_1d(
+    name,
+    values,
+    size_name
+):
+    lines = []
+
+    lines.append(
+        f"const int8_t {name}[{size_name}] ="
+    )
+
+    lines.append(
+        "{"
+    )
+
+    for i, value in enumerate(
+        values
+    ):
+        comma = (
+            ","
+            if i < len(values) - 1
+            else ""
+        )
+
+        lines.append(
+            f"  {int(value):4d}{comma}"
+        )
+
+    lines.append(
+        "};"
+    )
+
+    return "\n".join(
+        lines
+    )
+
+
+def c_array_int32_1d(
+    name,
+    values,
+    size_name
+):
+    lines = []
+
+    lines.append(
+        f"const int32_t {name}[{size_name}] ="
+    )
+
+    lines.append(
+        "{"
+    )
+
+    for i, value in enumerate(
+        values
+    ):
+        comma = (
+            ","
+            if i < len(values) - 1
+            else ""
+        )
+
+        lines.append(
+            f"  {int(value):8d}{comma}"
+        )
+
+    lines.append(
+        "};"
+    )
+
+    return "\n".join(
+        lines
+    )
+
+
+def c_array_int8_2d(
+    name,
+    matrix,
+    row_name,
+    col_name
+):
+    lines = []
+
+    lines.append(
+        f"const int8_t {name}"
+        f"[{row_name}]"
+        f"[{col_name}] ="
+    )
+
+    lines.append(
+        "{"
+    )
+
+    for i in range(
+        matrix.shape[0]
+    ):
+        row = ", ".join(
+            f"{int(v):4d}"
+            for v in matrix[i]
+        )
+
+        comma = (
+            ","
+            if i < matrix.shape[0] - 1
+            else ""
+        )
+
+        lines.append(
+            f"  {{ {row} }}{comma}"
+        )
+
+    lines.append(
+        "};"
+    )
+
+    return "\n".join(
+        lines
+    )
+
+
+# ------------------------------------------------------------
+# Build the requested Arduino parameter block
+# ------------------------------------------------------------
+
+arduino_int8_parameters = f"""
+#ifndef LDR_ANN_INT8_PARAMETERS_H
+#define LDR_ANN_INT8_PARAMETERS_H
+
+#include <stdint.h>
+
+#define HIDDEN_SIZE 4
+#define OUTPUT_SIZE 3
+
+// =====================================================
+// Manual INT8 Quantization Scales
+// =====================================================
+
+const float INPUT_SCALE_MANUAL = {INPUT_SCALE_MANUAL:.12g}f;
+const int INPUT_ZERO_POINT_MANUAL = {INPUT_ZERO_POINT_MANUAL};
+
+const float HIDDEN_SCALE_MANUAL = {HIDDEN_SCALE_MANUAL:.12g}f;
+const int HIDDEN_ZERO_POINT_MANUAL = {HIDDEN_ZERO_POINT_MANUAL};
+
+const float W1_SCALE_MANUAL = {W1_SCALE_MANUAL:.12g}f;
+const float B1_SCALE_MANUAL = {B1_SCALE_MANUAL:.12g}f;
+
+const float W2_SCALE_MANUAL = {W2_SCALE_MANUAL:.12g}f;
+const float B2_SCALE_MANUAL = {B2_SCALE_MANUAL:.12g}f;
+
+
+// =====================================================
+// INT8 ANN Parameters
+// =====================================================
+//
+// W1 shape = 1 x 4
+// =====================================================
+
+{c_array_int8_1d(
+    "W1_INT8",
+    W1_INT8,
+    "HIDDEN_SIZE"
+)}
+
+
+// =====================================================
+// Bias Layer 1
+// Stored as INT32
+// =====================================================
+
+{c_array_int32_1d(
+    "B1_INT32",
+    B1_INT32,
+    "HIDDEN_SIZE"
+)}
+
+
+// =====================================================
+// W2 shape = 4 x 3
+// =====================================================
+
+{c_array_int8_2d(
+    "W2_INT8",
+    W2_INT8,
+    "HIDDEN_SIZE",
+    "OUTPUT_SIZE"
+)}
+
+
+// =====================================================
+// Bias Layer 2
+// =====================================================
+
+{c_array_int32_1d(
+    "B2_INT32",
+    B2_INT32,
+    "OUTPUT_SIZE"
+)}
+
+#endif
+"""
+
+
+# ------------------------------------------------------------
+# Save Arduino header
+# ------------------------------------------------------------
+
+with open(
+    "ldr_ann_int8_parameters.h",
+    "w"
+) as f:
+
+    f.write(
+        arduino_int8_parameters
+    )
+
+
+# ------------------------------------------------------------
+# Print parameters to terminal
+# ------------------------------------------------------------
+
+print(
+    "\n\n"
+    "// ====================================================="
+)
+
+print(
+    "// INT8 ANN Parameters"
+)
+
+print(
+    "// ====================================================="
+)
+
+print()
+
+print(
+    c_array_int8_1d(
+        "W1_INT8",
+        W1_INT8,
+        "HIDDEN_SIZE"
+    )
+)
+
+print()
+
+print(
+    c_array_int32_1d(
+        "B1_INT32",
+        B1_INT32,
+        "HIDDEN_SIZE"
+    )
+)
+
+print()
+
+print(
+    c_array_int8_2d(
+        "W2_INT8",
+        W2_INT8,
+        "HIDDEN_SIZE",
+        "OUTPUT_SIZE"
+    )
+)
+
+print()
+
+print(
+    c_array_int32_1d(
+        "B2_INT32",
+        B2_INT32,
+        "OUTPUT_SIZE"
+    )
+)
+
+print(
+    "\nManual INT8 scales:"
+)
+
+print(
+    "INPUT_SCALE_MANUAL =",
+    INPUT_SCALE_MANUAL
+)
+
+print(
+    "W1_SCALE_MANUAL =",
+    W1_SCALE_MANUAL
+)
+
+print(
+    "B1_SCALE_MANUAL =",
+    B1_SCALE_MANUAL
+)
+
+print(
+    "HIDDEN_SCALE_MANUAL =",
+    HIDDEN_SCALE_MANUAL
+)
+
+print(
+    "W2_SCALE_MANUAL =",
+    W2_SCALE_MANUAL
+)
+
+print(
+    "B2_SCALE_MANUAL =",
+    B2_SCALE_MANUAL
+)
+
+print(
+    "\nSaved Arduino parameter header:"
+)
+
+print(
+    "ldr_ann_int8_parameters.h"
+)
