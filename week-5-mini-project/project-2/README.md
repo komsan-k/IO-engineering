@@ -99,6 +99,20 @@ $$
 T\;[{}^\circ\mathrm{C}] = \frac{T_{\mathrm{raw}}}{340} + 36.53
 $$
 
+### MPU6050 Raw Data Conversion
+
+For **±2 g** acceleration and **±250°/s** gyroscope ranges:
+
+- **Acceleration (g):** `A = acceleration_raw / 16384.0`
+- **Angular velocity (°/s):** `G = gyroscope_raw / 131.0`
+- **Temperature (°C):** `T = temperature_raw / 340.0 + 36.53`
+
+For **±4 g** acceleration and **±500°/s** gyroscope ranges:
+
+- **Acceleration (g):** `A = acceleration_raw / 8192.0`
+- **Angular velocity (°/s):** `G = gyroscope_raw / 65.5`
+- **Temperature (°C):** `T = temperature_raw / 340.0 + 36.53`
+
 ---
 
 ## 4. Human-Readable Printout with Conversions
