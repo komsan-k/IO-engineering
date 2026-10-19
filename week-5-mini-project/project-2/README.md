@@ -85,16 +85,18 @@ For default full-scale ranges:
 
 The scale factors are:
 
+For an accelerometer range of **±2 g** and a gyroscope range of **±250°/s**:
+
 $$
-A[g] = \frac{\text{raw}}{16384}
+A\;[\mathrm{g}] = \frac{A_{\mathrm{raw}}}{16384}
 $$
 
 $$
-G[°/s] = \frac{\text{raw}}{131}
+G\;[{}^\circ/\mathrm{s}] = \frac{G_{\mathrm{raw}}}{131}
 $$
 
 $$
-T[°C] = \frac{\text{raw}}{340} + 36.53
+T\;[{}^\circ\mathrm{C}] = \frac{T_{\mathrm{raw}}}{340} + 36.53
 $$
 
 ---
