@@ -1,6 +1,5 @@
 # Lab Phase 1: MPU6050 Time-Domain and FFT Features on ESP32
 
-**Suggested duration:** 2–3 hours  
 **Scope:** sensor acquisition, feature extraction, signal inspection, and labeled CSV collection. TinyML is introduced in Phase 2.
 
 ## 1. Objectives
