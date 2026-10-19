@@ -1,234 +1,88 @@
-# MPU6050 Tutorial
+# 💡 7. Project 2: Gesture-Controlled Light
 
-This section walks through an MPU6050 I²C example, line by line, and adds clear comments for teaching or documentation. It also shows how to convert raw readings to physical units and how to estimate orientation using a complementary filter.
+## 7.1 Project Description
 
----
+Build a lighting controller that recognizes hand gestures using an **MPU6050**, an **ESP32**, and a **TinyML model**.
 
-## 1. Explained Code 
+Attach the MPU6050 to the hand or a handheld object. The sensor measures motion while the ESP32 identifies the gesture and controls an LED.
 
-```cpp
-#include <Wire.h>              // I2C library
-#define MPU6050_ADDR 0x68      // MPU6050 I2C address (AD0=LOW -> 0x68)
+## 7.2 Required Components
 
-int16_t ax, ay, az;            // Accelerometer raw X, Y, Z
-int16_t gx, gy, gz;            // Gyroscope raw X, Y, Z
+- ESP32 development board
+- MPU6050 sensor module
+- LED and 330 Ω resistor
+- Breadboard and jumper wires
+- USB cable
 
-void setup() {
-  Serial.begin(115200);        // Serial for debugging
-  Wire.begin(4, 5);            // ESP32: SDA=GPIO4, SCL=GPIO5
+## 7.3 Sensor Measurements
 
-  // Wake up the MPU6050 (by default it starts in sleep mode).
-  Wire.beginTransmission(MPU6050_ADDR);
-  Wire.write(0x6B);            // Power Management 1 register
-  Wire.write(0x00);            // Clear SLEEP bit -> wake device
-  Wire.endTransmission(true);
-}
+The MPU6050 provides six measurements:
 
-void loop() {
-  // 1) Set start address to ACCEL_XOUT_H (0x3B)
-  Wire.beginTransmission(MPU6050_ADDR);
-  Wire.write(0x3B);
-  Wire.endTransmission(false); // Repeated start
+| Measurement | Signals | Unit |
+|---|---|---|
+| Acceleration | ax, ay, az | g |
+| Angular velocity | gx, gy, gz | degrees/second |
 
-  // 2) Request 14 bytes: accel(6) + temp(2) + gyro(6)
-  Wire.requestFrom(MPU6050_ADDR, 14, true);
+Collect a short sequence of these measurements for each gesture.
 
-  // 3) Read accelerometer
-  ax = (Wire.read() << 8) | Wire.read();
-  ay = (Wire.read() << 8) | Wire.read();
-  az = (Wire.read() << 8) | Wire.read();
+## 7.4 Gesture Commands
 
-  // 4) Read temperature (not used below)
-  int16_t temp = (Wire.read() << 8) | Wire.read();
+| Class | Example Gesture | Lighting Action |
+|---|---|---|
+| 0 | Tilt left | Turn OFF |
+| 1 | Tilt right | Turn ON |
+| 2 | Move upward | Increase brightness |
+| 3 | Move downward | Decrease brightness |
+| 4 | Idle / no command | Keep the current state |
 
-  // 5) Read gyroscope
-  gx = (Wire.read() << 8) | Wire.read();
-  gy = (Wire.read() << 8) | Wire.read();
-  gz = (Wire.read() << 8) | Wire.read();
+The **idle class** helps prevent unwanted commands when the user is not making a gesture.
 
-  // 6) Print raw results
-  Serial.println("MPU6050 Readings:");
-  Serial.print("Accel (raw): "); Serial.print(ax); Serial.print("  ");
-  Serial.print(ay); Serial.print("  "); Serial.println(az);
-  Serial.print("Gyro  (raw): "); Serial.print(gx); Serial.print("  ");
-  Serial.print(gy); Serial.print("  "); Serial.println(gz);
-  Serial.println("--------------------");
+## 7.5 System Operation
 
-  delay(500); // ~2 Hz for readability
-}
-```
+**Hand motion → MPU6050 → ESP32 → Motion features → TinyML prediction → LED control**
 
----
+1. Read all six sensor signals at **50 samples/second**.
+2. Group readings into a **one-second window**, containing 50 readings.
+3. Calculate features such as the **mean, standard deviation, minimum, and maximum** of each signal.
+4. Pass the features to the trained model.
+5. Use the predicted gesture to update the LED.
 
-## 2. Key Concepts
+Using four features for each of six signals produces **24 model inputs**.
 
-- **I²C control:**  
-  `Wire.begin(4,5)` selects ESP32 GPIO4/5 as SDA/SCL.  
-  Use `beginTransmission` + `write` to address registers, and `requestFrom` to read back data.
+## 7.6 Dataset and Training
 
-- **Register map:**  
-  `0x6B` = Power Management 1 (writing `0x00` wakes device).  
-  `0x3B` = ACCEL_XOUT_H (start of contiguous accel/temp/gyro block).
+Record repeated examples of each gesture, including idle periods. Use the same sensor position and sampling settings during collection and deployment.
 
-- **Data format:**  
-  Accelerometer and gyroscope outputs are 16-bit signed integers (`int16_t`) per axis.  
-  Temperature is also 16-bit signed, converted linearly to °C.
+Label each recording with its gesture class. Divide recordings into training, validation, and test sets, keeping readings from the same recording together.
 
----
+Train a small classification model using TensorFlow/Keras, convert it to TensorFlow Lite, and export it as a C/C++ model header for ESP32.
 
-## 3. Raw → Physical Units
+**This project requires a new gesture dataset and model.** The earlier stationary/moving/shaking model does not recognize these lighting commands.
 
-For default full-scale ranges:
+## 7.7 LED Control
 
-- Accelerometer ±2g  
-- Gyroscope ±250 °/s  
+Use a PWM-capable GPIO to adjust LED brightness.
 
-The scale factors are:
+| Command | Example Behavior |
+|---|---|
+| OFF | Set brightness to 0 |
+| ON | Restore the last nonzero brightness |
+| Brightness UP | Increase brightness by one step |
+| Brightness DOWN | Decrease brightness by one step |
+| Idle | Make no change |
 
-For an accelerometer range of **±2 g** and a gyroscope range of **±250°/s**:
+Limit brightness to the supported range. Execute each gesture once, then wait for the hand to return to idle before accepting another command.
 
-$$
-A\;[\mathrm{g}] = \frac{A_{\mathrm{raw}}}{16384}
-$$
+## 7.8 Core Tasks
 
-$$
-G\;[{}^\circ/\mathrm{s}] = \frac{G_{\mathrm{raw}}}{131}
-$$
+1. Connect and test the MPU6050.
+2. Collect and label gesture recordings.
+3. Extract features from each time window.
+4. Train and evaluate the gesture model.
+5. Convert and deploy the model to ESP32.
+6. Implement LED switching and PWM brightness control.
+7. Test gesture recognition and unwanted activations.
 
-$$
-T\;[{}^\circ\mathrm{C}] = \frac{T_{\mathrm{raw}}}{340} + 36.53
-$$
+## 7.9 Expected Outcome
 
-### MPU6050 Raw Data Conversion
-
-For **±2 g** acceleration and **±250°/s** gyroscope ranges:
-
-- **Acceleration (g):** `A = acceleration_raw / 16384.0`
-- **Angular velocity (°/s):** `G = gyroscope_raw / 131.0`
-- **Temperature (°C):** `T = temperature_raw / 340.0 + 36.53`
-
-For **±4 g** acceleration and **±500°/s** gyroscope ranges:
-
-- **Acceleration (g):** `A = acceleration_raw / 8192.0`
-- **Angular velocity (°/s):** `G = gyroscope_raw / 65.5`
-- **Temperature (°C):** `T = temperature_raw / 340.0 + 36.53`
-
----
-
-## 4. Human-Readable Printout with Conversions
-
-```cpp
-#include <Wire.h>
-#define MPU6050_ADDR 0x68
-
-// Raw variables
-int16_t ax, ay, az, gx, gy, gz, tempRaw;
-
-// Scale factors
-const float ACCEL_SCALE = 16384.0f;  // LSB per g
-const float GYRO_SCALE  = 131.0f;    // LSB per (°/s)
-
-float accelToG(int16_t v)       { return (float)v / ACCEL_SCALE; }
-float gyroToDegPerSec(int16_t v){ return (float)v / GYRO_SCALE;  }
-float tempToC(int16_t v)        { return (v / 340.0f) + 36.53f;  }
-
-void setup() {
-  Serial.begin(115200);
-  Wire.begin(4, 5);
-  Wire.beginTransmission(MPU6050_ADDR);
-  Wire.write(0x6B); Wire.write(0x00);  // wake
-  Wire.endTransmission(true);
-}
-
-void loop() {
-  Wire.beginTransmission(MPU6050_ADDR);
-  Wire.write(0x3B);
-  Wire.endTransmission(false);
-  Wire.requestFrom(MPU6050_ADDR, 14, true);
-
-  ax = (Wire.read() << 8) | Wire.read();
-  ay = (Wire.read() << 8) | Wire.read();
-  az = (Wire.read() << 8) | Wire.read();
-  tempRaw = (Wire.read() << 8) | Wire.read();
-  gx = (Wire.read() << 8) | Wire.read();
-  gy = (Wire.read() << 8) | Wire.read();
-  gz = (Wire.read() << 8) | Wire.read();
-
-  float ax_g = accelToG(ax), ay_g = accelToG(ay), az_g = accelToG(az);
-  float gx_d = gyroToDegPerSec(gx), gy_d = gyroToDegPerSec(gy), gz_d = gyroToDegPerSec(gz);
-  float tC   = tempToC(tempRaw);
-
-  Serial.println("MPU6050 Readings (converted):");
-  Serial.print("Accel (g): ");  Serial.print(ax_g,3); Serial.print("  ");
-  Serial.print(ay_g,3);         Serial.print("  ");    Serial.println(az_g,3);
-  Serial.print("Gyro (deg/s): "); Serial.print(gx_d,3); Serial.print("  ");
-  Serial.print(gy_d,3);          Serial.print("  ");    Serial.println(gz_d,3);
-  Serial.print("Temp (C): ");     Serial.println(tC,2);
-  Serial.println("----------------------");
-  delay(500);
-}
-```
-
----
-
-### 5. Estimating Roll and Pitch from Acceleration
-
-Let the acceleration vector be **a = (ax, ay, az)**, measured in g.
-
-**Acceleration magnitude:**
-
-    magnitude = sqrt(ax² + ay² + az²)
-
-**Tilt angles in radians:**
-
-    roll  = atan2(ay, az)
-    pitch = atan2(-ax, sqrt(ay² + az²))
-
-**Convert to degrees:**
-
-    roll_deg  = roll × 180 / π
-    pitch_deg = pitch × 180 / π
-
-These equations assume a stationary or slowly moving sensor,
-with acceleration dominated by gravity. Signs depend on the
-sensor-axis convention.
-
-**Yaw cannot be determined from the accelerometer alone.**
-Integrating the MPU6050 gyroscope can estimate relative yaw,
-but the estimate drifts over time.
-
----
-
-## 6. Complementary Filter (Stable Pitch/Roll)
-
-- Gyroscope integration → responsive, but drifts.  
-- Accelerometer tilt → absolute, but noisy.  
-- Complementary filter blends both:
-
-$$
-\text{roll} \leftarrow \alpha(\text{roll} + \dot\phi_\text{gyro}\,\Delta t) + (1-\alpha)\,\text{roll}_\text{acc}
-$$
-
-$$
-\text{pitch} \leftarrow \alpha(\text{pitch} + \dot\theta_\text{gyro}\,\Delta t) + (1-\alpha)\,\text{pitch}_\text{acc}
-$$
-
-Where $\alpha \in [0,1]$, e.g. 0.98.  
-Yaw has no gravity reference and will drift without a magnetometer.
-
----
-
-## 7. Practical Notes
-
-- **Filter weight α:**  
-  Start at 0.98. Larger α = faster response, more drift. Smaller α = more stable, but noisy.  
-
-- **Gyro bias:**  
-  Recalibrate after power-up or temperature change.  
-
-- **Yaw drift:**  
-  Without a magnetometer, yaw is unreferenced. Use a 9-DoF IMU or add a magnetometer.  
-
-- **Full-scale ranges:**  
-  If changed, update `ACCEL_SCALE` and `GYRO_SCALE` accordingly.  
-
+Students demonstrate a light that responds to hand gestures and report **classification accuracy, response time, and the number of unwanted lighting commands during idle periods**.
