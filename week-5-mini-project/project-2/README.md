@@ -171,25 +171,31 @@ void loop() {
 
 ---
 
-## 5. Mapping to Roll-Pitch-Yaw (RPY)  to a Cartesian orientation
+### 5. Estimating Roll and Pitch from Acceleration
 
-With acceleration vector **a** = (ax, ay, az) in g:
+Let the acceleration vector be **a = (ax, ay, az)**, measured in g.
 
-- Magnitude:  
-  $$
-  |\vec{a}| = \sqrt{a_x^2 + a_y^2 + a_z^2}
-  $$
+**Acceleration magnitude:**
 
-- Tilt angles:  
-  $$
-  \text{roll} = \arctan2(a_y, a_z)
-  $$
+    magnitude = sqrt(ax² + ay² + az²)
 
-  $$
-  \text{pitch} = \arctan2\left(-a_x, \sqrt{a_y^2 + a_z^2}\right)
-  $$
+**Tilt angles in radians:**
 
-Usually reported in degrees.
+    roll  = atan2(ay, az)
+    pitch = atan2(-ax, sqrt(ay² + az²))
+
+**Convert to degrees:**
+
+    roll_deg  = roll × 180 / π
+    pitch_deg = pitch × 180 / π
+
+These equations assume a stationary or slowly moving sensor,
+with acceleration dominated by gravity. Signs depend on the
+sensor-axis convention.
+
+**Yaw cannot be determined from the accelerometer alone.**
+Integrating the MPU6050 gyroscope can estimate relative yaw,
+but the estimate drifts over time.
 
 ---
 
