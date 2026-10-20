@@ -132,7 +132,7 @@ The classes map to **stationary → green**, **moving → yellow**, and **shakin
 | Repeat | 20 | 1 | | | | |
 
 Compare with the original sequential sketch: Does the sensor sampling remain responsive while inference runs? Do LED changes become noisier when `STABLE_COUNT = 1`? If inference exceeds 20 ms, some frames may be replaced before processing.
-
+<!---
 ## 10. Checkpoint questions
 
 1. What is the difference between a FreeRTOS task and Arduino's ordinary `loop()`?
@@ -155,3 +155,4 @@ This is a **teaching example**, not a hard real-time guarantee. The sketch targe
 ### Reference
 
 Original project: [MPU6050_Eloquent_3LED.ino](https://github.com/komsan-k/IO-engineering/blob/main/week-5-mini-project/project-2/MPU6050_Eloquent_3LED.ino)
+--->
