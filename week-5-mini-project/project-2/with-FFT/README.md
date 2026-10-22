@@ -1,4 +1,4 @@
-# Lab Phase 1: MPU6050 Time-Domain and FFT Features on ESP32
+# Phase 1: MPU6050 Time-Domain and FFT Features on ESP32
 
 **Scope:** sensor acquisition, feature extraction, signal inspection, and labeled CSV collection. TinyML is introduced in Phase 2.
 
@@ -807,9 +807,4 @@ if __name__=='__main__': main()
 ```
 
 
-To run the host arithmetic tests from the lab folder:
 
-```bash
-g++ -std=c++11 tests/test_features.cpp -o test_features
-./test_features
-```
