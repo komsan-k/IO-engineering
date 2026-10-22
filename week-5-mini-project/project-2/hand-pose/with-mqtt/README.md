@@ -1,4 +1,4 @@
-# Hand Pose Estimation with MQTT Messaging Using HiveMQ
+# Hand Pose Estimation with MQTT Messaging
 
 This version keeps the hand skeleton display and **publishes hand-pose data to HiveMQ using MQTT**.
 
